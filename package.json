@@ -1,0 +1,27 @@
+{
+  "name": "domain",
+  "version": "0.0.0",
+  "description": "domain for javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/leogiese/domain"
+  },
+  "keywords": [
+    "ddd",
+    "cqrs",
+    "domain"
+  ],
+  "author": "leogiese",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leogiese/domain/issues"
+  },
+  "homepage": "https://github.com/leogiese/domain",
+  "dependencies": {
+    "shortid": "^2.0.1"
+  }
+}
