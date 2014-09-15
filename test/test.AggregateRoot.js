@@ -61,6 +61,16 @@ describe("AggregateRoot", function () {
         user.get("name").should.eql("leogiese");
     })
 
+    it("#custom loadSnap",function(){
+        var P = AggregateRoot.extend({loadSnap:function(snap){
+            this.set({n:"leo"});
+        }})
+
+        var p = new P();
+        p.loadSnap();
+        p.get("n").should.eql("leo");
+    })
+
     it("#loadEvents", function () {
         user.loadEvents([
             {name: "changeName", data: {name: "brighthas"}},
