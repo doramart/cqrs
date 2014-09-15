@@ -22,6 +22,11 @@
   },
   "homepage": "https://github.com/leogiese/domain",
   "dependencies": {
+    "eventstore": "^1.0.3",
     "shortid": "^2.0.1"
+  },
+  "devDependencies": {
+    "mocha": "^1.21.4",
+    "should": "^4.0.4"
   }
 }
