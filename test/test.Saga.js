@@ -29,7 +29,7 @@ describe("Saga", function () {
             },
             listeners:{
                 "test":function(evt){
-                    console.log("test event.");
+                    // console.log("test event.");
                 }
             }
         });
@@ -109,6 +109,10 @@ describe("Saga", function () {
         me.changeAge(32);
         me.get("name").should.eql("liang");
         me.get("age").should.eql(32);
+    })
+
+    it("#listenerEventNameList",function(){
+        user.listenerEventNameList.should.eql(["test"]);
     })
 
 })

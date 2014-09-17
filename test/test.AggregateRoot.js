@@ -52,11 +52,11 @@ describe("AggregateRoot", function () {
     })
 
     it("#loadSnap", function () {
-        user.loadSnap({id: "001", name: "leogiese"});
+        user.loadSnap({alive:true,id: "001", name: "leogiese"});
         user.get("id").should.eql("001");
         user.get("name").should.eql("leogiese");
 
-        user.loadSnap({id: "002", name: "leogiese2"});
+        user.loadSnap({alive:true,id: "002", name: "leogiese2"});
         user.get("id").should.eql("001");
         user.get("name").should.eql("leogiese");
     })
