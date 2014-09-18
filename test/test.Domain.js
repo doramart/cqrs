@@ -1,25 +1,11 @@
-var EventBus = require("../lib/EventBus"),
-    eventstore = require("eventstore"),
-    Event = require("../lib/Event"),
-    AggregateRoot = require("../lib/AggregateRoot"),
-    es = eventstore();
+var Domain = require("../lib/Domain"),should = require("should");
 
+describe("Domain", function () {
 
+    var domain = new Domain(), UserClass;
 
-describe("EventBus",function(){
-
-    var bus;
-
-    it("#new" , function(){
-
-        bus = new EventBus(es);
-        es.init();
-
-    })
-
-    it("#publish",function(done){
-
-        var User = AggregateRoot.extend({
+    it("#register", function () {
+        UserClass = Domain.AggregateRoot.extend({
             when: function (event) {
                 switch (event.name) {
                     case "changeName":
@@ -40,15 +26,16 @@ describe("EventBus",function(){
             }
         });
 
-        bus.on("changeName",function(event){
-            done();
-        })
+        domain.register("User",UserClass);
+    })
 
 
-        var user = new User();
-        user.uncommittedEvents.push(new Event(user.get("id"),"changeName",{name:"leo123"}));
-        bus.publish(user);
+    it("#repos.User",function(){
+        should.exist(domain.repos.User);
+    })
 
+    it("#eventBus",function(){
+        should.exist(domain.eventBus);
     })
 
 })
