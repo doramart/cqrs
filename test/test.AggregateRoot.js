@@ -102,4 +102,23 @@ describe("AggregateRoot", function () {
         me.get("age").should.eql(32);
     })
 
+    it("#constructor",function(){
+
+        User = AggregateRoot.extend({
+            constructor:function(json){
+                if(json.name.length > 2)
+                this.set(json);
+                throw new Error("name string length > 2");
+            }
+        });
+
+        (function(){
+            var user = new User({name:"a"});
+        }).should.throw();
+
+        (function(){
+            var user = new User({name:"a"},true);
+        }).should.not.throw();
+    })
+
 })
