@@ -38,4 +38,7 @@ describe("Domain", function () {
         should.exist(domain.eventBus);
     })
 
+    it("#AggregateRoot have domain property",function(){
+        should.exist(UserClass.prototype.domain);
+    })
 })
