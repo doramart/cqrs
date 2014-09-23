@@ -1,33 +1,103 @@
 var Domain = require(".."),
+    FreezeMoney = require("./FreezeMoney"),
     Root = Domain.AggregateRoot;
 
 module.exports = Root.extend({
 
-    constructor:function(data){
-        this.set("money",0.0);
+    constructor: function (data) {
+        this.set("money", 0.0);
+        this.set("freezeMoneyList", []);
     },
 
     methods: {
-        recharge: function (money) {
+        recharge: function (money, cid) {
             // validat code omitted
-            this.apply("recharge", money);
+            this.apply("recharge", {money: money, id: cid});
         },
-        deduct: function (money) {
+        deduct: function (money, cid) {
             // validat code omitted
-            this.apply("deduct", money);
+            this.apply("deduct", {money: money, id: cid});
+        },
+        finish: function (cid) {
+            // validate code omitted
+            this.apply("finish", cid);
+        },
+        cancel: function (cid) {
+            // validate code omitted
+            this.apply("cancel", cid);
         }
     },
     when: function (event) {
         switch (event.name) {
             case "recharge":
-                var money = this.get("money") + event.data;
-                this.set("money", money);
+                var fm = new FreezeMoney(event.data.id, event.data.money);
+                var freezeMoneyList = this.get("freezeMoneyList");
+                freezeMoneyList.push(fm);
+                this.set("freezeMoneyList", freezeMoneyList);
                 break;
 
             case "deduct":
-                var money = this.get("money") - event.data;
-                this.set("money", money);
+                var fm = new FreezeMoney(event.data.id, -event.data.money);
+                var money = this.get("money");
+                this.set("money", money - event.data.money);
+                var freezeMoneyList = this.get("freezeMoneyList");
+                freezeMoneyList.push(fm);
+                break;
+
+            case "cancel":
+                var self = this;
+                var fmIndex = -1;
+                var fmid = event.data;
+                var freezeMoneyList = this.get("freezeMoneyList");
+                // find by fmid
+                freezeMoneyList.forEach(function (fm, index) {
+                    if (fm.id === fmid) {
+
+                        if (fm.money < 0) {
+                            var money = self.get("money");
+
+                            self.set("money", money - fm.money);
+                        }
+                        fmIndex = index;
+                    }
+                })
+
+                if (fmIndex !== -1) {
+                    freezeMoneyList.splice(fmIndex, 1);
+                }
+
+                break;
+
+            case "finish":
+                var self = this;
+                var fmIndex = -1;
+                var fmid = event.data;
+                var freezeMoneyList = this.get("freezeMoneyList");
+                // find by fmid
+                freezeMoneyList.forEach(function (fm, index) {
+                    if (fm.id === fmid) {
+                        if (fm.money > 0) {
+                            var money = self.get("money");
+                            self.set("money", money + fm.money);
+                        }
+                        fmIndex = index;
+                    }
+                })
+
+                if (fmIndex !== -1) {
+                    freezeMoneyList.splice(fmIndex, 1);
+                }
+
                 break;
         }
+    },
+
+    loadSnap: function (json) {
+        this.set("money", json.money);
+        var freezeMoneyList = [];
+        json.freezeMoneyList.forEach(function (fm) {
+            freezeMoneyList.push(new FreezeMoney(fm.id, fm.money));
+        });
+        this.set("freezeMoneyList", freezeMoneyList);
     }
 })
