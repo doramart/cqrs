@@ -19,9 +19,9 @@ module.exports = Saga.extend({
                 self.domain.repos.User.get(user2_id, function (err, user2) {
 
                     if (user1 && user2) {
-                        self.apply("start");
-                        user1.deduct(money);
-                        user2.recharge(money);
+                        self.apply("start",[user1_id,user2_id]);
+                        user1.deduct(money,self.get("id"));
+                        user2.recharge(money,self.get("id"));
                     } else {
                         self.apply("error");
                     }
@@ -29,15 +29,33 @@ module.exports = Saga.extend({
                 });
             });
 
+        },
 
+        _finish:function(){
+
+            var roles = this.get("roles"),self = this;
+
+            this.domain.repos.User.get(roles[0], function (err, user1) {
+
+                self.domain.repos.User.get(roles[1], function (err, user2) {
+
+                    if (user1 && user2) {
+                        user1.finish(self.get("id"));
+                        user1.finish(self.get("id"));
+                        self.completed();
+                    }
+
+                });
+            });
         }
+
     },
 
     listeners: {
         "deduct": function (event) {
             if (this.get("recharged")) {
                 this.apply("deducted");
-                this.completed();
+                this._finish();
             } else {
                 this.apply("deducted");
             }
@@ -45,7 +63,7 @@ module.exports = Saga.extend({
         "recharge": function (event) {
             if (this.get("deducted")) {
                 this.apply("recharged");
-                this.completed();
+                this._finish();
             } else {
                 this.apply("recharged");
             }
@@ -56,6 +74,7 @@ module.exports = Saga.extend({
         switch (event.name) {
             case "start":
                 this.set("start", true);
+                this.set("roles",event.data);
                 break;
             case "deducted":
                 this.set("deducted", true);

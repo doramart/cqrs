@@ -1,4 +1,23 @@
-var should = require("should"),Transfer = require("../Transfer");
+var should = require("should")
+    ,Transfer = require("../Transfer")
+    ,User = require("../User")
+    ,Domain  = require("../../lib/Domain")
+    ,domain = new Domain();
+
+domain.register("User",User);
+
+var uid1,uid2;
+
+domain.repos.User.create({},function(err,u){
+    uid1 = u.get("id");
+    u.recharge(10,"t1");
+    u.finish("t1");
+})
+
+domain.repos.User.create({},function(err,u){
+    uid2 = u.get("id");
+})
+
 
 describe("Transfer",function(){
 
@@ -6,11 +25,12 @@ describe("Transfer",function(){
 
     it("#new",function(){
         transfer = new Transfer();
+        transfer.domain = domain; // only test
     })
 
     it("#start event",function(){
         transfer.get("start").should.eql(false);
-        transfer.when({name:"start"});
+        transfer.transfer(uid1,uid2,5);
         transfer.get("start").should.eql(true);
     })
 
