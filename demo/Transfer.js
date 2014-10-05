@@ -52,7 +52,7 @@ module.exports = Saga.extend({
     },
 
     listeners: {
-        "deduct": function (event) {
+        "User:deduct": function (event) {
             if (this.get("recharged")) {
                 this.apply("deducted");
                 this._finish();
@@ -60,7 +60,7 @@ module.exports = Saga.extend({
                 this.apply("deducted");
             }
         },
-        "recharge": function (event) {
+        "User:recharge": function (event) {
             if (this.get("deducted")) {
                 this.apply("recharged");
                 this._finish();

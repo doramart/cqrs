@@ -14,6 +14,10 @@ exports.createUser = function(cb){
     })
 }
 
+exports.getDomain = function(){
+    return domain;
+}
+
 exports.recharge = function(id,money,cb){
     domain.repos.User.get(id,function(err,user){
         if(user){
@@ -45,4 +49,3 @@ exports.transfer = function(fromId,toId,money){
         transfer.transfer(fromId,toId,money);
     })
 }
-

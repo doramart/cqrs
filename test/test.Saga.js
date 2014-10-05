@@ -9,6 +9,7 @@ describe("Saga", function () {
     it("#extend", function () {
 
         User = Saga.extend({
+            className:"User",
             when: function (event) {
                 switch (event.name) {
                     case "changeName":
@@ -40,6 +41,10 @@ describe("Saga", function () {
         user = new User();
     })
 
+    it("#className",function(){
+        user.constructor.className.should.eql("User");
+    })
+
     it("#id", function () {
         should.exist(user.get("id"));
     })
@@ -55,16 +60,16 @@ describe("Saga", function () {
         data.name.should.eql(user.get("name"));
         user.json().should.not.equal(data);
     })
-
-    it("#loadSnap", function () {
-        user.loadSnap({id: "001", name: "leogiese"});
-        user.get("id").should.eql("001");
-        user.get("name").should.eql("leogiese");
-
-        user.loadSnap({id: "002", name: "leogiese2"});
-        user.get("id").should.eql("001");
-        user.get("name").should.eql("leogiese");
-    })
+//
+//    it("#loadSnap", function () {
+//        user.loadSnap({id: "001", name: "leogiese"});
+//        user.get("id").should.eql("001");
+//        user.get("name").should.eql("leogiese");
+//
+//        user.loadSnap({id: "002", name: "leogiese2"});
+//        user.get("id").should.eql("001");
+//        user.get("name").should.eql("leogiese");
+//    })
 
     it("#custom loadSnap",function(){
         var P = Saga.extend({loadSnap:function(snap){
@@ -76,15 +81,15 @@ describe("Saga", function () {
         p.get("n").should.eql("leo");
     })
 
-    it("#loadEvents", function () {
-        user.loadEvents([
-            {name: "changeName", data: {name: "brighthas"}},
-            {name: "changeAge", data: {age: 22}}
-        ])
-        user.get("name").should.eql("brighthas");
-        user.get("age").should.eql(22);
-
-    })
+//    it("#loadEvents", function () {
+//        user.loadEvents([
+//            {name: "changeName", data: {name: "brighthas"}},
+//            {name: "changeAge", data: {age: 22}}
+//        ])
+//        user.get("name").should.eql("brighthas");
+//        user.get("age").should.eql(22);
+//
+//    })
 
     it("#call method", function () {
 
@@ -92,6 +97,7 @@ describe("Saga", function () {
         user._publish = function () {
             //  this.when({name: eventName, data: data});
         }
+
         user.changeName("zeng");
         user.changeAge(30);
         user.get("name").should.eql("zeng");

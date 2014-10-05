@@ -5,21 +5,21 @@ var EventBus = require("../lib/EventBus"),
     es = eventstore();
 
 
-
-describe("EventBus",function(){
+describe("EventBus", function () {
 
     var bus;
 
-    it("#new" , function(){
+    it("#new", function () {
 
         bus = new EventBus(es);
         es.init();
 
     })
 
-    it("#publish",function(done){
+    it("#publish", function (done) {
 
         var User = AggregateRoot.extend({
+            className:"User",
             when: function (event) {
                 switch (event.name) {
                     case "changeName":
@@ -40,13 +40,25 @@ describe("EventBus",function(){
             }
         });
 
-        bus.on("changeName",function(event){
-            done();
+        var user = new User();
+
+        var aid = user.get("id");
+        bus.on("User." + aid + ":changeName", function (event) {
+            bus.on("." + aid + ":changeName", function (event) {
+                bus.on("." + aid, function (event) {
+                    bus.on("User:changeName", function (event) {
+                        bus.on("User", function (event) {
+                            bus.on(":changeName", function (event) {
+                                done();
+                            })
+                        })
+                    })
+                })
+            })
         })
 
 
-        var user = new User();
-        user.uncommittedEvents.push(new Event(user.get("id"),"changeName",{name:"leo123"}));
+        user.uncommittedEvents.push(new Event({aggregateType:"User",aggregateId: user.get("id"), name: "changeName", data: {name: "leo123"}}));
         bus.publish(user);
 
     })

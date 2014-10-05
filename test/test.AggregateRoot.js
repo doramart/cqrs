@@ -9,6 +9,7 @@ describe("AggregateRoot", function () {
     it("#extend", function () {
 
         User = AggregateRoot.extend({
+            className:"User",
             when: function (event) {
                 switch (event.name) {
                     case "changeName":
@@ -29,10 +30,16 @@ describe("AggregateRoot", function () {
             }
         });
 
+
+
     })
 
     it("#new", function () {
         user = new User();
+    })
+
+    it("#className",function(){
+        user.constructor.className.should.eql("User");
     })
 
     it("#id", function () {
@@ -105,6 +112,7 @@ describe("AggregateRoot", function () {
     it("#constructor",function(){
 
         User = AggregateRoot.extend({
+            className:"User",
             constructor:function(json){
                 if(json.name.length > 2)
                 this.set(json);
