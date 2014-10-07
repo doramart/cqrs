@@ -21,11 +21,11 @@ describe("AggregateRoot", function () {
                 }
             },
             methods: {
-                changeName: function (name) {
-                    this.apply("changeName", {name: name});
+                changeName: function (data,apply) {
+                    apply("changeName", data);
                 },
-                changeAge: function (age) {
-                    this.apply("changeAge", {age: age});
+                changeAge: function (data,apply) {
+                    apply("changeAge", data);
                 }
             }
         });
@@ -94,8 +94,8 @@ describe("AggregateRoot", function () {
         user._publish = function () {
           //  this.when({name: eventName, data: data});
         }
-        user.changeName("zeng");
-        user.changeAge(30);
+        user.changeName({name:"zeng"});
+        user.changeAge({age:30});
         user.get("name").should.eql("zeng");
         user.get("age").should.eql(30);
 
@@ -103,8 +103,8 @@ describe("AggregateRoot", function () {
 
     it("#wrap", function () {
         var me = wrap(user);
-        me.changeName("liang");
-        me.changeAge(32);
+        me.changeName({name:"liang"});
+        me.changeAge({age:32});
         me.get("name").should.eql("liang");
         me.get("age").should.eql(32);
     })
