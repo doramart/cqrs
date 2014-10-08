@@ -16,11 +16,11 @@ var Repository = require("../lib/Repository"),
             }
         },
         methods: {
-            changeName: function (name) {
-                this.apply("changeName", {name: name});
+            changeName: function (data,apply) {
+                apply("changeName", data);
             },
-            changeAge: function (age) {
-                this.apply("changeAge", {age: age});
+            changeAge: function (data,apply) {
+                apply("changeAge", data);
             }
         }
     });
@@ -36,10 +36,11 @@ describe("Repository",function(){
 
     it("#create",function(done){
         repository.create({name:"leo"},function(err,u){
+            console.log(err);
             user = u;
             uid = user.get("id");
 
-            user.changeName("leo");
+            user.changeName({name:"leo"});
 
             repository.clear(uid);
             done();

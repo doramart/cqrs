@@ -21,11 +21,11 @@ describe("Saga", function () {
                 }
             },
             methods: {
-                changeName: function (name) {
-                    this.apply("changeName", {name: name});
+                changeName: function (data,apply) {
+                    apply("changeName", data);
                 },
-                changeAge: function (age) {
-                    this.apply("changeAge", {age: age});
+                changeAge: function (data,apply) {
+                    apply("changeAge", data);
                 }
             },
             listeners:{
@@ -98,21 +98,21 @@ describe("Saga", function () {
             //  this.when({name: eventName, data: data});
         }
 
-        user.changeName("zeng");
-        user.changeAge(30);
+        user.changeName({name:"zeng"});
+        user.changeAge({age:30});
         user.get("name").should.eql("zeng");
         user.get("age").should.eql(30);
 
     })
 
     it("#listeners",function(){
-        user.emit("test");
+        user._emit("test");
     })
 
     it("#wrap", function () {
         var me = wrap(user);
-        me.changeName("liang");
-        me.changeAge(32);
+        me.changeName({name:"liang"});
+        me.changeAge({age:32});
         me.get("name").should.eql("liang");
         me.get("age").should.eql(32);
     })
