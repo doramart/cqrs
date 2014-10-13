@@ -10,20 +10,20 @@ module.exports = Saga.extend({
 
     methods: {
 
-        transfer: function (user1_id, user2_id, money) {
+        transfer: function (data,apply) {
 
             var self = this;
 
-            this.domain.repos.User.get(user1_id, function (err, user1) {
+            this.domain.repos.User.get(data.user1_id, function (err, user1) {
 
-                self.domain.repos.User.get(user2_id, function (err, user2) {
+                self.domain.repos.User.get(data.user2_id, function (err, user2) {
 
                     if (user1 && user2) {
-                        self.apply("start",[user1_id,user2_id]);
-                        user1.deduct(money,self.get("id"));
-                        user2.recharge(money,self.get("id"));
+                        apply("start",[data.user1_id,data.user2_id]);
+                        user1.deduct(data.money,self.get("id"),self.get("id"));
+                        user2.recharge(data.money,self.get("id"),self.get("id"));
                     } else {
-                        self.apply("error");
+                        apply("error");
                     }
 
                 });
@@ -40,8 +40,8 @@ module.exports = Saga.extend({
                 self.domain.repos.User.get(roles[1], function (err, user2) {
 
                     if (user1 && user2) {
-                        user1.finish(self.get("id"));
-                        user1.finish(self.get("id"));
+                        user1.finish({id:self.get("id")},self.get("id"));
+                        user2.finish({id:self.get("id")},self.get("id"));
                         self.completed();
                     }
 
@@ -53,6 +53,7 @@ module.exports = Saga.extend({
 
     listeners: {
         "User:deduct": function (event) {
+            console.log(".....deduct");
             if (this.get("recharged")) {
                 this.apply("deducted");
                 this._finish();

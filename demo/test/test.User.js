@@ -13,31 +13,31 @@ describe("User",function(){
     })
 
     it("#recharge",function(){
-        user.recharge(10,"t01");
+        user.recharge({money:10,id:"t01"});
         user.get("money").should.eql(0);
-        user.finish("t01");
+        user.finish({id:"t01"});
         user.get("money").should.eql(10);
         user.get("freezeMoneyList").should.eql([]);
     })
 
     it("#deduct",function(){
-        user.deduct(3,"t02");
+        user.deduct({money:3,id:"t02"});
         user.get("money").should.eql(7);
-        user.finish("t02");
+        user.finish({id:"t02"});
         user.get("money").should.eql(7);
         user.get("freezeMoneyList").should.eql([]);
     })
 
     it("#cancel",function(){
-        user.deduct(3,"t03");
+        user.deduct({money:3,id:"t03"});
         user.get("money").should.eql(4);
-        user.cancel("t03")
+        user.cancel({id:"t03"});
         user.get("money").should.eql(7);
         user.get("freezeMoneyList").should.eql([]);
 
-        user.recharge(3,"t04");
+        user.recharge({money:3,id:"t04"});
         user.get("money").should.eql(7);
-        user.cancel("t04")
+        user.cancel({id:"t04"})
         user.get("money").should.eql(7);
         user.get("freezeMoneyList").should.eql([]);
     })
@@ -45,9 +45,9 @@ describe("User",function(){
     it("#loadSnap",function(){
         // first user
         var user1 = new User();
-        user1.recharge(12,"t01");
-        user1.finish("t01");
-        user1.recharge(5,"t02");
+        user1.recharge({money:12,id:"t01"});
+        user1.finish({id:"t01"});
+        user1.recharge({money:5,id:"t02"});
 
         var data = user1.json();
 

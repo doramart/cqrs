@@ -5,7 +5,8 @@ describe("Domain", function () {
     var domain = new Domain(), UserClass;
 
     it("#register", function () {
-        UserClass = Domain.AggregateRoot.extend({
+        domain.register({
+            className:"User",
             when: function (event) {
                 switch (event.name) {
                     case "changeName":
@@ -17,28 +18,28 @@ describe("Domain", function () {
                 }
             },
             methods: {
-                changeName: function (name) {
-                    this.apply("changeName", {name: name});
+                changeName: function (data,apply) {
+                    apply("changeName", data);
                 },
                 changeAge: function (age) {
-                    this.apply("changeAge", {age: age});
+                    apply("changeAge", data);
                 }
             }
         });
-
-        domain.register("User",UserClass);
     })
 
+    var uid;
 
-    it("#repos.User",function(){
-        should.exist(domain.repos.User);
+    it("#create",function(){
+        domain.create("User",null,function(err,id){
+            uid = id;
+        })
     })
 
-    it("#eventBus",function(){
-        should.exist(domain.eventBus);
+    it("#get",function(){
+        domain.get("User",uid,function(err,data){
+            data.alive.should.eql(true);
+        })
     })
 
-    it("#AggregateRoot have domain property",function(){
-        should.exist(UserClass.prototype.domain);
-    })
 })

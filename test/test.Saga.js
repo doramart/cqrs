@@ -22,10 +22,10 @@ describe("Saga", function () {
             },
             methods: {
                 changeName: function (data,apply) {
-                    apply("changeName", data);
+                    this._apply("changeName", data);
                 },
                 changeAge: function (data,apply) {
-                    apply("changeAge", data);
+                    this._apply("changeAge", data);
                 }
             },
             listeners:{

@@ -1,5 +1,6 @@
 var Repository = require("../lib/Repository"),
     eventstore = require("eventstore"),
+    should = require("should"),
     AggregateRoot = require("../lib/AggregateRoot"),
     es = eventstore(),
     EventBus = require("../lib/EventBus"),
@@ -17,10 +18,10 @@ var Repository = require("../lib/Repository"),
         },
         methods: {
             changeName: function (data,apply) {
-                apply("changeName", data);
+                this._apply("changeName", data);
             },
             changeAge: function (data,apply) {
-                apply("changeAge", data);
+                this._apply("changeAge", data);
             }
         }
     });
@@ -36,7 +37,6 @@ describe("Repository",function(){
 
     it("#create",function(done){
         repository.create({name:"leo"},function(err,u){
-            console.log(err);
             user = u;
             uid = user.get("id");
 

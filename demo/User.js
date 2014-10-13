@@ -10,21 +10,21 @@ module.exports = Root.extend({
     },
 
     methods: {
-        recharge: function (money, cid) {
+        recharge: function (data,apply) {
             // validat code omitted
-            this.apply("recharge", {money: money, id: cid});
+            apply("recharge", data);
         },
-        deduct: function (money, cid) {
+        deduct: function (data,apply) {
             // validat code omitted
-            this.apply("deduct", {money: money, id: cid});
+            apply("deduct", data);
         },
-        finish: function (cid) {
+        finish: function (data,apply) {
             // validate code omitted
-            this.apply("finish", cid);
+            apply("finish", data);
         },
-        cancel: function (cid) {
+        cancel: function (data,apply) {
             // validate code omitted
-            this.apply("cancel", cid);
+            apply("cancel", data);
         }
     },
     when: function (event) {
@@ -47,7 +47,7 @@ module.exports = Root.extend({
             case "cancel":
                 var self = this;
                 var fmIndex = -1;
-                var fmid = event.data;
+                var fmid = event.data.id;
                 var freezeMoneyList = this.get("freezeMoneyList");
                 // find by fmid
                 freezeMoneyList.forEach(function (fm, index) {
@@ -71,7 +71,7 @@ module.exports = Root.extend({
             case "finish":
                 var self = this;
                 var fmIndex = -1;
-                var fmid = event.data;
+                var fmid = event.data.id;
                 var freezeMoneyList = this.get("freezeMoneyList");
                 // find by fmid
                 freezeMoneyList.forEach(function (fm, index) {

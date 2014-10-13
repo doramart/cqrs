@@ -1,40 +1,45 @@
 var should = require("should")
-    ,Transfer = require("../Transfer")
-    ,User = require("../User")
-    ,Domain  = require("../../lib/Domain")
-    ,domain = new Domain();
+    , Transfer = require("../Transfer")
+    , User = require("../User")
+    , Domain = require("../../lib/Domain")
+    , domain = new Domain();
 
-domain.register("User",User);
+domain.register("User", User);
+domain.register("Transfer", Transfer);
 
-var uid1,uid2;
+var uid1, uid2;
 
-domain.repos.User.create({},function(err,u){
+domain.repos.User.create({}, function (err, u) {
     uid1 = u.get("id");
-    u.recharge(10,"t1");
-    u.finish("t1");
+    u.recharge({money: 10, id: "t1"});
+    u.finish({id: "t1"});
 })
 
-domain.repos.User.create({},function(err,u){
+domain.repos.User.create({}, function (err, u) {
     uid2 = u.get("id");
 })
 
 
-describe("Transfer",function(){
+describe("Transfer", function () {
 
     var transfer;
 
-    it("#new",function(){
-        transfer = new Transfer();
-        transfer.domain = domain; // only test
+    it("#new", function (done) {
+
+        domain.repos.Transfer.create({}, function (err, t) {
+            transfer = t;
+            done()
+        })
+
     })
 
-    it("#start event",function(){
+    it("#start event", function () {
         transfer.get("start").should.eql(false);
-        transfer.transfer(uid1,uid2,5);
+        transfer.transfer({user1_id: uid1, user2_id: uid2, money: 5});
         transfer.get("start").should.eql(true);
     })
 
-    it("#listener deduct event",function(){
+    it("#listener deduct event", function () {
         transfer.isCompleted().should.eql(false);
         transfer.get("deducted").should.eql(false);
         transfer.emit("deduct");
@@ -43,7 +48,7 @@ describe("Transfer",function(){
 
     })
 
-    it("#listener recharge event",function(){
+    it("#listener recharge event", function () {
         transfer.isCompleted().should.eql(false);
         transfer.get("recharged").should.eql(false);
         transfer.emit("recharge");
