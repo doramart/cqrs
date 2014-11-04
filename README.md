@@ -38,6 +38,7 @@ var User = Actor.extend({
 
 #### new object
 
+```
 var user = new User();
 
 user.on("apply",function(this){
@@ -46,6 +47,7 @@ user.on("apply",function(this){
 
 user.call("changeName","leo giese");
 
+```
 
 LICENSE
 =======
