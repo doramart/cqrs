@@ -6,7 +6,7 @@ Now only preview.
 domain
 ======
 
-Domain for javascript, from CQRS / DDD idea.
+Domain for javascript, from CQRS & DDD idea.
 
 Install
 =======
@@ -16,15 +16,27 @@ Install
 create Actor class
 ==================
 
-e.g.
+```
+
+var User = Actor.extend({
+    typeName:"User",
+    methods:{
+        changeName:function(data,service){
+
+           service.apply("changeName",data);
+
+        }
+    },
+    when:function(event,set){
+        if(event.name === "changeName"){
+            set("name",event.data);
+        }
+    }
+})
 
 ```
 
-Actor.extend({})
-
-```
-
-#### call it
+#### new object
 
 var user = new User();
 
