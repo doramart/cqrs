@@ -1,59 +1,43 @@
-var Repository = require("../lib/Repository"),
-    eventstore = require("eventstore"),
-    should = require("should"),
-    AggregateRoot = require("../lib/AggregateRoot"),
-    es = eventstore(),
-    EventBus = require("../lib/EventBus"),
-    bus = new EventBus(es),
-    User = AggregateRoot.extend({
-        when: function (event) {
-            switch (event.name) {
-                case "changeName":
-                    this.set("name", event.data.name);
-                    break;
-                case "changeAge":
-                    this.set("age", event.data.age);
-                    break;
-            }
-        },
-        methods: {
-            changeName: function (data,apply) {
-                this._apply("changeName", data);
-            },
-            changeAge: function (data,apply) {
-                this._apply("changeAge", data);
-            }
-        }
-    });
+require("traceur");
+var Repository = require("../lib/Repository");
+var Actor = require("../lib/Actor");
+var ES = require("eventstore");
+var co = require("co");
+var should = require("should");
+var thunkify = require("thunkify");
 
 
-describe("Repository",function(){
+describe("Repository", function () {
 
-    var repository,user,uid;
+    var User = Actor.extend({
+        typeName:"People"
+    }),es = new ES,repos;
 
-    it("#new",function(){
-        repository = new Repository("User",User,es,bus);
+    var uid;
+
+    it("#new", function () {
+       repos  = new Repository(User,es);
     })
 
-    it("#create",function(done){
-        repository.create({name:"leo"},function(err,u){
-            user = u;
-            uid = user.get("id");
-
-            user.changeName({name:"leo"});
-
-            repository.clear(uid);
+    it("#create", function (done) {
+        co(function *() {
+            var user = yield repos.create({name:"leo"});
+            uid = user.id;
+            user.get("name").should.eql("leo");
+            var getFromSnapShot = thunkify(es.getFromSnapshot).bind(es);
+            var rs = yield getFromSnapShot(user.id);
+            var snap = rs[0];
+            should.exist(snap);
             done();
-        })
+        })()
     })
 
-
-
-    it("#get",function(done){
-        repository.get(uid,function(err,result){
-            result.get("name").should.eql("leo");
+    it("#get", function (done) {
+        co(function* () {
+            repos.clear(uid);
+            var user = yield repos.get(uid);
+            user.get("name").should.eql("leo");
             done();
-        })
+        })()
     })
-
 })

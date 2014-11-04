@@ -13,49 +13,27 @@ Install
 
     npm install domain --save
 
-Example
-=======
+create Actor class
+==================
 
-    var Domain = require("domain"),
-    domain = new Domain(),
-    AggregateRoot = Domain.AggregateRoot,
+e.g.
 
-    UserClass = AggregateRoot.extend({
-        when: function (event) {
-            switch (event.name) {
-                case "changeName":
-                    this.set("name", event.data.name);
-                    break;
-                case "changeAge":
-                    this.set("age", event.data.age);
-                    break;
-            }
-        },
-        methods: {
-            changeName: function (name) {
-                this.apply("changeName", {name: name});
-            },
-            changeAge: function (age) {
-                this.apply("changeAge", {age: age});
-            }
-        }
-    })
+```
 
-    domain.register("User",UserClass);
+Actor.extend({})
 
-    var userRepository = domain.repos.User;
+```
 
-    // add listener
-    domain.eventBus.on("changeName",function listener(){
-        // do samething.
-    })
+#### call it
 
+var user = new User();
 
-    // call
-    userRepository.get(idxxx,function(err,user){
-        user.changeName("Leo.Giese");
-        user.changeAge(22);
-    })
+user.on("apply",function(this){
+    console.log(this.get("name")) ; // leo giese
+})
+
+user.call("changeName","leo giese");
+
 
 LICENSE
 =======
