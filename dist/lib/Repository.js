@@ -2,7 +2,7 @@ System.register("lib/Repository", [], function() {
   "use strict";
   var __moduleName = "lib/Repository";
   var thunkify = require("thunkify");
-  var co = require("co");
+  var Emitter = require("events").EventEmitter;
   var cache = Symbol("cache");
   var Repository = function Repository(Actor, eventstore) {
     this.Actor = Actor;
@@ -24,7 +24,7 @@ System.register("lib/Repository", [], function() {
         while (true)
           switch ($ctx.state) {
             case 0:
-              actor = new this.Actor(data);
+              actor = new this.Actor(data, true);
               $ctx.state = 16;
               break;
             case 16:
@@ -51,13 +51,14 @@ System.register("lib/Repository", [], function() {
                 aggregateId: actor.id,
                 aggregate: this.Actor.typeName,
                 data: actor.json,
-                revision: stream.revision
+                revision: stream.lastRevision
               });
             case 10:
               $ctx.maybeThrow();
               $ctx.state = 12;
               break;
             case 12:
+              this.emit("create", actor);
               this[$traceurRuntime.toProperty(cache)][$traceurRuntime.toProperty(actor.id)] = actor;
               $ctx.state = 18;
               break;
@@ -142,7 +143,7 @@ System.register("lib/Repository", [], function() {
           }
       }, $__7, this);
     })
-  }, {});
+  }, {}, Emitter);
   module.exports = Repository;
   return {};
 });

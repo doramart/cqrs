@@ -1,13 +1,14 @@
-System.register("lib/Actor", [], function() {
+System.register("../../lib/Actor", [], function() {
   "use strict";
   var $__2;
-  var __moduleName = "lib/Actor";
+  var __moduleName = "../../lib/Actor";
   var dataKye = Symbol("dataKey"),
       set = Symbol[$traceurRuntime.toProperty("set")],
       isLoadEvents = Symbol("isLoadEvents"),
       apply = Symbol("apply"),
       listen = Symbol("listen"),
       when = Symbol("when"),
+      create = Symbol("create"),
       otherWhen = Symbol("otherWhen"),
       uid = require("shortid"),
       Event = require("./Event"),
@@ -15,10 +16,14 @@ System.register("lib/Actor", [], function() {
       typeNames = [];
   var Actor = function Actor() {
     var data = arguments[0] !== (void 0) ? arguments[0] : {};
+    var isCreate = arguments[1] !== (void 0) ? arguments[1] : false;
     this[$traceurRuntime.toProperty(dataKye)] = data;
     this[$traceurRuntime.toProperty(set)]("id", uid());
     this[$traceurRuntime.toProperty(set)]("alive", true);
     this.uncommittedEvents = [];
+    if (isCreate) {
+      this[$traceurRuntime.toProperty(create)](data);
+    }
   };
   var $Actor = Actor;
   ($traceurRuntime.createClass)(Actor, ($__2 = {}, Object.defineProperty($__2, set, {
@@ -37,6 +42,8 @@ System.register("lib/Actor", [], function() {
     writable: true
   }), Object.defineProperty($__2, "get", {
     value: function(k) {
+      console.log(k);
+      console.log(this[$traceurRuntime.toProperty(dataKye)][$traceurRuntime.toProperty(k)]);
       return this[$traceurRuntime.toProperty(dataKye)][$traceurRuntime.toProperty(k)];
     },
     configurable: true,
@@ -81,13 +88,6 @@ System.register("lib/Actor", [], function() {
     configurable: true,
     enumerable: true,
     writable: true
-  }), Object.defineProperty($__2, listen, {
-    value: function(eventName, handleName) {
-      this.emit('listen', eventName, handleName);
-    },
-    configurable: true,
-    enumerable: true,
-    writable: true
   }), Object.defineProperty($__2, when, {
     value: function(event, set) {
       if (event.name === "remove") {
@@ -102,6 +102,8 @@ System.register("lib/Actor", [], function() {
   }), Object.defineProperty($__2, apply, {
     value: function(name, data) {
       var caller = arguments[2] !== (void 0) ? arguments[2] : {};
+      var contextId = arguments[3] !== (void 0) ? arguments[3] : null;
+      caller = caller || {};
       if (this.get("alive")) {
         var event = new Event(name, {
           callerId: caller.id,
@@ -109,12 +111,17 @@ System.register("lib/Actor", [], function() {
           targetId: this.get("id"),
           targetType: this.typeName,
           data: data
-        });
+        }, contextId);
         this[$traceurRuntime.toProperty(when)](event, this[$traceurRuntime.toProperty(set)].bind(this));
-        this.uncommittedEvents.push(event);
+        this.uncommittedEvents.push(event.json);
         this.emit("apply", this);
       }
     },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__2, create, {
+    value: function(data) {},
     configurable: true,
     enumerable: true,
     writable: true
@@ -126,13 +133,25 @@ System.register("lib/Actor", [], function() {
     enumerable: true,
     writable: true
   }), Object.defineProperty($__2, "call", {
-    value: function(commandName, data, caller) {
+    value: function(commandName) {
+      var data = arguments[1] !== (void 0) ? arguments[1] : {};
+      var caller = arguments[2] !== (void 0) ? arguments[2] : {};
+      var contextId = arguments[3] !== (void 0) ? arguments[3] : null;
       var $__0 = this;
       this[$traceurRuntime.toProperty(commandName)](data, {
-        apply: (function(eventName, data) {
-          $__0[$traceurRuntime.toProperty(apply)](eventName, data, caller);
+        apply: (function(eventName, data, cxt) {
+          $__0[$traceurRuntime.toProperty(apply)](eventName, data, caller, cxt || contextId);
         }),
-        listen: this[$traceurRuntime.toProperty(listen)].bind(this)
+        listen: (function(eventName, handleName, cxt, onlyContext) {
+          if (cxt === true) {
+            onlyContext = cxt;
+            cxt = contentId;
+          }
+          $__0.emit('listen', $__0, eventName, handleName, cxt || contextId, onlyContext);
+        }),
+        call: (function(actorId, commandName, data, cxt) {
+          $__0.emit("call", actorId, commandName, data, $__0, cxt || contextId);
+        })
       });
     },
     configurable: true,
@@ -142,12 +161,17 @@ System.register("lib/Actor", [], function() {
       var typeName = options.typeName;
       if (typeNames.indexOf(typeName) !== -1)
         throw new Error("type name is exist.");
-      var methods = options.methods;
+      var methods = options.methods || {};
       var Type = function Type() {
         $traceurRuntime.defaultSuperCall(this, $Type.prototype, arguments);
       };
       var $Type = Type;
       ($traceurRuntime.createClass)(Type, {}, {}, $Actor);
+      if (methods.create) {
+        var createFun = methods.create;
+        delete methods.create;
+        Object.defineProperty(Type, constructor, {value: createFun});
+      }
       Object.defineProperty(Type, "typeName", {get: function() {
           return typeName;
         }});
@@ -164,4 +188,4 @@ System.register("lib/Actor", [], function() {
   module.exports = Actor;
   return {};
 });
-System.get("lib/Actor" + '');
+System.get("../../lib/Actor" + '');
