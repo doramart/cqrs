@@ -41,13 +41,15 @@ System.register("../../test/test.ActorListener", [], function() {
       rs[0].actorType.should.eql("Order");
       rs[0].handleMethodName.should.eql("change");
     });
-    it("#emit", function() {
+    it("#emit", function(done) {
       should.not.exist(order.get("name"));
       listener.emit({
         name: "test",
         data: "leo"
       });
-      order.get("name").should.eql("leo");
+      setTimeout((function() {
+        return (order.get("name").data.should.eql("leo"), done());
+      }), 10);
     });
   });
   return {};

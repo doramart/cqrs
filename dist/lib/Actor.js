@@ -42,8 +42,6 @@ System.register("../../lib/Actor", [], function() {
     writable: true
   }), Object.defineProperty($__2, "get", {
     value: function(k) {
-      console.log(k);
-      console.log(this[$traceurRuntime.toProperty(dataKye)][$traceurRuntime.toProperty(k)]);
       return this[$traceurRuntime.toProperty(dataKye)][$traceurRuntime.toProperty(k)];
     },
     configurable: true,

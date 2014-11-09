@@ -1,20 +1,21 @@
 var ActorListener = require("../lib/ActorListener");
 
+
 var Actor = require("../lib/Actor");
 
 var should = require("should");
 
 var Order = Actor.extend({
-    typeName:"Order",
-    methods:{
-        change(name,di){
-            di.apply("change",name);
+    typeName: "Order",
+    methods: {
+        change(name, di) {
+            di.apply("change", name);
         }
     },
-    when:function(event,set){
+    when: function (event, set) {
 
-        if(event.name === "change"){
-            set("name",event.data.data);
+        if (event.name === "change") {
+            set("name", event.data.data);
         }
     }
 });
@@ -48,15 +49,13 @@ describe("ActorListener", function () {
         rs[0].handleMethodName.should.eql("change");
     })
 
-    it("#emit", function () {
+    it("#emit", function (done) {
 
 
         should.not.exist(order.get("name"));
 
-        listener.emit({name:"test",data:"leo"});
-
-        order.get("name").should.eql("leo");
-
+        listener.emit({name: "test", data: "leo"});
+        setTimeout(()=>(order.get("name").data.should.eql("leo"), done()), 10);
     })
 
 })
