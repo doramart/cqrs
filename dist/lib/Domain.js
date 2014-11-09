@@ -1,17 +1,19 @@
-System.register("lib/Domain", [], function() {
+System.register("../../lib/Domain", [], function() {
   "use strict";
-  var __moduleName = "lib/Domain";
+  var __moduleName = "../../lib/Domain";
   var eventstore = require("eventstore"),
       Repository = require("./Repository"),
       co = require("co"),
       Actor = require("./Actor"),
+      ActorListener = require("./ActorListener"),
       EventBus = require("./EventBus");
   var Domain = function Domain() {
     this.eventstore = eventstore();
     this.ActorClasses = {};
+    this.repos = {};
     this.eventBus = new EventBus(this.eventstore, this.repos);
     this.eventstore.init();
-    this.repos = {};
+    this.actorListener = new ActorListener(this.repos);
   };
   ($traceurRuntime.createClass)(Domain, {
     register: function(ActorClass) {
@@ -35,7 +37,7 @@ System.register("lib/Domain", [], function() {
         for (var opt = [],
             $__1 = 0; $__1 < arguments.length; $__1++)
           opt[$traceurRuntime.toProperty($__1)] = arguments[$traceurRuntime.toProperty($__1)];
-        ($__2 = self.eventBus).listen.apply($__2, $traceurRuntime.spread(opt));
+        ($__2 = self.actorListener).listen.apply($__2, $traceurRuntime.spread(opt));
       }
       function actorCallEventHandle(actorId, commandName, data, caller, contextId) {
         co($traceurRuntime.initGeneratorFunction(function $__3() {
@@ -120,10 +122,10 @@ System.register("lib/Domain", [], function() {
       }))();
     },
     addListener: function(eventName, listener) {
-      this._eventBus.on(eventName, listener);
+      this.eventBus.on(eventName, listener);
     }
   }, {});
   module.exports = Domain;
   return {};
 });
-System.get("lib/Domain" + '');
+System.get("../../lib/Domain" + '');
