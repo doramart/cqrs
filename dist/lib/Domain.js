@@ -102,6 +102,48 @@ System.register("../../lib/Domain", [], function() {
         }, $__3, this);
       }))();
     },
+    create: function(actorType, data, callback) {
+      var repo = this.repos[$traceurRuntime.toProperty(actorType)];
+      co($traceurRuntime.initGeneratorFunction(function $__3() {
+        var actor,
+            e;
+        return $traceurRuntime.createGeneratorInstance(function($ctx) {
+          while (true)
+            switch ($ctx.state) {
+              case 0:
+                $ctx.pushTry(7, null);
+                $ctx.state = 10;
+                break;
+              case 10:
+                $ctx.state = 2;
+                return repo.create(data);
+              case 2:
+                actor = $ctx.sent;
+                $ctx.state = 4;
+                break;
+              case 4:
+                callback(null, actor.id);
+                $ctx.state = 6;
+                break;
+              case 6:
+                $ctx.popTry();
+                $ctx.state = -2;
+                break;
+              case 7:
+                $ctx.popTry();
+                e = $ctx.storedException;
+                $ctx.state = 13;
+                break;
+              case 13:
+                callback(e);
+                $ctx.state = -2;
+                break;
+              default:
+                return $ctx.end();
+            }
+        }, $__3, this);
+      }))();
+    },
     get: function(actorType, actorId, cb) {
       co($traceurRuntime.initGeneratorFunction(function $__3() {
         var repo,

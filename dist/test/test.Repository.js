@@ -1,6 +1,6 @@
-System.register("test/test.Repository", [], function() {
+System.register("../../test/test.Repository", [], function() {
   "use strict";
-  var __moduleName = "test/test.Repository";
+  var __moduleName = "../../test/test.Repository";
   require("traceur");
   var Repository = require("../lib/Repository");
   var Actor = require("../lib/Actor");
@@ -18,10 +18,7 @@ System.register("test/test.Repository", [], function() {
     });
     it("#create", function(done) {
       co($traceurRuntime.initGeneratorFunction(function $__0() {
-        var user,
-            getFromSnapShot,
-            rs,
-            snap;
+        var user;
         return $traceurRuntime.createGeneratorInstance(function($ctx) {
           while (true)
             switch ($ctx.state) {
@@ -35,47 +32,6 @@ System.register("test/test.Repository", [], function() {
               case 4:
                 uid = user.id;
                 user.get("name").should.eql("leo");
-                getFromSnapShot = thunkify(es.getFromSnapshot).bind(es);
-                $ctx.state = 10;
-                break;
-              case 10:
-                $ctx.state = 6;
-                return getFromSnapShot(user.id);
-              case 6:
-                rs = $ctx.sent;
-                $ctx.state = 8;
-                break;
-              case 8:
-                snap = rs[0];
-                should.exist(snap);
-                done();
-                $ctx.state = -2;
-                break;
-              default:
-                return $ctx.end();
-            }
-        }, $__0, this);
-      }))();
-    });
-    it("#get", function(done) {
-      co($traceurRuntime.initGeneratorFunction(function $__0() {
-        var user;
-        return $traceurRuntime.createGeneratorInstance(function($ctx) {
-          while (true)
-            switch ($ctx.state) {
-              case 0:
-                repos.clear(uid);
-                $ctx.state = 6;
-                break;
-              case 6:
-                $ctx.state = 2;
-                return repos.get(uid);
-              case 2:
-                user = $ctx.sent;
-                $ctx.state = 4;
-                break;
-              case 4:
-                user.get("name").should.eql("leo");
                 done();
                 $ctx.state = -2;
                 break;
@@ -88,4 +44,4 @@ System.register("test/test.Repository", [], function() {
   });
   return {};
 });
-System.get("test/test.Repository" + '');
+System.get("../../test/test.Repository" + '');

@@ -50,20 +50,9 @@ describe("EventBus", function () {
     it("#publsh", function () {
 
         actor.call("changeName", "bright");
-        actor.uncommittedEvents.length.should.eql(1);
+        actor.uncommittedEvents.length.should.eql(2);
         bus.publish(actor);
         actor.uncommittedEvents.should.eql([]);
-
-    })
-
-    it("#listen", function (done) {
-
-        bus.listen(actor, "User:changeName", "finish");
-
-        actor.call("changeName", "leo");
-        bus.publish(actor);
-
-        setTimeout(()=> {actor.get("finish").should.eql("ok");done()},100)
 
     })
 

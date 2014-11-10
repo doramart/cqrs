@@ -1,6 +1,6 @@
-System.register("test/test.EventBus", [], function() {
+System.register("../../test/test.EventBus", [], function() {
   "use strict";
-  var __moduleName = "test/test.EventBus";
+  var __moduleName = "../../test/test.EventBus";
   require("traceur");
   var Repository = require("../lib/Repository");
   var Actor = require("../lib/Actor");
@@ -58,20 +58,11 @@ System.register("test/test.EventBus", [], function() {
     });
     it("#publsh", function() {
       actor.call("changeName", "bright");
-      actor.uncommittedEvents.length.should.eql(1);
+      actor.uncommittedEvents.length.should.eql(2);
       bus.publish(actor);
       actor.uncommittedEvents.should.eql([]);
-    });
-    it("#listen", function(done) {
-      bus.listen(actor, "User:changeName", "finish");
-      actor.call("changeName", "leo");
-      bus.publish(actor);
-      setTimeout((function() {
-        actor.get("finish").should.eql("ok");
-        done();
-      }), 100);
     });
   });
   return {};
 });
-System.get("test/test.EventBus" + '');
+System.get("../../test/test.EventBus" + '');
