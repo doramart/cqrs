@@ -15,8 +15,8 @@ describe("Domain", function () {
         domain.register({
             typeName: "User",
             methods: {
-                changeName(name, apply) {
-                    apply("changeName", name);
+                changeName(name, di) {
+                    di.apply("changeName", name);
                 }
             },
             when(event,set){
@@ -36,18 +36,23 @@ var uid;
     it("#create", function (done) {
 
         domain.addListener("User:create", function (event) {
-            console.log(event);
+            event.name.should.eql("create");
+            done()
         })
 
         domain.create("User",{name:"brighthas"}, function (err,id) {
             uid = id;
             should.exist(id);
-            done();
         });
 
     })
 
     it("#call", function (done) {
+        domain.call("User",uid,"changeName","leo");
+        domain.get("User",uid, function (act) {
+            act.id.should.eql(uid);
+            done()
+        })
     })
 
 });

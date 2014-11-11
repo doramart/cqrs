@@ -171,7 +171,7 @@ System.register("../../lib/Actor", [], function() {
       var data = arguments[1] !== (void 0) ? arguments[1] : {};
       var caller = arguments[2] !== (void 0) ? arguments[2] : {};
       var contextId = arguments[3] !== (void 0) ? arguments[3] : null;
-      this[$traceurRuntime.toProperty(commandName)](data, getDI(data, caller, contextId));
+      this[$traceurRuntime.toProperty(commandName)](data, this[$traceurRuntime.toProperty(getDI)](data, caller, contextId));
     },
     configurable: true,
     enumerable: true,
