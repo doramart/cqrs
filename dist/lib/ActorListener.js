@@ -18,11 +18,11 @@ System.register("../../lib/ActorListener", [], function() {
             cxt: cxt,
             onlyContext: onlyContext
           };
-      repo = (repo = this.repos[$traceurRuntime.toProperty(eventName)]) ? this.repos[$traceurRuntime.toProperty(eventName)] : (this.repos[$traceurRuntime.toProperty(eventName)] = []);
+      repo = (repo = this.repos[eventName]) ? this.repos[eventName] : (this.repos[eventName] = []);
       repo.push(listener);
     },
     findListener: function(eventName) {
-      return this.repos[$traceurRuntime.toProperty(eventName)] || [];
+      return this.repos[eventName] || [];
     },
     emit: function(event) {
       var self = this;
@@ -52,8 +52,8 @@ System.register("../../lib/ActorListener", [], function() {
                 $ctx.state = 11;
                 break;
               case 5:
-                listener = list[$traceurRuntime.toProperty(i)];
-                actorRepo = self.actorRepos[$traceurRuntime.toProperty(listener.actorType)];
+                listener = list[i];
+                actorRepo = self.actorRepos[listener.actorType];
                 $ctx.state = 6;
                 break;
               case 6:
