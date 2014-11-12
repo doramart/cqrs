@@ -33,10 +33,11 @@ domain.register({
 #### domain#create(typeName,data,callback)
 
 create actor object.
-
+```
 domain.create("User",data,function(err,actorId){
     ...
 })
+```
 
 #### domain#call(command,callback)
 
@@ -44,6 +45,18 @@ domain.create("User",data,function(err,actorId){
 + callback(err)
 
 call actor's domain method.
+
+```
+domain.call({
+            typeName:"User",
+            actorId:uid,
+            methodName:"recharge",
+            data:{money:20}
+        }, function (err) {
+            ...
+        });
+```
+
 
 
 
