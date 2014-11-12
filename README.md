@@ -1,12 +1,6 @@
-Note
-====
+#### DDD-CQRS framework for javascript.
 
-Now only preview.
-
-domain
-======
-
-Domain for javascript, from CQRS & DDD idea.
+![](https://raw.githubusercontent.com/leogiese/ddd-cqrs/master/img.png)
 
 Install
 =======
