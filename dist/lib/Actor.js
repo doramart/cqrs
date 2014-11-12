@@ -92,8 +92,8 @@ System.register("../../lib/Actor", [], function() {
       } else if (event.name === "create") {
         this[dataKye] === event.data;
       }
-      if (this[otherWhen])
-        this[otherWhen](event, set);
+      if (this._otherWhen)
+        this._otherWhen(event, set);
     },
     configurable: true,
     enumerable: true,
@@ -194,7 +194,7 @@ System.register("../../lib/Actor", [], function() {
       Object.defineProperty(Type.prototype, "typeName", {get: function() {
           return typeName;
         }});
-      Object.defineProperty(Type.prototype, otherWhen, {value: options.when});
+      Object.defineProperty(Type.prototype, "_otherWhen", {value: options.when});
       for (var k in methods) {
         Object.defineProperty(Type.prototype, k, {value: methods[k]});
       }

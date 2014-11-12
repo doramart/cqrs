@@ -18,7 +18,7 @@ System.register("../../lib/Domain", [], function() {
   ($traceurRuntime.createClass)(Domain, {
     register: function(ActorClass) {
       var self = this;
-      if (ActorClass instanceof Actor) {} else {
+      if (typeof ActorClass === "function") {} else {
         ActorClass = Actor.extend(ActorClass);
       }
       this.ActorClasses[ActorClass.typeName] = ActorClass;
