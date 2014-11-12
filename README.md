@@ -38,6 +38,13 @@ domain.create("User",data,function(err,actorId){
     ...
 })
 
+#### domain#call(command,callback)
+
++ command {typeName, actorId, methodName, [data], [contextId]}
++ callback(err)
+
+call actor's domain method.
+
 
 
 LICENSE

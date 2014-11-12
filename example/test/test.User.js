@@ -2,6 +2,7 @@ var domain = require("../domain");
 var should = require("should");
 
 
+var uid;
 
 describe("domain", function () {
 
@@ -12,8 +13,21 @@ describe("domain", function () {
             done();
         });
         domain.create("User",{}, function (err,id) {
+            uid = id;
             should.exist(id);
             should.not.exist(err);
         });
     });
+
+    it("#call", function (done) {
+        domain.call({
+            typeName:"User",
+            actorId:uid,
+            methodName:"recharge",
+            data:{money:20}
+        }, function (err) {
+            should.not.exist(err);
+            done();
+        })
+    })
 });
