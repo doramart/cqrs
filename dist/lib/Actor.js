@@ -157,8 +157,8 @@ System.register("../../lib/Actor", [], function() {
           }
           $__0.emit('listen', $__0, eventName, handleName, cxt || contextId, onlyContext);
         }),
-        call: (function(actorId, commandName, data, cxt) {
-          $__0.emit("call", actorId, commandName, data, $__0, cxt || contextId);
+        call: (function(command) {
+          $__0.emit("call", command);
         })
       };
     },

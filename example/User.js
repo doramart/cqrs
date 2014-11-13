@@ -35,26 +35,27 @@ module.exports = Actor.extend({
                 break;
             case "recharge":
                 var orderforms = this.get("orderforms");
-                orderforms[event.data.id] = event.data.money;
+                orderforms[event.data.data.id] = event.data.data.money;
                 break;
 
             case "rechargeFinish":
                 var orderforms = this.get("orderforms");
-                var money1  = orderforms[event.data.id];
+                var money1  = orderforms[event.data.data.id];
                 var money = this.get("money");
                 set("money",money+money1);
-                delete orderforms[event.data.id];
+                delete orderforms[event.data.data.id];
                 break;
 
             case "deduct":
                 var orderforms = this.get("orderforms");
-                orderforms[event.data.id] = event.data.money;
+                orderforms[event.data.data.id] = event.data.data.money;
                 var money = this.get("money");
-                set("money",money-event.data.money);
+                set("money",money-event.data.data.money);
                 break;
 
             case "deductFinish":
-                delete orderforms[event.data.id];
+                var orderforms = this.get("orderforms");
+                delete orderforms[event.data.data.id];
                 break;
         }
     }

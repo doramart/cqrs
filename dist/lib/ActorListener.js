@@ -24,7 +24,7 @@ System.register("../../lib/ActorListener", [], function() {
     findListener: function(eventName) {
       return this.repos[eventName] || [];
     },
-    emit: function(event) {
+    emit: function(eventname, event) {
       var self = this;
       co($traceurRuntime.initGeneratorFunction(function $__1() {
         var list,
@@ -37,7 +37,7 @@ System.register("../../lib/ActorListener", [], function() {
           while (true)
             switch ($ctx.state) {
               case 0:
-                list = self.findListener(event.name);
+                list = self.findListener(eventname);
                 $ctx.state = 13;
                 break;
               case 13:

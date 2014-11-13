@@ -11,9 +11,9 @@ System.register("../../lib/Domain", [], function() {
     this.eventstore = eventstore();
     this.ActorClasses = {};
     this.repos = {};
-    this.eventBus = new EventBus(this.eventstore, this.repos);
-    this.eventstore.init();
     this.actorListener = new ActorListener(this.repos);
+    this.eventBus = new EventBus(this.eventstore, this.repos, this.actorListener);
+    this.eventstore.init();
   };
   ($traceurRuntime.createClass)(Domain, {
     register: function(ActorClass) {
@@ -33,37 +33,11 @@ System.register("../../lib/Domain", [], function() {
       function actorApplyEventHandle(actor) {
         self.eventBus.publish(actor);
       }
-      function actorListenEventHandle() {
-        var $__3;
-        for (var opt = [],
-            $__2 = 0; $__2 < arguments.length; $__2++)
-          opt[$__2] = arguments[$__2];
-        ($__3 = self.actorListener).listen.apply($__3, $traceurRuntime.spread(opt));
+      function actorListenEventHandle(actor, eventName, handleName, contextId, onlyContext) {
+        self.actorListener.listen(actor, eventName, handleName, contextId, onlyContext);
       }
-      function actorCallEventHandle(actorId, commandName, data, caller, contextId) {
-        co($traceurRuntime.initGeneratorFunction(function $__4() {
-          var actor;
-          return $traceurRuntime.createGeneratorInstance(function($ctx) {
-            while (true)
-              switch ($ctx.state) {
-                case 0:
-                  $ctx.state = 2;
-                  return repo.get(actorId);
-                case 2:
-                  actor = $ctx.sent;
-                  $ctx.state = 4;
-                  break;
-                case 4:
-                  if (actor) {
-                    actor.call(commandName, data, caller, contextId);
-                  }
-                  $ctx.state = -2;
-                  break;
-                default:
-                  return $ctx.end();
-              }
-          }, $__4, this);
-        }))();
+      function actorCallEventHandle(command) {
+        self.call(command);
       }
       var listenActorEventHandle = (function(actor) {
         actor.on("apply", actorApplyEventHandle);
@@ -77,8 +51,9 @@ System.register("../../lib/Domain", [], function() {
       repo.on("reborn", listenActorEventHandle);
     },
     call: function(command, callback) {
+      callback = callback || function() {};
       var self = this;
-      co($traceurRuntime.initGeneratorFunction(function $__4() {
+      co($traceurRuntime.initGeneratorFunction(function $__2() {
         var repo,
             actor,
             err;
@@ -127,12 +102,12 @@ System.register("../../lib/Domain", [], function() {
               default:
                 return $ctx.end();
             }
-        }, $__4, this);
+        }, $__2, this);
       }))();
     },
     create: function(actorType, data, callback) {
       var repo = this.repos[actorType];
-      co($traceurRuntime.initGeneratorFunction(function $__4() {
+      co($traceurRuntime.initGeneratorFunction(function $__2() {
         var actor,
             e;
         return $traceurRuntime.createGeneratorInstance(function($ctx) {
@@ -169,18 +144,23 @@ System.register("../../lib/Domain", [], function() {
               default:
                 return $ctx.end();
             }
-        }, $__4, this);
+        }, $__2, this);
       }))();
     },
     get: function(actorType, actorId, cb) {
       var self = this;
-      co($traceurRuntime.initGeneratorFunction(function $__4() {
+      co($traceurRuntime.initGeneratorFunction(function $__2() {
         var repo,
-            actor;
+            actor,
+            e;
         return $traceurRuntime.createGeneratorInstance(function($ctx) {
           while (true)
             switch ($ctx.state) {
               case 0:
+                $ctx.pushTry(9, null);
+                $ctx.state = 12;
+                break;
+              case 12:
                 repo = self.repos[actorType];
                 $ctx.state = 6;
                 break;
@@ -192,13 +172,26 @@ System.register("../../lib/Domain", [], function() {
                 $ctx.state = 4;
                 break;
               case 4:
-                cb(actor);
+                cb(null, actor.json);
+                $ctx.state = 8;
+                break;
+              case 8:
+                $ctx.popTry();
+                $ctx.state = -2;
+                break;
+              case 9:
+                $ctx.popTry();
+                e = $ctx.storedException;
+                $ctx.state = 15;
+                break;
+              case 15:
+                cb(e);
                 $ctx.state = -2;
                 break;
               default:
                 return $ctx.end();
             }
-        }, $__4, this);
+        }, $__2, this);
       }))();
     },
     addListener: function(eventName, listener) {
