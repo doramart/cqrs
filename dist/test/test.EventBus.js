@@ -7,6 +7,7 @@ System.register("../../test/test.EventBus", [], function() {
   var ES = require("eventstore");
   var es = new ES();
   var EventBus = require("../lib/EventBus");
+  var ActorListener = require("../lib/ActorListener");
   var co = require("co");
   var should = require("should");
   describe("EventBus", function() {
@@ -14,18 +15,15 @@ System.register("../../test/test.EventBus", [], function() {
         actor,
         repos = {};
     it("#new", function() {
-      bus = new EventBus(es, repos);
+      bus = new EventBus(es, repos, new ActorListener);
     });
     it("#init", function(done) {
-      var User = Actor.extend({
-        typeName: "User",
-        methods: {
-          changeName: function(name, di) {
-            di.apply("changeName", name);
-          },
-          finish: function(name, di) {
-            di.apply("finish");
-          }
+      var User = Actor.extend("User", {
+        changeName: function(name, di) {
+          di.apply("changeName", name);
+        },
+        finish: function(name, di) {
+          di.apply("finish");
         },
         when: function(event, set) {
           if (event.name === "finish") {
@@ -34,14 +32,14 @@ System.register("../../test/test.EventBus", [], function() {
         }
       });
       var uid;
-      repos[$traceurRuntime.toProperty(User.typeName)] = new Repository(User, es);
+      repos[User.typeName] = new Repository(User, es);
       co($traceurRuntime.initGeneratorFunction(function $__0() {
         return $traceurRuntime.createGeneratorInstance(function($ctx) {
           while (true)
             switch ($ctx.state) {
               case 0:
                 $ctx.state = 2;
-                return repos[$traceurRuntime.toProperty(User.typeName)].create({name: "leo"});
+                return repos[User.typeName].create({name: "leo"});
               case 2:
                 actor = $ctx.sent;
                 $ctx.state = 4;

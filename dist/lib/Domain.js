@@ -19,7 +19,7 @@ System.register("../../lib/Domain", [], function() {
     register: function(ActorClass) {
       var self = this;
       if (typeof ActorClass === "function") {} else {
-        ActorClass = Actor.extend(ActorClass);
+        ActorClass = Actor.extend(arguments[0], arguments[1]);
       }
       this.ActorClasses[ActorClass.typeName] = ActorClass;
       var repo = new Repository(ActorClass, this.eventstore);

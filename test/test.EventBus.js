@@ -4,6 +4,7 @@ var Actor = require("../lib/Actor");
 var ES = require("eventstore");
 var es = new ES();
 var EventBus = require("../lib/EventBus");
+var ActorListener = require("../lib/ActorListener");
 var co = require("co");
 var should = require("should");
 
@@ -15,26 +16,24 @@ describe("EventBus", function () {
     let bus, actor, repos = {}
 
     it("#new", function () {
-        bus = new EventBus(es,repos);
+        bus = new EventBus(es, repos, new ActorListener);
     })
 
     it("#init", function (done) {
-        var User = Actor.extend({
-            typeName: "User",
-            methods: {
-                changeName(name, di) {
-                    di.apply("changeName", name);
-                },
-                finish(name,di){
-                    di.apply("finish");
-                }
-
+        var User = Actor.extend("User", {
+            changeName(name, di) {
+                di.apply("changeName", name);
             },
-            when(event,set){
-                if(event.name === "finish"){
-                    set("finish","ok");
+            finish(name, di) {
+                di.apply("finish");
+            },
+
+            when(event, set) {
+                if (event.name === "finish") {
+                    set("finish", "ok");
                 }
             }
+
         });
 
         var uid;

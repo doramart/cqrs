@@ -4,11 +4,10 @@ System.register("../../test/test.ActorListener", [], function() {
   var ActorListener = require("../lib/ActorListener");
   var Actor = require("../lib/Actor");
   var should = require("should");
-  var Order = Actor.extend({
-    typeName: "Order",
-    methods: {change: function(name, di) {
-        di.apply("change", name);
-      }},
+  var Order = Actor.extend("Order", {
+    change: function(name, di) {
+      di.apply("change", name);
+    },
     when: function(event, set) {
       if (event.name === "change") {
         set("name", event.data.data);
@@ -43,13 +42,13 @@ System.register("../../test/test.ActorListener", [], function() {
     });
     it("#emit", function(done) {
       should.not.exist(order.get("name"));
-      listener.emit({
+      listener.emit("test", {
         name: "test",
         data: "leo"
       });
       setTimeout((function() {
         return (order.get("name").data.should.eql("leo"), done());
-      }), 10);
+      }), 100);
     });
   });
   return {};

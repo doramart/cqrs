@@ -175,9 +175,8 @@ System.register("../../lib/Actor", [], function() {
     configurable: true,
     enumerable: true,
     writable: true
-  }), $__2), {extend: function(options) {
-      var typeName = options.typeName;
-      var methods = options.methods || {};
+  }), $__2), {extend: function(typeName) {
+      var methods = arguments[1] !== (void 0) ? arguments[1] : {};
       var Type = function Type() {
         $traceurRuntime.defaultSuperCall(this, $Type.prototype, arguments);
       };
@@ -194,9 +193,12 @@ System.register("../../lib/Actor", [], function() {
       Object.defineProperty(Type.prototype, "typeName", {get: function() {
           return typeName;
         }});
-      Object.defineProperty(Type.prototype, "_otherWhen", {value: options.when});
       for (var k in methods) {
-        Object.defineProperty(Type.prototype, k, {value: methods[k]});
+        if (k === "when") {
+          Object.defineProperty(Type.prototype, "_otherWhen", {value: methods[k]});
+        } else {
+          Object.defineProperty(Type.prototype, k, {value: methods[k]});
+        }
       }
       return Type;
     }}, EventEmitter);

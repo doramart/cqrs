@@ -9,9 +9,7 @@ var thunkify = require("thunkify");
 
 describe("Repository", function () {
 
-    var User = Actor.extend({
-        typeName:"People"
-    }),es = new ES,repos;
+    var User = Actor.extend("People"),es = new ES,repos;
 
     var uid;
 

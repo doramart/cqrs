@@ -9,7 +9,7 @@ System.register("../../test/test.Repository", [], function() {
   var should = require("should");
   var thunkify = require("thunkify");
   describe("Repository", function() {
-    var User = Actor.extend({typeName: "People"}),
+    var User = Actor.extend("People"),
         es = new ES,
         repos;
     var uid;

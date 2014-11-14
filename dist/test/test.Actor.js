@@ -1,6 +1,6 @@
-System.register("test/test.Actor", [], function() {
+System.register("../../test/test.Actor", [], function() {
   "use strict";
-  var __moduleName = "test/test.Actor";
+  var __moduleName = "../../test/test.Actor";
   require("traceur");
   var should = require("should");
   var Actor = require("../lib/Actor");
@@ -26,12 +26,9 @@ System.register("test/test.Actor", [], function() {
       should.exist(data.alive);
     });
     it("#apply", function() {
-      var User = Actor.extend({
-        typeName: "User",
-        methods: {changeName: function(name, service) {
-            service.apply("changeName", name);
-          }}
-      });
+      var User = Actor.extend("User", {changeName: function(name, service) {
+          service.apply("changeName", name);
+        }});
       var caller = new User();
       var actor = new User();
       actor.on("apply", function() {
@@ -50,15 +47,12 @@ System.register("test/test.Actor", [], function() {
       actor.call("changeName", "leo", caller);
     });
     it("#listen", function(done) {
-      var User = Actor.extend({
-        typeName: "User",
-        methods: {
-          changeName: function(name, service) {
-            service.listen("change", "finishChange");
-          },
-          finishChange: function(data, service) {
-            done();
-          }
+      var User = Actor.extend("User", {
+        changeName: function(name, service) {
+          service.listen("change", "finishChange");
+        },
+        finishChange: function(data, service) {
+          done();
         }
       });
       var user = new User();
@@ -68,11 +62,10 @@ System.register("test/test.Actor", [], function() {
       user.call("changeName");
     });
     it("#when", function() {
-      var User = Actor.extend({
-        typeName: "People",
-        methods: {changeName: function(name, service) {
-            service.apply("changeName", name);
-          }},
+      var User = Actor.extend("User", {
+        changeName: function(name, service) {
+          service.apply("changeName", name);
+        },
         when: function(event, set) {
           if (event.name === "changeName") {
             set("name", event.data.data);
@@ -86,4 +79,4 @@ System.register("test/test.Actor", [], function() {
   });
   return {};
 });
-System.get("test/test.Actor" + '');
+System.get("../../test/test.Actor" + '');

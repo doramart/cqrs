@@ -12,16 +12,13 @@ describe("Domain", function () {
 
     it("#register", function () {
 
-        domain.register({
-            typeName: "User",
-            methods: {
-                changeName(name, di) {
-                    di.apply("changeName", name);
-                }
+        domain.register("User", {
+            changeName(name, di) {
+                di.apply("changeName", name);
             },
-            when(event,set){
-                if(event.name === "changeName"){
-                    set("name",event.data);
+            when(event, set) {
+                if (event.name === "changeName") {
+                    set("name", event.data);
                 }
             }
         });
@@ -31,7 +28,7 @@ describe("Domain", function () {
 
     });
 
-var uid;
+    var uid;
 
     it("#create", function (done) {
 
@@ -40,7 +37,7 @@ var uid;
             done()
         })
 
-        domain.create("User",{name:"brighthas"}, function (err,id) {
+        domain.create("User", {name: "brighthas"}, function (err, id) {
             uid = id;
             should.exist(id);
         });
@@ -48,8 +45,8 @@ var uid;
     })
 
     it("#call", function (done) {
-        domain.call("User",uid,"changeName","leo");
-        domain.get("User",uid, function (act) {
+        domain.call({typeName:"User", actorId:uid, methodName:"changeName", data:"leo"});
+        domain.get("User", uid, function (err,act) {
             act.id.should.eql(uid);
             done()
         })

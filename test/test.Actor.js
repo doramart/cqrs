@@ -32,12 +32,9 @@ describe("Actor", function () {
 
         //var caller = new Actor();
 
-        var User = Actor.extend({
-            typeName:"User",
-            methods:{
-                changeName: function (name,service) {
-                    service.apply("changeName",name);
-                }
+        var User = Actor.extend("User", {
+            changeName: function (name, service) {
+                service.apply("changeName", name);
             }
         })
 
@@ -63,45 +60,39 @@ describe("Actor", function () {
     })
 
     it("#listen", function (done) {
-        var User = Actor.extend({
-            typeName:"User",
-            methods:{
-                changeName: function (name,service) {
-                    service.listen("change","finishChange");
-                },
-                finishChange: function (data, service) {
-                    done();
-                }
+        var User = Actor.extend("User", {
+            changeName: function (name, service) {
+                service.listen("change", "finishChange");
+            },
+            finishChange: function (data, service) {
+                done();
             }
         })
 
         var user = new User();
 
-        user.on("listen", function (event,methodname) {
-            this.call("finishChange",methodname);
+        user.on("listen", function (event, methodname) {
+            this.call("finishChange", methodname);
         });
 
         user.call("changeName");
     })
 
     it("#when", function () {
-        var User = Actor.extend({
-            typeName:"People",
-            methods:{
-                changeName: function (name,service) {
-                    service.apply("changeName",name);
-                }
-            },
+        var User = Actor.extend("User", {
+                changeName: function (name, service) {
+                    service.apply("changeName", name);
+                },
             when: function (event, set) {
-                if(event.name === "changeName"){
-                    set("name",event.data.data);
+                if (event.name === "changeName") {
+                    set("name", event.data.data);
                 }
             }
         })
 
         var user = new User();
 
-        user.call("changeName","leo");
+        user.call("changeName", "leo");
         user.get("name").should.eql("leo");
     })
 })

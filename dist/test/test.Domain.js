@@ -9,19 +9,18 @@ System.register("../../test/test.Domain", [], function() {
       domain = new Domain();
     });
     it("#register", function() {
-      domain.register({
-        typeName: "User",
-        methods: {changeName: function(name, di) {
-            di.apply("changeName", name);
-          }},
+      domain.register("User", {
+        changeName: function(name, di) {
+          di.apply("changeName", name);
+        },
         when: function(event, set) {
           if (event.name === "changeName") {
             set("name", event.data);
           }
         }
       });
-      should.exist(domain.repos[$traceurRuntime.toProperty("User")]);
-      should.exist(domain.ActorClasses[$traceurRuntime.toProperty("User")]);
+      should.exist(domain.repos["User"]);
+      should.exist(domain.ActorClasses["User"]);
     });
     var uid;
     it("#create", function(done) {
@@ -35,8 +34,13 @@ System.register("../../test/test.Domain", [], function() {
       });
     });
     it("#call", function(done) {
-      domain.call("User", uid, "changeName", "leo");
-      domain.get("User", uid, function(act) {
+      domain.call({
+        typeName: "User",
+        actorId: uid,
+        methodName: "changeName",
+        data: "leo"
+      });
+      domain.get("User", uid, function(err, act) {
         act.id.should.eql(uid);
         done();
       });
