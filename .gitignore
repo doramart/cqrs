@@ -25,5 +25,3 @@ build/Release
 node_modules
 
 .idea
-
-old_lib

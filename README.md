@@ -17,10 +17,12 @@ var domain = require("cqrs")();
 
 #### register Actor class , Actor like DDD's AggregateRoot.
 
+```
 domain.register("User",{
     changeName:function(data,di){},
     when:function(event,set){}
 })
+```
 
 #### domain#create(typeName,data,callback)
 
