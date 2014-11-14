@@ -12,7 +12,7 @@ describe("domain", function () {
             event.data.data.orderforms.should.eql({});
             done();
         });
-        domain.create("User",{}, function (err,id) {
+        domain.create("User", {}, function (err, id) {
             uid = id;
             should.exist(id);
             should.not.exist(err);
@@ -21,13 +21,13 @@ describe("domain", function () {
 
     it("#call recharge", function (done) {
         domain.call({
-            typeName:"User",
-            actorId:uid,
-            methodName:"recharge",
-            data:{id:"t01",money:20}
+            typeName: "User",
+            actorId: uid,
+            methodName: "recharge",
+            data: {id: "t01", money: 20}
         }, function (err) {
             should.not.exist(err);
-            domain.get("User",uid, function (err,u) {
+            domain.get("User", uid, function (err, u) {
                 u.orderforms.t01.should.eql(20);
                 done();
             })
@@ -36,13 +36,13 @@ describe("domain", function () {
 
     it("#call rechargeFinish", function (done) {
         domain.call({
-            typeName:"User",
-            actorId:uid,
-            methodName:"rechargeFinish",
-            data:{id:"t01"}
+            typeName: "User",
+            actorId: uid,
+            methodName: "rechargeFinish",
+            data: {id: "t01"}
         }, function (err) {
             should.not.exist(err);
-            domain.get("User",uid, function (err,u) {
+            domain.get("User", uid, function (err, u) {
                 u.money.should.eql(120);
                 done();
             })
@@ -51,13 +51,13 @@ describe("domain", function () {
 
     it("#call deduct", function (done) {
         domain.call({
-            typeName:"User",
-            actorId:uid,
-            methodName:"deduct",
-            data:{id:"t02",money:20}
+            typeName: "User",
+            actorId: uid,
+            methodName: "deduct",
+            data: {id: "t02", money: 20}
         }, function (err) {
             should.not.exist(err);
-            domain.get("User",uid, function (err,u) {
+            domain.get("User", uid, function (err, u) {
                 u.orderforms.t02.should.eql(20);
                 u.money.should.eql(100);
                 done();
@@ -67,21 +67,19 @@ describe("domain", function () {
 
     it("#call deductFinish", function (done) {
         domain.call({
-            typeName:"User",
-            actorId:uid,
-            methodName:"deductFinish",
-            data:{id:"t02"}
+            typeName: "User",
+            actorId: uid,
+            methodName: "deductFinish",
+            data: {id: "t02"}
         }, function (err) {
             should.not.exist(err);
-            domain.get("User",uid, function (err,u) {
+            domain.get("User", uid, function (err, u) {
                 u.money.should.eql(100);
                 should.not.exist(u.orderforms.t02);
                 done();
             })
         })
     })
-
-
 
 
 });

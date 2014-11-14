@@ -50,7 +50,58 @@ domain.call({
             ...
         });
 ```
+#### domain#addListener(eventName,handleFunction)
+```
+domain.addListener("User:changeName",function(domainEvent){
 
+});
+```
+
+Actor API
+=========
+
+#### Defined Actor class
+```
+var User = Actor.extend("User",methods);
+```
+
+
+#### Defined methods
+
+```
+Actor.extend("User",{
+    changeName:function(data,di){
+        var name = data.name;
+        if(name.length <3 || name.length > 18){
+            throw new Error("name char size must >3 and <18");
+        }
+        di.apply("change name",data.name);
+    }
+})
+```
+
+the method cann't change self data. and must use `when` method.
+
+#### `when(event,set)`
+
+when method only set self data.
+
+```
+Actor.extend("User",{
+    changeName:function(data,di){
+        var name = data.name;
+        if(name.length <3 || name.length > 18){
+            throw new Error("name char size must >3 and <18");
+        }
+        di.apply("change name",data.name);
+    },
+    when:function(event,set){
+        if(event.name === "change name"){
+            set("name",event.data);
+        }
+    }
+})
+```
 
 LICENSE
 =======
