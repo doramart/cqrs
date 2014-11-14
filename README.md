@@ -1,19 +1,18 @@
 #### DDD-CQRS framework for javascript.
 
-![](https://raw.githubusercontent.com/leogiese/ddd-cqrs/master/img.png)
+![](https://raw.githubusercontent.com/leogiese/cqrs/master/img.png)
 
 Install
 =======
 
-    npm install ddd-cqrs --save
+    npm install cqrs --save
 
 Use it
 ======
 
-
 #### create a domain object
 ```
-var domain = require("ddd-cqrs")();
+var domain = require("cqrs")();
 ```
 
 #### register Actor class , Actor like DDD's AggregateRoot.
@@ -50,8 +49,6 @@ domain.call({
             ...
         });
 ```
-
-
 
 
 LICENSE

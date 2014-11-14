@@ -1,14 +1,14 @@
 {
-  "name": "ddd-cqrs",
-  "version": "0.0.2",
-  "description": "domain for javascript",
+  "name": "cqrs",
+  "version": "0.0.0",
+  "description": "cqrs for javascript",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/leogiese/domain"
+    "url": "https://github.com/leogiese/cqrs"
   },
   "keywords": [
     "ddd",
@@ -18,9 +18,9 @@
   "author": "leogiese",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/leogiese/domain/issues"
+    "url": "https://github.com/leogiese/cqrs/issues"
   },
-  "homepage": "https://github.com/leogiese/domain",
+  "homepage": "https://github.com/leogiese/cqrs",
   "dependencies": {
     "co": "^3.1.0",
     "eventstore": "^1.0.3",
@@ -35,6 +35,7 @@
     "traceur": "0.0.72"
   },
   "directories": {
-    "test": "test"
+    "example": "example",
+    "test": "dist/test"
   }
 }
