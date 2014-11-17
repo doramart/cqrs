@@ -7,9 +7,9 @@ System.register("../../lib/Actor", [], function() {
       isLoadEvents = Symbol("isLoadEvents"),
       apply = Symbol("apply"),
       listen = Symbol("listen"),
+      readDataKye = Symbol("readDataKye"),
       when = Symbol("when"),
       create = Symbol("create"),
-      otherWhen = Symbol("otherWhen"),
       getDI = Symbol("getDI"),
       uid = require("shortid"),
       Event = require("./Event"),
@@ -18,57 +18,53 @@ System.register("../../lib/Actor", [], function() {
     var data = arguments[0] !== (void 0) ? arguments[0] : {};
     var isCreate = arguments[1] !== (void 0) ? arguments[1] : false;
     this[dataKye] = data;
-    this[set]("id", uid());
-    this[set]("alive", true);
+    this[readDataKye] = {};
+    this[dataKye].id = uid();
     this.uncommittedEvents = [];
     if (isCreate) {
       this[create](this[dataKye]);
     }
   };
   var $Actor = Actor;
-  ($traceurRuntime.createClass)(Actor, ($__2 = {}, Object.defineProperty($__2, set, {
-    value: function(k, v) {
-      if (arguments.length === 1) {
-        for (var n in k) {
-          this[set](n, k[n]);
-        }
-      } else {
-        this[dataKye][k] = v;
-      }
-    },
-    configurable: true,
-    enumerable: true,
-    writable: true
-  }), Object.defineProperty($__2, "get", {
-    value: function(k) {
-      return this[dataKye][k];
-    },
-    configurable: true,
-    enumerable: true,
-    writable: true
-  }), Object.defineProperty($__2, "id", {
+  ($traceurRuntime.createClass)(Actor, ($__2 = {}, Object.defineProperty($__2, "id", {
     get: function() {
-      return this.get("id");
+      return this[dataKye].id;
+    },
+    configurable: true,
+    enumerable: true
+  }), Object.defineProperty($__2, "data", {
+    get: function() {
+      return this[readDataKye];
     },
     configurable: true,
     enumerable: true
   }), Object.defineProperty($__2, "json", {
     get: function() {
-      var data = JSON.parse(JSON.stringify(this[dataKye]));
-      data.id = this.get("id");
-      data.alive = this.get("alive");
-      return data;
+      return this[readDataKye] = this.toJSON(this[dataKye]);
     },
     configurable: true,
     enumerable: true
+  }), Object.defineProperty($__2, "refreshData", {
+    value: function() {
+      this.json;
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
+  }), Object.defineProperty($__2, "toJSON", {
+    value: function(data) {
+      return JSON.parse(JSON.stringify(data));
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
   }), Object.defineProperty($__2, "loadEvents", {
     value: function(events) {
       var $__0 = this;
       if (this[isLoadEvents])
         return;
-      var set = this.set.bind(this);
       events.forEach((function(event) {
-        $__0[when](event, set);
+        $__0[when](event);
       }));
       this[isLoadEvents] = true;
     },
@@ -79,21 +75,26 @@ System.register("../../lib/Actor", [], function() {
     value: function(snap) {
       if (this[isLoadEvents])
         return;
-      this[set](snap);
+      this[dataKye] = this.reborn(snap);
       this[isLoadEvents] = true;
     },
     configurable: true,
     enumerable: true,
     writable: true
+  }), Object.defineProperty($__2, "reborn", {
+    value: function(data) {
+      return data;
+    },
+    configurable: true,
+    enumerable: true,
+    writable: true
   }), Object.defineProperty($__2, when, {
-    value: function(event, set) {
-      if (event.name === "remove") {
-        set("alive", false);
-      } else if (event.name === "create") {
-        this[dataKye] === event.data;
+    value: function(event) {
+      if (event.name === "create") {
+        this[dataKye] === this.reborn(event.data);
       }
       if (this._otherWhen)
-        this._otherWhen(event, set);
+        this._otherWhen(event, this[dataKye]);
     },
     configurable: true,
     enumerable: true,
@@ -103,18 +104,16 @@ System.register("../../lib/Actor", [], function() {
       var caller = arguments[2] !== (void 0) ? arguments[2] : {};
       var contextId = arguments[3] !== (void 0) ? arguments[3] : null;
       caller = caller || {};
-      if (this.get("alive")) {
-        var event = new Event(name, {
-          callerId: caller.id,
-          callerType: caller.typeName,
-          targetId: this.get("id"),
-          targetType: this.typeName,
-          data: data
-        }, contextId);
-        this[when](event, this[set].bind(this));
-        this.uncommittedEvents.push(event.json);
-        this.emit("apply", this);
-      }
+      var event = new Event(name, {
+        callerId: caller.id,
+        callerType: caller.typeName,
+        targetId: this.json.id,
+        targetType: this.typeName,
+        data: data
+      }, contextId);
+      this[when](event);
+      this.uncommittedEvents.push(event.json);
+      this.emit("apply", this);
     },
     configurable: true,
     enumerable: true,
@@ -185,7 +184,7 @@ System.register("../../lib/Actor", [], function() {
       if (methods.create) {
         var createFun = methods.create;
         delete methods.create;
-        Object.defineProperty(Type, constructor, {value: createFun});
+        Object.defineProperty(Type.prototype, "create", {value: createFun});
       }
       Object.defineProperty(Type, "typeName", {get: function() {
           return typeName;

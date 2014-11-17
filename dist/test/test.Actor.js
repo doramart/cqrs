@@ -11,19 +11,16 @@ System.register("../../test/test.Actor", [], function() {
         name: "leo",
         book: "xxx"
       });
-      should.exist(actor.get("id"));
-      actor.get("name").should.eql("leo");
-      actor.get("book").should.eql("xxx");
-      should.exist(actor.get("id"));
-      actor.get("alive").should.eql(true);
-      should.not.exist(actor.set);
+      var data = actor.json;
+      should.exist(data.id);
+      data.name.should.eql("leo");
+      data.book.should.eql("xxx");
     });
     it("#json", function() {
       var data = actor.json;
       data.name.should.eql("leo");
       data.book.should.eql("xxx");
       should.exist(data.id);
-      should.exist(data.alive);
     });
     it("#apply", function() {
       var User = Actor.extend("User", {changeName: function(name, service) {
@@ -38,9 +35,9 @@ System.register("../../test/test.Actor", [], function() {
         should.exist(event.time);
         event.name.should.eql("changeName");
         var data = event.data;
-        data.callerId.should.eql(caller.get("id"));
+        data.callerId.should.eql(caller.json.id);
         data.callerType.should.eql("User");
-        data.targetId.should.eql(actor.get("id"));
+        data.targetId.should.eql(actor.json.id);
         data.targetType.should.eql("User");
         data.data.should.eql("leo");
       });
@@ -66,15 +63,15 @@ System.register("../../test/test.Actor", [], function() {
         changeName: function(name, service) {
           service.apply("changeName", name);
         },
-        when: function(event, set) {
+        when: function(event, data) {
           if (event.name === "changeName") {
-            set("name", event.data.data);
+            data.name = event.data.data;
           }
         }
       });
       var user = new User();
       user.call("changeName", "leo");
-      user.get("name").should.eql("leo");
+      user.json.name.should.eql("leo");
     });
   });
   return {};

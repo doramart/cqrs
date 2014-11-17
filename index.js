@@ -1,3 +1,4 @@
+require("traceur");
 var Domain = require("./dist/lib/Domain"), Actor = require("./dist/lib/Actor");
 
 function wrap(){

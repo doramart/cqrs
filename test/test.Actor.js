@@ -9,14 +9,10 @@ describe("Actor", function () {
 
     it("#new", function () {
         actor = new Actor({name: "leo", book: "xxx"});
-        should.exist(actor.get("id"));
-        actor.get("name").should.eql("leo");
-        actor.get("book").should.eql("xxx");
-        should.exist(actor.get("id"));
-        actor.get("alive").should.eql(true);
-
-        should.not.exist(actor.set);
-
+        var data = actor.json;
+        should.exist(data.id);
+        data.name.should.eql("leo");
+        data.book.should.eql("xxx");
     })
 
     it("#json", function () {
@@ -24,7 +20,6 @@ describe("Actor", function () {
         data.name.should.eql("leo");
         data.book.should.eql("xxx")
         should.exist(data.id);
-        should.exist(data.alive);
     })
 
 
@@ -48,9 +43,9 @@ describe("Actor", function () {
             should.exist(event.time);
             event.name.should.eql("changeName");
             var data = event.data;
-            data.callerId.should.eql(caller.get("id"));
+            data.callerId.should.eql(caller.json.id);
             data.callerType.should.eql("User");
-            data.targetId.should.eql(actor.get("id"))
+            data.targetId.should.eql(actor.json.id)
             data.targetType.should.eql("User");
             data.data.should.eql("leo");
         });
@@ -83,9 +78,9 @@ describe("Actor", function () {
                 changeName: function (name, service) {
                     service.apply("changeName", name);
                 },
-            when: function (event, set) {
+            when: function (event, data) {
                 if (event.name === "changeName") {
-                    set("name", event.data.data);
+                    data.name = event.data.data;
                 }
             }
         })
@@ -93,6 +88,6 @@ describe("Actor", function () {
         var user = new User();
 
         user.call("changeName", "leo");
-        user.get("name").should.eql("leo");
+        user.json.name.should.eql("leo");
     })
 })
