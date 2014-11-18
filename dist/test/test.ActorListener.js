@@ -1,54 +1,67 @@
 System.register("../../test/test.ActorListener", [], function() {
   "use strict";
   var __moduleName = "../../test/test.ActorListener";
-  var ActorListener = require("../lib/ActorListener");
-  var Actor = require("../lib/Actor");
-  var should = require("should");
-  var Order = Actor.extend("Order", {
-    change: function(name, di) {
-      di.apply("change", name);
-    },
-    when: function(event, set) {
-      if (event.name === "change") {
-        set("name", event.data.data);
-      }
-    }
-  });
-  var order = new Order();
+  var ActorListener = require("../lib/ActorListener"),
+      Actor = require("../lib/Actor"),
+      should = require("should"),
+      User = Actor.extend("User", {
+        handle: function(event, di) {
+          di.apply("handle event");
+        },
+        when: function(event, data) {
+          if (event.name === "handle event") {
+            data.name = "leo";
+          }
+        }
+      });
   describe("ActorListener", function() {
-    var listener;
+    var actorListener,
+        user = new User;
     it("#new", function() {
-      listener = new ActorListener({"Order": {get: $traceurRuntime.initGeneratorFunction(function $__0() {
+      actorListener = new ActorListener(null, true);
+      var actorRepos = {User: {get: $traceurRuntime.initGeneratorFunction(function $__0() {
             return $traceurRuntime.createGeneratorInstance(function($ctx) {
               while (true)
                 switch ($ctx.state) {
                   case 0:
-                    $ctx.returnValue = order;
+                    $ctx.returnValue = user;
                     $ctx.state = -2;
                     break;
                   default:
                     return $ctx.end();
                 }
             }, $__0, this);
-          })}});
+          })}};
+      actorListener.actorRepos = actorRepos;
     });
     it("#listen", function() {
-      listener.listen(order, "test", "change");
-      var rs = listener.findListener("test");
-      rs.length.should.eql(1);
-      rs[0].actorId.should.eql(order.id);
-      rs[0].actorType.should.eql("Order");
-      rs[0].handleMethodName.should.eql("change");
-    });
-    it("#emit", function(done) {
-      should.not.exist(order.get("name"));
-      listener.emit("test", {
-        name: "test",
-        data: "leo"
+      actorListener.on("apply", function(al) {
+        var listeners = al.json.repos.test;
       });
-      setTimeout((function() {
-        return (order.get("name").data.should.eql("leo"), done());
-      }), 100);
+      actorListener.call("listen", {
+        eventName: "test",
+        actor: user,
+        handleMethodName: "handle"
+      });
+    });
+    it("#pub", function(done) {
+      should.not.exist(user.json.name);
+      user.on("apply", function(u) {
+        user.json.name.should.eql("leo");
+      });
+      actorListener.call("listenOne", {
+        eventName: "test",
+        actor: user,
+        handleMethodName: "handle"
+      });
+      actorListener.call("pub", {
+        eventName: "test",
+        event: {name: "leo"}
+      });
+      setTimeout(function() {
+        var listeners = actorListener.json.repos.test;
+        done();
+      }, 200);
     });
   });
   return {};

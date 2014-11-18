@@ -1,58 +1,71 @@
-var ActorListener = require("../lib/ActorListener");
+var ActorListener = require("../lib/ActorListener"),
+    Actor = require("../lib/Actor"),
+    should = require("should"),
+    User = Actor.extend("User", {
+        handle: function (event, di) {
+            di.apply("handle event");
+        },
+        when: function (event,data) {
+            if(event.name === "handle event"){
+                data.name = "leo";
 
-
-var Actor = require("../lib/Actor");
-
-var should = require("should");
-
-var Order = Actor.extend("Order", {
-    change(name, di) {
-        di.apply("change", name);
-    },
-    when: function (event, set) {
-
-        if (event.name === "change") {
-            set("name", event.data.data);
+            }
         }
-    }
-});
-
-var order = new Order();
+    });
 
 describe("ActorListener", function () {
 
-    var listener;
+    var actorListener,user =  new User;
 
     it("#new", function () {
+        actorListener = new ActorListener(null,true);
 
-
-        listener = new ActorListener({
-            "Order": {
+        var actorRepos = {
+            User: {
                 get: function* () {
-                    return order;
+                    return user;
                 }
             }
-        });
+        };
+
+        actorListener.actorRepos = actorRepos;
 
     })
 
     it("#listen", function () {
-        listener.listen(order, "test", "change");
-        var rs = listener.findListener("test");
 
-        rs.length.should.eql(1);
-        rs[0].actorId.should.eql(order.id);
-        rs[0].actorType.should.eql("Order");
-        rs[0].handleMethodName.should.eql("change");
+        actorListener.on("apply", function (al) {
+            var listeners  = al.json.repos.test;
+        })
+
+        actorListener.call("listen",{
+            eventName:"test",
+            actor:user,
+            handleMethodName:"handle"
+        })
     })
 
-    it("#emit", function (done) {
+    it("#pub", function (done) {
 
+        should.not.exist(user.json.name);
 
-        should.not.exist(order.get("name"));
+        user.on("apply", function (u) {
+            user.json.name.should.eql("leo");
+        })
 
-        listener.emit("test",{name: "test", data: "leo"});
-        setTimeout(()=>(order.get("name").data.should.eql("leo"), done()), 100);
-    })
+        actorListener.call("listenOne",{
+            eventName:"test",
+            actor:user,
+            handleMethodName:"handle"
+        })
+
+        actorListener.call("pub",{eventName:"test",event:{name:"leo"}});
+
+        setTimeout(function () {
+            var listeners  = actorListener.json.repos.test;
+            done()
+        },200);
+
+    });
 
 })

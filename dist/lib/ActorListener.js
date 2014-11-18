@@ -30,10 +30,10 @@ System.register("../../lib/ActorListener", [], function() {
       command.isOne = true;
       this.listen(command, di);
     },
-    emit: function(command, di) {
-      var eventname = command.eventName,
+    pub: function(command, di) {
+      var eventName = command.eventName,
           event = command.event;
-      var repos = this.json;
+      var repos = this.json.repos;
       var self = this;
       co($traceurRuntime.initGeneratorFunction(function $__0() {
         var list,
@@ -79,7 +79,7 @@ System.register("../../lib/ActorListener", [], function() {
                 $ctx.state = 8;
                 break;
               case 9:
-                di.apply("emit", eventname);
+                di.apply("emit", eventName);
                 $ctx.state = -2;
                 break;
               default:
@@ -92,14 +92,16 @@ System.register("../../lib/ActorListener", [], function() {
       return data;
     },
     when: function(event, data) {
+      if (event.name === "create") {
+        data.repos = {};
+      }
       var repos = data.repos;
       if (event.name === "listen") {
-        var eventName = event.data.eventName;
-        var repo = repos[eventName];
-        repo = (repo = repos[eventName]) ? repos[eventName] : (repos[eventName] = []);
-        repo.push(event.data.listener);
+        var eventName = event.data.data.eventName;
+        var repo = (repo = repos[eventName]) ? repos[eventName] : (repos[eventName] = []);
+        repo.push(event.data.data.listener);
       } else if (event.name === "emit") {
-        var list = repos[event.data] || [];
+        var list = repos[event.data.data] || [];
         for (var i = 0,
             len = list.length; i < len; i++) {
           var listener = list[i];
@@ -107,7 +109,7 @@ System.register("../../lib/ActorListener", [], function() {
             list[i] = null;
           }
         }
-        repos[event.data] = _.compact(list);
+        repos[event.data.data] = _.compact(list);
       }
     }
   });

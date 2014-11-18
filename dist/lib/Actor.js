@@ -3,7 +3,6 @@ System.register("../../lib/Actor", [], function() {
   var $__2;
   var __moduleName = "../../lib/Actor";
   var dataKye = Symbol("dataKey"),
-      set = Symbol["set"],
       isLoadEvents = Symbol("isLoadEvents"),
       apply = Symbol("apply"),
       listen = Symbol("listen"),
@@ -14,9 +13,9 @@ System.register("../../lib/Actor", [], function() {
       uid = require("shortid"),
       Event = require("./Event"),
       EventEmitter = require("events").EventEmitter;
-  var Actor = function Actor() {
-    var data = arguments[0] !== (void 0) ? arguments[0] : {};
+  var Actor = function Actor(data) {
     var isCreate = arguments[1] !== (void 0) ? arguments[1] : false;
+    data = data || {};
     this[dataKye] = data;
     this[readDataKye] = {};
     this[dataKye].id = uid();
