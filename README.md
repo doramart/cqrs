@@ -57,6 +57,17 @@ call actor's domain method.
 
     domain.call(command, function (err) {});
 
+or
+
+
+    domain.call()
+        .typeName("User")
+        .actorId(uid)
+        .methodName("recharge")
+        .data({money:20})
+        .exec();
+
+
 
 #### domain#addListener(eventName,handleFunction)
 
