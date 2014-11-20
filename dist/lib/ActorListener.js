@@ -93,12 +93,14 @@ System.register("../../lib/ActorListener", [], function() {
     },
     when: function(event, data) {
       if (event.name === "create") {
+        data.id = "ActorListenerId";
         data.repos = {};
       }
       var repos = data.repos;
       if (event.name === "listen") {
         var eventName = event.data.data.eventName;
-        var repo = (repo = repos[eventName]) ? repos[eventName] : (repos[eventName] = []);
+        var repo;
+        repo = (repo = repos[eventName]) ? repos[eventName] : (repos[eventName] = []);
         repo.push(event.data.data.listener);
       } else if (event.name === "emit") {
         var list = repos[event.data.data] || [];

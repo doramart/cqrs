@@ -4,7 +4,7 @@ var should = require("should");
 
 var uid;
 
-describe("domain", function () {
+describe("User", function () {
 
     it("#create", function (done) {
         domain.addListener("User:create", function (event) {

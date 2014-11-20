@@ -9,7 +9,7 @@ System.register("../../lib/Repository", [], function() {
     this.eventstore = eventstore;
     this.getFromSnapShot = thunkify(this.eventstore.getFromSnapshot).bind(this.eventstore);
     this.createSnapshot = thunkify(this.eventstore.createSnapshot).bind(this.eventstore);
-    this[$traceurRuntime.toProperty(cache)] = {};
+    this[cache] = {};
   };
   ($traceurRuntime.createClass)(Repository, {
     create: $traceurRuntime.initGeneratorFunction(function $__1(data) {
@@ -19,7 +19,7 @@ System.register("../../lib/Repository", [], function() {
           switch ($ctx.state) {
             case 0:
               actor = new this.Actor(data, true);
-              this[$traceurRuntime.toProperty(cache)][$traceurRuntime.toProperty(actor.id)] = actor;
+              this[cache][actor.id] = actor;
               this.emit("create", actor);
               $ctx.state = 4;
               break;
@@ -33,10 +33,10 @@ System.register("../../lib/Repository", [], function() {
       }, $__1, this);
     }),
     clear: function(id) {
-      delete this[$traceurRuntime.toProperty(cache)][$traceurRuntime.toProperty(id)];
+      delete this[cache][id];
     },
     getFromCache: function(id) {
-      return this[$traceurRuntime.toProperty(cache)][$traceurRuntime.toProperty(id)];
+      return this[cache][id];
     },
     get: $traceurRuntime.initGeneratorFunction(function $__2(id) {
       var actor,
@@ -75,6 +75,15 @@ System.register("../../lib/Repository", [], function() {
               stream = result[1];
               snap = snapshot ? snapshot.data : {};
               history = stream.events;
+              $ctx.state = 17;
+              break;
+            case 17:
+              $ctx.state = (!snapshot && history.length === 0) ? 11 : 12;
+              break;
+            case 11:
+              $ctx.state = -2;
+              break;
+            case 12:
               actor = new this.Actor();
               actor.loadSnap(snap);
               historyv = [];
@@ -82,11 +91,11 @@ System.register("../../lib/Repository", [], function() {
                 historyv.push(e.payload);
               });
               actor.loadEvents(historyv);
-              this[$traceurRuntime.toProperty(cache)][$traceurRuntime.toProperty(actor.id)] = actor;
+              this[cache][actor.id] = actor;
               this.emit("reborn", actor);
-              $ctx.state = 14;
+              $ctx.state = 19;
               break;
-            case 14:
+            case 19:
               $ctx.returnValue = actor;
               $ctx.state = -2;
               break;

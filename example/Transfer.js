@@ -3,19 +3,19 @@ var Actor = require("..").Actor,
 
 module.exports = Actor.extend("Transfer", {
     transfer: function (data, di) {
-
         // if start and stop
-        if (this.get("start")) {
+        if (this.data.start) {
             return;
         }
-
         var fromId = data.fromId,
             toId = data.toId,
             money = data.money,
             tid = shortid();
 
-        di.listen("User." + fromId, "handle");
-        di.listen("User." + toId, "handle");
+            di.listen("User." + fromId, "handle");
+
+            di.listen("User." + toId, "handle");
+
 
         data.tid = tid;
 
@@ -31,25 +31,25 @@ module.exports = Actor.extend("Transfer", {
             case "deduct":
                 di.call({
                     typeName: "User",
-                    actorId: this.get("toId"),
+                    actorId: this.data.toId,
                     methodName: "recharge",
-                    data: {id: this.get("tid")}
+                    data: {id: this.data.tid}
                 });
                 break;
             case "recharge":
                 di.call({
                     typeName: "User",
-                    actorId: this.get("fromId"),
+                    actorId: this.data.fromId,
                     methodName: "deductFinish",
-                    data: {id: this.get("tid")}
+                    data: {id: this.data.tid}
                 });
                 break;
             case "deductFinish":
                 di.call({
                     typeName: "User",
-                    actorId: this.get("toId"),
+                    actorId: this.data.toId,
                     methodName: "rechargeFinish",
-                    data: {id: this.get("tid")}
+                    data: {id: this.data.tid}
                 });
                 break;
             case "rechargeFinish":
@@ -57,16 +57,21 @@ module.exports = Actor.extend("Transfer", {
                 break;
         }
     },
-    when: function (event, set) {
+    when: function (event, data) {
         switch (event.name) {
             case "transferStart":
-                set(event.data.data);
-                set("start", true);
+                for(var k in event.data.data){
+                    data[k] = event.data.data[k];
+                }
+                data.start = true;
                 break;
             case "transferSuccess":
-                set("success", true);
+                data.success = true;
                 break;
 
         }
+
+        this.refreshData();
+
     }
 });

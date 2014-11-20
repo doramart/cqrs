@@ -4,7 +4,7 @@ var should = require("should");
 
 var toId, fromId, transferId;
 
-describe("domain", function () {
+describe("Transfer", function () {
 
     it("#init", function (done) {
 
@@ -28,7 +28,6 @@ describe("domain", function () {
     it("#transfer", function (done) {
 
         domain.addListener('Transfer', function (event) {
-
               if(event.name === "transferSuccess"){
                   done();
               }
@@ -41,7 +40,8 @@ describe("domain", function () {
                 actorId: transferId,
                 methodName: "transfer",
                 data: {toId: toId, fromId: fromId, money: 50}
-            }, function (err) {});
+            }, function (err) {
+            });
     })
 
 

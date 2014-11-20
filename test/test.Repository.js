@@ -21,7 +21,7 @@ describe("Repository", function () {
         co(function *() {
             var user = yield repos.create({name:"leo"});
             uid = user.id;
-            user.get("name").should.eql("leo");
+            user.data.name.should.eql("leo");
             done();
         })()
     })

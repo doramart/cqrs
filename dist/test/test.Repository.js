@@ -31,7 +31,7 @@ System.register("../../test/test.Repository", [], function() {
                 break;
               case 4:
                 uid = user.id;
-                user.get("name").should.eql("leo");
+                user.data.name.should.eql("leo");
                 done();
                 $ctx.state = -2;
                 break;

@@ -11,8 +11,100 @@ System.register("../../lib/Domain", [], function() {
     this.eventstore = eventstore();
     this.ActorClasses = {};
     this.repos = {};
-    this.actorListener = new ActorListener(this.repos);
-    this.eventBus = new EventBus(this.eventstore, this.repos, this.actorListener);
+    this.eventBus = new EventBus(this.eventstore, this.repos);
+    var self = this;
+    co($traceurRuntime.initGeneratorFunction(function $__2() {
+      var repo,
+          actorListener;
+      return $traceurRuntime.createGeneratorInstance(function($ctx) {
+        while (true)
+          switch ($ctx.state) {
+            case 0:
+              self.register(ActorListener);
+              repo = self.repos["ActorListener"];
+              $ctx.state = 11;
+              break;
+            case 11:
+              $ctx.state = 2;
+              return repo.get("ActorListenerId");
+            case 2:
+              actorListener = $ctx.sent;
+              $ctx.state = 4;
+              break;
+            case 4:
+              $ctx.state = (!actorListener) ? 5 : 8;
+              break;
+            case 5:
+              $ctx.state = 6;
+              return repo.create();
+            case 6:
+              actorListener = $ctx.sent;
+              $ctx.state = 8;
+              break;
+            case 8:
+              self.actorListener = actorListener;
+              actorListener.actorRepos = self.repos;
+              self.eventBus.on("*", function(evt) {
+                if (evt.data.targetType === "ActorListener")
+                  return;
+                actorListener.call("pub", {
+                  eventName: evt.data.targetType + "." + evt.data.targetId + ":" + evt.name,
+                  event: evt
+                });
+                actorListener.call("pub", {
+                  eventName: evt.data.targetType + "." + evt.data.targetId,
+                  event: evt
+                });
+                actorListener.call("pub", {
+                  eventName: evt.data.targetType + ":" + evt.name,
+                  event: evt
+                });
+                actorListener.call("pub", {
+                  eventName: "." + evt.data.targetId + ":" + evt.name,
+                  event: evt
+                });
+                actorListener.call("pub", {
+                  eventName: ":" + evt.name,
+                  event: evt
+                });
+                actorListener.call("pub", {
+                  eventName: evt.data.targetType,
+                  event: evt
+                });
+                if (evt.contextId) {
+                  actorListener.call("pub", {
+                    eventName: evt.data.targetType + "." + evt.data.targetId + ":" + evt.name + "&" + evt.contextId,
+                    event: evt
+                  });
+                  actorListener.call("pub", {
+                    eventName: evt.data.targetType + "." + evt.data.targetId + "&" + evt.contextId,
+                    event: evt
+                  });
+                  actorListener.call("pub", {
+                    eventName: evt.data.targetType + ":" + evt.name + "&" + evt.contextId,
+                    event: evt
+                  });
+                  actorListener.call("pub", {
+                    eventName: "." + evt.data.targetId + ":" + evt.name + "&" + evt.contextId,
+                    event: evt
+                  });
+                  actorListener.call("pub", {
+                    eventName: ":" + evt.name + "&" + evt.contextId,
+                    event: evt
+                  });
+                  actorListener.call("pub", {
+                    eventName: evt.data.targetType + "&" + evt.contextId,
+                    event: evt
+                  });
+                }
+              });
+              $ctx.state = -2;
+              break;
+            default:
+              return $ctx.end();
+          }
+      }, $__2, this);
+    }))();
     this.eventstore.init();
   };
   ($traceurRuntime.createClass)(Domain, {
@@ -33,8 +125,14 @@ System.register("../../lib/Domain", [], function() {
       function actorApplyEventHandle(actor) {
         self.eventBus.publish(actor);
       }
-      function actorListenEventHandle(actor, eventName, handleName, contextId, onlyContext) {
-        self.actorListener.listen(actor, eventName, handleName, contextId, onlyContext);
+      function actorListenEventHandle(actor, eventName, handleMethodName, contextId, onlyContext) {
+        self.actorListener.call("listen", {
+          actor: actor,
+          eventName: eventName,
+          handleMethodName: handleMethodName,
+          contextId: contextId,
+          onlyContext: onlyContext
+        });
       }
       function actorCallEventHandle(command) {
         self.call(command);
