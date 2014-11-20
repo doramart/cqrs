@@ -6,6 +6,7 @@ System.register("../../lib/Domain", [], function() {
       co = require("co"),
       Actor = require("./Actor"),
       ActorListener = require("./ActorListener"),
+      Command = require("./Command"),
       EventBus = require("./EventBus");
   var Domain = function Domain() {
     this.eventstore = eventstore();
@@ -149,59 +150,73 @@ System.register("../../lib/Domain", [], function() {
       repo.on("reborn", listenActorEventHandle);
     },
     call: function(command, callback) {
-      callback = callback || function() {};
       var self = this;
-      co($traceurRuntime.initGeneratorFunction(function $__2() {
-        var repo,
-            actor,
-            err;
-        return $traceurRuntime.createGeneratorInstance(function($ctx) {
-          while (true)
-            switch ($ctx.state) {
-              case 0:
-                $ctx.pushTry(9, null);
-                $ctx.state = 12;
-                break;
-              case 12:
-                repo = self.repos[command.typeName];
-                if (!repo) {
-                  throw new Error("please register " + command.typeName);
-                }
-                $ctx.state = 6;
-                break;
-              case 6:
-                $ctx.state = 2;
-                return repo.get(command.actorId);
-              case 2:
-                actor = $ctx.sent;
-                $ctx.state = 4;
-                break;
-              case 4:
-                if (!actor) {
-                  throw new Error("no find by id = " + command.actorId);
-                }
-                actor.call(command.methodName, command.data || {}, {}, command.contextId);
-                callback();
-                $ctx.state = 8;
-                break;
-              case 8:
-                $ctx.popTry();
-                $ctx.state = -2;
-                break;
-              case 9:
-                $ctx.popTry();
-                err = $ctx.storedException;
-                $ctx.state = 15;
-                break;
-              case 15:
-                callback(err);
-                $ctx.state = -2;
-                break;
-              default:
-                return $ctx.end();
-            }
-        }, $__2, this);
-      }))();
+      if (arguments.length) {
+        exec();
+      } else {
+        var cmd = new Command("typeName", "actorId", "data", "contextId", "methodName", "callback");
+        cmd.once("exec", function(opts) {
+          command = opts;
+          callback = opts.callback;
+          exec();
+        });
+        return cmd;
+      }
+      function exec() {
+        co($traceurRuntime.initGeneratorFunction(function $__2() {
+          var repo,
+              actor,
+              err;
+          return $traceurRuntime.createGeneratorInstance(function($ctx) {
+            while (true)
+              switch ($ctx.state) {
+                case 0:
+                  $ctx.pushTry(9, null);
+                  $ctx.state = 12;
+                  break;
+                case 12:
+                  repo = self.repos[command.typeName];
+                  if (!repo) {
+                    throw new Error("please register " + command.typeName);
+                  }
+                  $ctx.state = 6;
+                  break;
+                case 6:
+                  $ctx.state = 2;
+                  return repo.get(command.actorId);
+                case 2:
+                  actor = $ctx.sent;
+                  $ctx.state = 4;
+                  break;
+                case 4:
+                  if (!actor) {
+                    throw new Error("no find by id = " + command.actorId);
+                  }
+                  actor.call(command.methodName, command.data || {}, {}, command.contextId);
+                  if (callback)
+                    callback();
+                  $ctx.state = 8;
+                  break;
+                case 8:
+                  $ctx.popTry();
+                  $ctx.state = -2;
+                  break;
+                case 9:
+                  $ctx.popTry();
+                  err = $ctx.storedException;
+                  $ctx.state = 15;
+                  break;
+                case 15:
+                  if (callback)
+                    callback(err);
+                  $ctx.state = -2;
+                  break;
+                default:
+                  return $ctx.end();
+              }
+          }, $__2, this);
+        }))();
+      }
     },
     create: function(actorType, data, callback) {
       var repo = this.repos[actorType];
