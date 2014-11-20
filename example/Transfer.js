@@ -12,15 +12,10 @@ module.exports = Actor.extend("Transfer", {
             money = data.money,
             tid = shortid();
 
-            di.listen("User." + fromId, "handle");
-
-            di.listen("User." + toId, "handle");
-
-
+        di.listen("User." + fromId, "handle");
+        di.listen("User." + toId, "handle");
         data.tid = tid;
-
         di.apply("transferStart", data);
-
         // transfer start !
         di.call({typeName: "User", actorId: fromId, methodName: "deduct", data: {id: tid}});
 
@@ -60,7 +55,7 @@ module.exports = Actor.extend("Transfer", {
     when: function (event, data) {
         switch (event.name) {
             case "transferStart":
-                for(var k in event.data.data){
+                for (var k in event.data.data) {
                     data[k] = event.data.data[k];
                 }
                 data.start = true;
