@@ -49,6 +49,7 @@ create actor object.
 call actor's domain method.
 
 + command {typeName, actorId, methodName, [data], [contextId]}
+
 + callback(err)
 
 
