@@ -1,6 +1,6 @@
 {
   "name": "cqrs",
-  "version": "0.0.0",
+  "version": "0.0.4",
   "description": "cqrs for javascript",
   "main": "index.js",
   "scripts": {
@@ -37,6 +37,6 @@
   },
   "directories": {
     "example": "example",
-    "test": "dist/test"
+    "test": "test"
   }
 }
