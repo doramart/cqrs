@@ -1,20 +1,21 @@
 System.register("../../lib/Domain", [], function() {
   "use strict";
   var __moduleName = "../../lib/Domain";
-  var eventstore = require("eventstore"),
+  var EventStore = require("eventstore"),
       Repository = require("./Repository"),
       co = require("co"),
       Actor = require("./Actor"),
+      eventstore = Symbol("eventstore"),
       ActorListener = require("./ActorListener"),
       Command = require("./Command"),
       EventBus = require("./EventBus");
   var Domain = function Domain() {
-    this.eventstore = eventstore();
+    this[eventstore] = EventStore();
     this.ActorClasses = {};
     this.repos = {};
-    this.eventBus = new EventBus(this.eventstore, this.repos);
+    this.eventBus = new EventBus(this[eventstore], this.repos);
     var self = this;
-    co($traceurRuntime.initGeneratorFunction(function $__2() {
+    co($traceurRuntime.initGeneratorFunction(function $__4() {
       var repo,
           actorListener;
       return $traceurRuntime.createGeneratorInstance(function($ctx) {
@@ -104,9 +105,9 @@ System.register("../../lib/Domain", [], function() {
             default:
               return $ctx.end();
           }
-      }, $__2, this);
+      }, $__4, this);
     }))();
-    this.eventstore.init();
+    this[eventstore].init();
   };
   ($traceurRuntime.createClass)(Domain, {
     register: function(ActorClass) {
@@ -115,7 +116,7 @@ System.register("../../lib/Domain", [], function() {
         ActorClass = Actor.extend(arguments[0], arguments[1]);
       }
       this.ActorClasses[ActorClass.typeName] = ActorClass;
-      var repo = new Repository(ActorClass, this.eventstore);
+      var repo = new Repository(ActorClass, this[eventstore]);
       this.repos[ActorClass.typeName] = repo;
       this._actorEventHandle(repo);
       return this;
@@ -163,7 +164,7 @@ System.register("../../lib/Domain", [], function() {
         return cmd;
       }
       function exec() {
-        co($traceurRuntime.initGeneratorFunction(function $__2() {
+        co($traceurRuntime.initGeneratorFunction(function $__4() {
           var repo,
               actor,
               err;
@@ -214,13 +215,13 @@ System.register("../../lib/Domain", [], function() {
                 default:
                   return $ctx.end();
               }
-          }, $__2, this);
+          }, $__4, this);
         }))();
       }
     },
     create: function(actorType, data, callback) {
       var repo = this.repos[actorType];
-      co($traceurRuntime.initGeneratorFunction(function $__2() {
+      co($traceurRuntime.initGeneratorFunction(function $__4() {
         var actor,
             e;
         return $traceurRuntime.createGeneratorInstance(function($ctx) {
@@ -257,12 +258,12 @@ System.register("../../lib/Domain", [], function() {
               default:
                 return $ctx.end();
             }
-        }, $__2, this);
+        }, $__4, this);
       }))();
     },
     get: function(actorType, actorId, cb) {
       var self = this;
-      co($traceurRuntime.initGeneratorFunction(function $__2() {
+      co($traceurRuntime.initGeneratorFunction(function $__4() {
         var repo,
             actor,
             e;
@@ -304,11 +305,18 @@ System.register("../../lib/Domain", [], function() {
               default:
                 return $ctx.end();
             }
-        }, $__2, this);
+        }, $__4, this);
       }))();
     },
     addListener: function(eventName, listener) {
       this.eventBus.on(eventName, listener);
+    },
+    getHistory: function() {
+      var $__3;
+      for (var opts = [],
+          $__2 = 0; $__2 < arguments.length; $__2++)
+        opts[$__2] = arguments[$__2];
+      ($__3 = this[eventstore]).getEvents.apply($__3, $traceurRuntime.spread(opts));
     }
   }, {});
   module.exports = Domain;

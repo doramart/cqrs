@@ -29,7 +29,16 @@ System.register("../../lib/EventBus", [], function() {
     this.es.init();
   };
   ($traceurRuntime.createClass)(EventBus, {publish: function(actor) {
-      this.es.getEventStream(actor.id, function(err, stream) {
+      var self = this;
+      this.es.getFromSnapshot(actor.id, function(err, snap, stream) {
+        var history = stream.events;
+        if (history.length > 20) {
+          self.es.createSnapshot({
+            streamId: actor.id,
+            data: actor.json,
+            revision: stream.lastRevision
+          }, function(err) {});
+        }
         if (actor.uncommittedEvents.length) {
           stream.addEvents(actor.uncommittedEvents);
           stream.commit();

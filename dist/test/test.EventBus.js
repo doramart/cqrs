@@ -54,11 +54,14 @@ System.register("../../test/test.EventBus", [], function() {
         }, $__0, this);
       }))();
     });
-    it("#publsh", function() {
+    it("#publsh", function(done) {
       actor.call("changeName", "bright");
       actor.uncommittedEvents.length.should.eql(2);
       bus.publish(actor);
-      actor.uncommittedEvents.should.eql([]);
+      setTimeout(function() {
+        actor.uncommittedEvents.should.eql([]);
+        done();
+      }, 10);
     });
   });
   return {};

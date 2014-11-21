@@ -45,6 +45,12 @@ System.register("../../test/test.Domain", [], function() {
         done();
       });
     });
+    it("#getHisitory", function(done) {
+      domain.getHistory(uid, 0, 1000, function(err, evets) {
+        console.log(evets);
+        done();
+      });
+    });
   });
   return {};
 });

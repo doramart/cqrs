@@ -45,11 +45,19 @@ describe("Domain", function () {
     })
 
     it("#call", function (done) {
-        domain.call({typeName:"User", actorId:uid, methodName:"changeName", data:"leo"});
-        domain.get("User", uid, function (err,act) {
+        domain.call({typeName: "User", actorId: uid, methodName: "changeName", data: "leo"});
+        domain.get("User", uid, function (err, act) {
             act.id.should.eql(uid);
             done()
         })
+    })
+
+    it("#getHisitory", function (done) {
+        domain.getHistory(uid, 0,1000, function (err, evets) {
+            console.log(evets);
+            done();
+        })
+
     })
 
 });
