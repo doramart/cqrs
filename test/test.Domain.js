@@ -54,7 +54,6 @@ describe("Domain", function () {
 
     it("#getHisitory", function (done) {
         domain.getHistory(uid, 0,1000, function (err, evets) {
-            console.log(evets);
             done();
         })
 

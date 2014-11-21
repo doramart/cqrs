@@ -9,8 +9,8 @@ System.register("../../lib/Domain", [], function() {
       ActorListener = require("./ActorListener"),
       Command = require("./Command"),
       EventBus = require("./EventBus");
-  var Domain = function Domain() {
-    this[eventstore] = EventStore();
+  var Domain = function Domain(options) {
+    this[eventstore] = EventStore(options);
     this.ActorClasses = {};
     this.repos = {};
     this.eventBus = new EventBus(this[eventstore], this.repos);

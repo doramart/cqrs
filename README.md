@@ -15,6 +15,12 @@ Use
 
     var domain = require("cqrs")();
 
+    or
+
+    var domain = require("cqrs")(options);
+
++ options for eventstore , see [eventstore - Provide implementation for storage](https://github.com/adrai/node-eventstore#provide-implementation-for-storage)
+
 #### domain#register
 
 register Actor class , Actor like DDD's AggregateRoot.
