@@ -191,13 +191,27 @@ System.register("../../lib/Actor", [], function() {
       Object.defineProperty(Type.prototype, "typeName", {get: function() {
           return typeName;
         }});
-      for (var k in methods) {
+      var keys = Object.keys(methods);
+      keys.forEach((function(k) {
         if (k === "when") {
           Object.defineProperty(Type.prototype, "_otherWhen", {value: methods[k]});
-        } else {
+        } else if (methods[k] === true) {
+          Object.defineProperty(Type.prototype, k, {value: function(data, di) {
+              di.apply(k);
+            }});
+        } else if (typeof methods[k] === "function") {
           Object.defineProperty(Type.prototype, k, {value: methods[k]});
+        } else {
+          var attrs = methods[k];
+          Object.defineProperty(Type.prototype, k, {value: function(data, di) {
+              var mydata = {};
+              attrs.forEach((function(attr) {
+                mydata[attr] = data[attr];
+              }));
+              di.apply(k, mydata);
+            }});
         }
-      }
+      }));
       return Type;
     }}, EventEmitter);
   module.exports = Actor;

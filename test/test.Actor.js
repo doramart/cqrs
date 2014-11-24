@@ -15,6 +15,7 @@ describe("Actor", function () {
         data.book.should.eql("xxx");
     })
 
+
     it("#json", function () {
         var data = actor.json;
         data.name.should.eql("leo");
@@ -90,4 +91,43 @@ describe("Actor", function () {
         user.call("changeName", "leo");
         user.json.name.should.eql("leo");
     })
+
+    it("#create actor usbclass 1", function (done) {
+
+        var User = Actor.extend("User",{
+            changeAge:true,
+            when: function (event,data) {
+                if(event.name === "changeAge"){
+                    done();
+                }
+            }
+        })
+        var user = new User();
+
+        user.call("changeAge");
+
+    })
+
+
+    it("#create actor usbclass 2", function (done) {
+
+        var User = Actor.extend("User",{
+            change:["name","age"],
+            when: function (event,data) {
+                if(event.name === "change"){
+                    var mydata = event.data.data;
+                    mydata.name.should.eql("leo");
+                    mydata.age.should.eql(22);
+                    done()
+                }
+            }
+        })
+        var user = new User();
+
+        user.call("change",{name:"leo",age:22});
+
+    })
+
+
+
 })

@@ -110,6 +110,28 @@ Actor API
         }
     })
 
+or
+
+    Actor.extend("User",{
+        changeName:true,
+        changeAge:true,
+        when:function(){
+            //see next step
+        }
+    })
+
+`changeName:true` Equivalent to
+
+    changeName:function(data,di){
+        di.apply("changeName",data.name);
+    }
+
+`change:["name","age"]` Equivalent to
+
+    change:function(data,di){
+        di.apply("change" , {name:data["name"],age:data["age"]})
+    }
+
 the method cann't change self data. and must use `when` method to changed.
 
 #### Actor#when(event,data)
