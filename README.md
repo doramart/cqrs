@@ -114,7 +114,7 @@ or
 
     Actor.extend("User",{
         changeName:true,
-        changeAge:true,
+        change:true,
         when:function(){
             //see next step
         }

@@ -139,10 +139,18 @@ System.register("../../lib/Domain", [], function() {
       function actorCallEventHandle(command) {
         self.call(command);
       }
+      function actorCreateEventHandle() {
+        var $__3;
+        for (var opts = [],
+            $__2 = 0; $__2 < arguments.length; $__2++)
+          opts[$__2] = arguments[$__2];
+        ($__3 = self).create.apply($__3, $traceurRuntime.spread(opts));
+      }
       var listenActorEventHandle = (function(actor) {
         actor.on("apply", actorApplyEventHandle);
         actor.on("listen", actorListenEventHandle);
         actor.on("call", actorCallEventHandle);
+        actor.on("create", actorCreateEventHandle);
         if (actor.uncommittedEvents.length) {
           $__0.eventBus.publish(actor);
         }

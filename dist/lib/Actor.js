@@ -157,6 +157,14 @@ System.register("../../lib/Actor", [], function() {
         }),
         call: (function(command) {
           $__0.emit("call", command);
+        }),
+        create: (function() {
+          var $__4;
+          for (var opts = [],
+              $__3 = 0; $__3 < arguments.length; $__3++)
+            opts[$__3] = arguments[$__3];
+          opts.unshift("create");
+          ($__4 = $__0).emit.apply($__4, $traceurRuntime.spread(opts));
         })
       };
     },
