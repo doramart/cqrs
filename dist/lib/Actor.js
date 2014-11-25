@@ -90,7 +90,7 @@ System.register("../../lib/Actor", [], function() {
   }), Object.defineProperty($__2, when, {
     value: function(event) {
       if (event.name === "create") {
-        this[dataKye] === this.reborn(event.data);
+        this[dataKye] === this.reborn(event.data.data);
       }
       if (this._otherWhen)
         this._otherWhen(event, this[dataKye]);

@@ -1,6 +1,6 @@
 {
   "name": "cqrs",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "cqrs for javascript",
   "main": "index.js",
   "scripts": {
