@@ -106,7 +106,7 @@ System.register("../../lib/Actor", [], function() {
       var event = new Event(name, {
         callerId: caller.id,
         callerType: caller.typeName,
-        targetId: this.json.id,
+        targetId: this.id,
         targetType: this.typeName,
         data: data
       }, contextId);

@@ -228,6 +228,7 @@ System.register("../../lib/Domain", [], function() {
       }
     },
     create: function(actorType, data, callback) {
+      callback = callback || function() {};
       var repo = this.repos[actorType];
       co($traceurRuntime.initGeneratorFunction(function $__4() {
         var actor,
