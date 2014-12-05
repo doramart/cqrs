@@ -13,17 +13,34 @@ System.register("../../lib/Repository", [], function() {
   };
   ($traceurRuntime.createClass)(Repository, {
     create: $traceurRuntime.initGeneratorFunction(function $__1(data) {
-      var actor;
+      var actor,
+          result,
+          stream;
       return $traceurRuntime.createGeneratorInstance(function($ctx) {
         while (true)
           switch ($ctx.state) {
             case 0:
-              actor = new this.Actor(data, true);
-              this[cache][actor.id] = actor;
-              this.emit("create", actor);
+              actor = new this.Actor(data);
+              $ctx.state = 8;
+              break;
+            case 8:
+              $ctx.state = 2;
+              return this.getFromSnapShot(actor.id);
+            case 2:
+              result = $ctx.sent;
               $ctx.state = 4;
               break;
             case 4:
+              stream = result[1];
+              this.createSnapshot({
+                streamId: actor.id,
+                data: this.Actor.toJSON(actor),
+                revision: stream.lastRevision
+              });
+              this[cache][actor.id] = actor;
+              $ctx.state = 10;
+              break;
+            case 10:
               $ctx.returnValue = actor;
               $ctx.state = -2;
               break;
@@ -73,26 +90,24 @@ System.register("../../lib/Repository", [], function() {
             case 9:
               snapshot = result[0];
               stream = result[1];
-              snap = snapshot ? snapshot.data : {};
-              history = stream.events;
               $ctx.state = 17;
               break;
             case 17:
-              $ctx.state = (!snapshot && history.length === 0) ? 11 : 12;
+              $ctx.state = (!snapshot) ? 11 : 12;
               break;
             case 11:
               $ctx.state = -2;
               break;
             case 12:
-              actor = new this.Actor();
-              actor.loadSnap(snap);
+              snap = snapshot.data;
+              actor = new this.Actor(snap);
+              history = stream.events;
               historyv = [];
               history.forEach(function(e) {
                 historyv.push(e.payload);
               });
               actor.loadEvents(historyv);
               this[cache][actor.id] = actor;
-              this.emit("reborn", actor);
               $ctx.state = 19;
               break;
             case 19:
