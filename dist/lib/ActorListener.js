@@ -5,7 +5,11 @@ System.register("../../lib/ActorListener", [], function() {
       Actor = require("./Actor"),
       _ = require("underscore");
   module.exports = Actor.extend("ActorListener", {
-    listen: function(command, di) {
+    init: function() {
+      this._data.id = "ActorListenerId";
+      this._data.repos = {};
+    },
+    listen: function(command) {
       var actorId = command.actor.id,
           actorType = command.actor.type,
           handle = command.handle,
@@ -21,14 +25,14 @@ System.register("../../lib/ActorListener", [], function() {
             isOne: isOne
           },
           eventName = command.eventName;
-      di.apply("listen", {
+      this.apply("listen", {
         eventName: eventName,
         listener: listener
-      }).exec();
+      });
     },
-    listenOne: function(command, di) {
+    listenOne: function(command) {
       command.isOne = true;
-      this.listen(command, di);
+      this.listen(command);
     },
     pub: function(command, di) {
       var eventName = command.eventName,
@@ -88,14 +92,7 @@ System.register("../../lib/ActorListener", [], function() {
         }, $__0, this);
       }))();
     },
-    toJSON: function(data) {
-      return data;
-    },
-    when: function(event, data) {
-      if (event.name === "create") {
-        data.id = "ActorListenerId";
-        data.repos = {};
-      }
+    when: function(event) {
       var repos = data.repos;
       if (event.name === "listen") {
         var eventName = event.data.eventName;

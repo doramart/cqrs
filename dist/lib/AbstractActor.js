@@ -26,6 +26,7 @@ System.register("../../lib/AbstractActor", [], function() {
       for (var opts = [],
           $__2 = 0; $__2 < arguments.length; $__2++)
         opts[$__2] = arguments[$__2];
+      opts.splice(1, 0, this);
       var event = new (Function.prototype.bind.apply(DomainEvent, $traceurRuntime.spread([null], opts)))();
       this.when(event);
       this.uncommittedEvents = this.uncommittedEvents || [];

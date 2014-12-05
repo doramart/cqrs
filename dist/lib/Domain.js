@@ -47,55 +47,51 @@ System.register("../../lib/Domain", [], function() {
               self.actorListener = actorListener;
               actorListener.actorRepos = self.repos;
               self.eventBus.on("*", function(evt) {
-                if (evt.data.targetType === "ActorListener")
+                if (evt.targetType === "ActorListener")
                   return;
                 actorListener.call("pub", {
-                  eventName: evt.data.targetType + "." + evt.data.targetId + ":" + evt.name,
+                  eventName: evt.targetType + "." + evt.targetId + ":" + evt.name,
                   event: evt
                 });
-                actorListener.call("pub", {
-                  eventName: evt.data.targetType + "." + evt.data.targetId,
+                actorListener.pub({
+                  eventName: evt.targetType + "." + evt.targetId,
                   event: evt
                 });
-                actorListener.call("pub", {
-                  eventName: evt.data.targetType + ":" + evt.name,
+                actorListener.pub({
+                  eventName: evt.targetType + ":" + evt.name,
                   event: evt
                 });
-                actorListener.call("pub", {
-                  eventName: "." + evt.data.targetId + ":" + evt.name,
+                actorListener.pub({
+                  eventName: "." + evt.targetId + ":" + evt.name,
                   event: evt
                 });
-                actorListener.call("pub", {
+                actorListener.pub({
                   eventName: ":" + evt.name,
                   event: evt
                 });
-                actorListener.call("pub", {
-                  eventName: evt.data.targetType,
+                actorListener.pub({
+                  eventName: evt.targetType,
                   event: evt
                 });
                 if (evt.contextId) {
-                  actorListener.call("pub", {
-                    eventName: evt.data.targetType + "." + evt.data.targetId + ":" + evt.name + "&" + evt.contextId,
+                  actorListener.pub({
+                    eventName: evt.targetType + "." + evt.targetId + "&" + evt.contextId,
                     event: evt
                   });
-                  actorListener.call("pub", {
-                    eventName: evt.data.targetType + "." + evt.data.targetId + "&" + evt.contextId,
+                  actorListener.pub({
+                    eventName: evt.targetType + ":" + evt.name + "&" + evt.contextId,
                     event: evt
                   });
-                  actorListener.call("pub", {
-                    eventName: evt.data.targetType + ":" + evt.name + "&" + evt.contextId,
+                  actorListener.pub({
+                    eventName: "." + evt.targetId + ":" + evt.name + "&" + evt.contextId,
                     event: evt
                   });
-                  actorListener.call("pub", {
-                    eventName: "." + evt.data.targetId + ":" + evt.name + "&" + evt.contextId,
-                    event: evt
-                  });
-                  actorListener.call("pub", {
+                  actorListener.pub({
                     eventName: ":" + evt.name + "&" + evt.contextId,
                     event: evt
                   });
-                  actorListener.call("pub", {
-                    eventName: evt.data.targetType + "&" + evt.contextId,
+                  actorListener.pub({
+                    eventName: evt.targetType + "&" + evt.contextId,
                     event: evt
                   });
                 }
@@ -115,9 +111,9 @@ System.register("../../lib/Domain", [], function() {
       if (typeof ActorClass === "function") {} else {
         ActorClass = Actor.extend(arguments[0], arguments[1]);
       }
-      this.ActorClasses[ActorClass.typeName] = ActorClass;
+      this.ActorClasses[ActorClass.type] = ActorClass;
       var repo = new Repository(ActorClass, this[eventstore]);
-      this.repos[ActorClass.typeName] = repo;
+      this.repos[ActorClass.type] = repo;
       this._actorEventHandle(repo);
       return this;
     },
@@ -136,94 +132,15 @@ System.register("../../lib/Domain", [], function() {
           onlyContext: onlyContext
         });
       }
-      function actorCallEventHandle(command) {
-        self.call(command);
-      }
-      function actorCreateEventHandle() {
-        var $__3;
-        for (var opts = [],
-            $__2 = 0; $__2 < arguments.length; $__2++)
-          opts[$__2] = arguments[$__2];
-        ($__3 = self).create.apply($__3, $traceurRuntime.spread(opts));
-      }
       var listenActorEventHandle = (function(actor) {
         actor.on("apply", actorApplyEventHandle);
         actor.on("listen", actorListenEventHandle);
-        actor.on("call", actorCallEventHandle);
-        actor.on("create", actorCreateEventHandle);
         if (actor.uncommittedEvents.length) {
           $__0.eventBus.publish(actor);
         }
       });
       repo.on("create", listenActorEventHandle);
       repo.on("reborn", listenActorEventHandle);
-    },
-    call: function(command, callback) {
-      var self = this;
-      if (arguments.length) {
-        exec();
-      } else {
-        return Command("typeName", "actorId", "data", "contextId", "methodName", function(opts, cb) {
-          command = opts;
-          callback = cb;
-          exec();
-        });
-      }
-      function exec() {
-        co($traceurRuntime.initGeneratorFunction(function $__4() {
-          var repo,
-              actor,
-              err;
-          return $traceurRuntime.createGeneratorInstance(function($ctx) {
-            while (true)
-              switch ($ctx.state) {
-                case 0:
-                  $ctx.pushTry(9, null);
-                  $ctx.state = 12;
-                  break;
-                case 12:
-                  repo = self.repos[command.typeName];
-                  if (!repo) {
-                    throw new Error("please register " + command.typeName);
-                  }
-                  $ctx.state = 6;
-                  break;
-                case 6:
-                  $ctx.state = 2;
-                  return repo.get(command.actorId);
-                case 2:
-                  actor = $ctx.sent;
-                  $ctx.state = 4;
-                  break;
-                case 4:
-                  if (!actor) {
-                    throw new Error("no find by id = " + command.actorId);
-                  }
-                  actor.call(command.methodName, command.data || {}, {}, command.contextId);
-                  if (callback)
-                    callback();
-                  $ctx.state = 8;
-                  break;
-                case 8:
-                  $ctx.popTry();
-                  $ctx.state = -2;
-                  break;
-                case 9:
-                  $ctx.popTry();
-                  err = $ctx.storedException;
-                  $ctx.state = 15;
-                  break;
-                case 15:
-                  if (callback)
-                    callback(err);
-                  $ctx.state = -2;
-                  break;
-                default:
-                  return $ctx.end();
-              }
-          }, $__4, this);
-        }))();
-      }
     },
     create: function(actorType, data, callback) {
       callback = callback || function() {};
@@ -293,7 +210,7 @@ System.register("../../lib/Domain", [], function() {
                 $ctx.state = 4;
                 break;
               case 4:
-                cb(null, actor.json);
+                cb(null, actor);
                 $ctx.state = 8;
                 break;
               case 8:

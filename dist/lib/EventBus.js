@@ -10,20 +10,20 @@ System.register("../../lib/EventBus", [], function() {
     this.es = eventstore;
     this.es.useEventPublisher((function(evt, cb) {
       var event = Event.reborn(evt);
-      $__0.emit(evt.data.targetType + "." + evt.data.targetId + ":" + evt.name, event);
-      $__0.emit(evt.data.targetType + "." + evt.data.targetId, event);
-      $__0.emit(evt.data.targetType + ":" + evt.name, event);
-      $__0.emit("." + evt.data.targetId + ":" + evt.name, event);
+      $__0.emit(evt.targetType + "." + evt.targetId + ":" + evt.name, event);
+      $__0.emit(evt.targetType + "." + evt.targetId, event);
+      $__0.emit(evt.targetType + ":" + evt.name, event);
+      $__0.emit("." + evt.targetId + ":" + evt.name, event);
       $__0.emit(":" + evt.name, event);
-      $__0.emit(evt.data.targetType, event);
+      $__0.emit(evt.targetType, event);
       $__0.emit("*", event);
       if (evt.contextId) {
-        $__0.emit(evt.data.targetType + "." + evt.data.targetId + ":" + evt.name + "&" + evt.contextId, event);
-        $__0.emit(evt.data.targetType + "." + evt.data.targetId + "&" + evt.contextId, event);
-        $__0.emit(evt.data.targetType + ":" + evt.name + "&" + evt.contextId, event);
-        $__0.emit("." + evt.data.targetId + ":" + evt.name + "&" + evt.contextId, event);
+        $__0.emit(evt.targetType + "." + evt.targetId + ":" + evt.name + "&" + evt.contextId, event);
+        $__0.emit(evt.targetType + "." + evt.targetId + "&" + evt.contextId, event);
+        $__0.emit(evt.targetType + ":" + evt.name + "&" + evt.contextId, event);
+        $__0.emit("." + evt.targetId + ":" + evt.name + "&" + evt.contextId, event);
         $__0.emit(":" + evt.name + "&" + evt.contextId, event);
-        $__0.emit(evt.data.targetType + "&" + evt.contextId, event);
+        $__0.emit(evt.targetType + "&" + evt.contextId, event);
       }
     }));
     this.es.init();

@@ -3,9 +3,9 @@ System.register("../../lib/DomainEvent", [], function() {
   var __moduleName = "../../lib/DomainEvent";
   var uid = require("shortid");
   var DomainEvent = function DomainEvent() {};
-  ($traceurRuntime.createClass)(DomainEvent, {constrcutor: function(actor, data, contextId) {
+  ($traceurRuntime.createClass)(DomainEvent, {constrcutor: function(name, actor, data, contextId) {
       this.actorId = actor.id;
-      this.actorType = actor.constructor.type;
+      this.actorType = actor.type;
       this.id = uid();
       this.data = data;
       this.name = name;

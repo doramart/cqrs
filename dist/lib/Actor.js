@@ -3,26 +3,38 @@ System.register("../../lib/Actor", [], function() {
   var __moduleName = "../../lib/Actor";
   var AbstractActor = require("./Actor");
   var uid = require("shortid");
+  var debug = require("debug")("Actor");
   var Actor = function Actor() {
     var data = arguments[0] !== (void 0) ? arguments[0] : {};
     $traceurRuntime.superCall(this, $Actor.prototype, "constructor", []);
-    this.data = data;
-    this.data.id = uid;
+    this._data = data;
+    this._data.id = uid;
+    this.on("apply", this._refreshData);
   };
   var $Actor = Actor;
-  ($traceurRuntime.createClass)(Actor, {get id() {
-      return this.data.id;
-    }}, {
+  ($traceurRuntime.createClass)(Actor, {
+    _refreshData: function() {
+      this.data = this.constructor.toJSON(this);
+      Object.freeze(this.data);
+    },
+    get id() {
+      return this._data.id;
+    },
+    loadEvents: function(events) {
+      $traceurRuntime.superCall(this, $Actor.prototype, "loadEvents", [events]);
+      this._refreshData();
+    }
+  }, {
     get type() {
       return this.name;
     },
     parse: function(json) {
       var actor = new this(json);
-      actor.data.id = json.id;
+      actor._data.id = json.id;
       return actor;
     },
     toJSON: function(actor) {
-      return JSON.parse(JSON.stringify(actor.data));
+      return JSON.parse(JSON.stringify(actor._data));
     },
     extend: function() {
       var methods = arguments[0] !== (void 0) ? arguments[0] : {};
@@ -32,6 +44,8 @@ System.register("../../lib/Actor", [], function() {
       delete methods.type;
       var initFun = methods.init;
       delete methods.init;
+      var toJSONFun = methods.toJSON;
+      delete methods.toJSON;
       var Type = function Type(data) {
         $traceurRuntime.superCall(this, $Type.prototype, "constructor", [data]);
         if (init)
@@ -40,9 +54,18 @@ System.register("../../lib/Actor", [], function() {
       var $Type = Type;
       ($traceurRuntime.createClass)(Type, {when: function() {
           whenFun.apply(this, arguments);
-        }}, {type: function() {
+        }}, {
+        type: function() {
           return typeName;
-        }}, $Actor);
+        },
+        toJSON: function(actor) {
+          if (toJSONFun) {
+            return toJSONFun.call(this, actor);
+          } else {
+            return $traceurRuntime.superCall(this, $Type, "toJSON", [actor]);
+          }
+        }
+      }, $Actor);
       var keys = Object.keys(methods);
       keys.forEach((function(k) {
         if (methods[k] === true) {
