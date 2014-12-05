@@ -58,7 +58,7 @@ describe("Actor", function () {
     it("#listen", function (done) {
         var User = Actor.extend("User", {
             changeName: function (name, service) {
-                service.listen("change", "finishChange");
+                service.listen("change","finishChange").exec();
             },
             finishChange: function (data, service) {
                 done();
@@ -68,54 +68,55 @@ describe("Actor", function () {
         var user = new User();
 
         user.on("listen", function (event, methodname) {
-            this.call("finishChange", methodname);
+            this.call().commandName("finishChange").data(methodname).exec();
         });
 
-        user.call("changeName");
+        user.call().commandName("changeName").exec();
     })
 
     it("#when", function () {
         var User = Actor.extend("User", {
-                changeName: function (name, service) {
-                    service.apply("changeName", name);
-                },
+            changeName: function (name, service) {
+                service.apply().name("changeName").data(name).exec();
+            },
             when: function (event, data) {
                 if (event.name === "changeName") {
-                    data.name = event.data.data;
+                    data.name = event.data;
                 }
             }
         })
 
         var user = new User();
 
-        user.call("changeName", "leo");
+        user.call().commandName("changeName").data("leo").exec();
+
         user.json.name.should.eql("leo");
     })
 
     it("#create actor usbclass 1", function (done) {
 
-        var User = Actor.extend("User",{
-            changeAge:true,
-            when: function (event,data) {
-                if(event.name === "changeAge"){
+        var User = Actor.extend("User", {
+            changeAge: true,
+            when: function (event, data) {
+                if (event.name === "changeAge") {
                     done();
                 }
             }
         })
         var user = new User();
 
-        user.call("changeAge");
+        user.call("changeAge").exec();
 
-    })
+    });
 
 
     it("#create actor usbclass 2", function (done) {
 
-        var User = Actor.extend("User",{
-            change:["name","age"],
-            when: function (event,data) {
-                if(event.name === "change"){
-                    var mydata = event.data.data;
+        var User = Actor.extend("User", {
+            change: ["name", "age"],
+            when: function (event, data) {
+                if (event.name === "change") {
+                    var mydata = event.data;
                     mydata.name.should.eql("leo");
                     mydata.age.should.eql(22);
                     done()
@@ -124,10 +125,9 @@ describe("Actor", function () {
         })
         var user = new User();
 
-        user.call("change",{name:"leo",age:22});
+        user.call("change", {name: "leo", age: 22}).exec();
 
     })
-
 
 
 })

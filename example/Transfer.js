@@ -18,7 +18,6 @@ module.exports = Actor.extend("Transfer", {
         di.apply("transferStart", data);
         // transfer start !
         di.call({typeName: "User", actorId: fromId, methodName: "deduct", data: {id: tid}});
-
     },
     handle: function (event, di) {
         switch (event.name) {

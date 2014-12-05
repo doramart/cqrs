@@ -1,8 +1,8 @@
-System.register("../../lib/ActorListener", [], function() {
+System.register("../../../lib/old/ActorListener", [], function() {
   "use strict";
-  var __moduleName = "../../lib/ActorListener";
+  var __moduleName = "../../../lib/old/ActorListener";
   var co = require("co"),
-      Actor = require("./Actor"),
+      Actor = require("./../Actor"),
       _ = require("underscore");
   module.exports = Actor.extend("ActorListener", {
     listen: function(command, di) {
@@ -117,4 +117,4 @@ System.register("../../lib/ActorListener", [], function() {
   });
   return {};
 });
-System.get("../../lib/ActorListener" + '');
+System.get("../../../lib/old/ActorListener" + '');

@@ -23,6 +23,7 @@
   "homepage": "https://github.com/leogiese/cqrs",
   "dependencies": {
     "co": "^3.1.0",
+    "command": "git://github.com/leogiese/command",
     "eventstore": "^1.1.2",
     "shortid": "^2.0.1",
     "thunkify": "^2.1.2",

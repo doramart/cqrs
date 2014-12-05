@@ -7,7 +7,7 @@ System.register("../../lib/Domain", [], function() {
       Actor = require("./Actor"),
       eventstore = Symbol("eventstore"),
       ActorListener = require("./ActorListener"),
-      Command = require("./Command"),
+      Command = require("command"),
       EventBus = require("./EventBus");
   var Domain = function Domain(options) {
     this[eventstore] = EventStore(options);
@@ -163,13 +163,11 @@ System.register("../../lib/Domain", [], function() {
       if (arguments.length) {
         exec();
       } else {
-        var cmd = new Command("typeName", "actorId", "data", "contextId", "methodName", "callback");
-        cmd.once("exec", function(opts) {
+        return Command("typeName", "actorId", "data", "contextId", "methodName", function(opts, cb) {
           command = opts;
-          callback = opts.callback;
+          callback = cb;
           exec();
         });
-        return cmd;
       }
       function exec() {
         co($traceurRuntime.initGeneratorFunction(function $__4() {
