@@ -28,8 +28,8 @@ register Actor class , Actor like DDD's AggregateRoot.
 e.g.
 
     domain.register("User",{
-        changeName:function(data,di){},
-        when:function(event,data){}
+        changeName:function(name){},
+        when:function(event){}
     })
 
 or
@@ -37,8 +37,8 @@ or
 
     var Actor = require("cqrs").Actor;
     var User = Actor.extend("User",{
-        changeName:function(data,di){},
-        when:function(event,data){}
+         changeName:function(name){},
+         when:function(event){}
     })
     domain.register(User);
 
@@ -50,31 +50,6 @@ create actor object.
 
     domain.create("User",data,function(err,actorId){})
 
-#### domain#call(command,callback)
-
-call actor's domain method.
-
-    var command = {
-        typeName:"User",
-        actorId:uid,
-        methodName:"recharge",
-        data:{money:20}
-    }
-
-    domain.call(command, function (err) {});
-
-or
-
-
-    domain.call()
-        .typeName("User")
-        .actorId(uid)
-        .methodName("recharge")
-        .data({money:20})
-        .exec();
-
-
-
 #### domain#addListener(eventName,handleFunction)
 
 listen a domain event.
@@ -83,29 +58,24 @@ listen a domain event.
 
 #### domain#get(typeName,actorId,callback)
 
-get a actor's json, isn't entity.
-
-    domain.get("User","id0001" , function(err , jsonData){ })
+    domain.get("User","id0001" , function(err , actor){ })
 
 Actor API
 =========
 
 #### Defined Actor class
 
-    var User = Actor.extend("User",methods);
+    var User = Actor.extend("User",options);
 
 
 #### Defined methods
 
     Actor.extend("User",{
-        changeName:function(data,di){
+        changeName:function(name){
             // you can validat and throw error ...
-            di.apply("changeName",data.name);
+            di.apply("changeName",name);
         },
-        changeAge:function(data){
-            di.apply("changeAge",data.age);
-        },
-        when:function(){
+        when:function(event){
             //see next step
         }
     })
@@ -114,92 +84,51 @@ or
 
     Actor.extend("User",{
         changeName:true,
-        change:true,
-        when:function(){
+        when:function(event){
             //see next step
         }
     })
 
 `changeName:true` Equivalent to
 
-    changeName:function(data,di){
-        di.apply("changeName",data.name);
+    changeName:function(data){
+        this.apply("changeName",data.name);
     }
 
 `change:["name","age"]` Equivalent to
 
-    change:function(data,di){
-        di.apply("change" , {name:data["name"],age:data["age"]})
+    change:function(data){
+        this.apply("change" , {name:data["name"],age:data["age"]})
     }
 
 the method cann't change self data. and must use `when` method to changed.
 
-#### Actor#when(event,data)
+#### Actor#when(event)
 
 The method only set self data according `event` , no only logic code.
 
 + event , domain event.
-+ data , writable data.
 
 e.g.
 
     Actor.extend("User",{
-        changeName:function(data,di){
-            var name = data.name;
-            di.apply("changeName",name);
+        changeName:function(name){
+            this.apply("changeName",name);
         },
-        when:function(event,data){
+        when:function(event){
             if(event.name === "changName"){
-                data.name = event.data.data;
+                this._data.name = event.data;
             }
         }
     })
 
-#### Actor#toJSON
+#### Actor#toJSON(actor)
 
-The method is private , and `actor.json` call ,  default code :
+static method
 
-    toJSON(data) {
-        return JSON.parse(JSON.stringify(data));
-    }
+#### Actor#parse(json)
 
-can custom
-
-e.g.
-
-    Actor.extend("User",{
-        changeName:function(data,di){
-
-            ......
-
-            var mydata = this.json;
-            console.log(mydata.name); // xxx---
-
-            ......
-        },
-        toJSON:function(data){
-            data.name = data.name + "---";
-            return JSON.parse(JSON.stringify(data));
-        }
-    })
-
-#### Actor#json / Actor#data / Actor#refreshData
-
-`json` is internal call `toJSON` , and refresh `data` , and  `data` is a readonly.
-
-if want data is new , can use  `refreshData`
-
-e.g.
-
-
-    Actor.extend("User",{
-        changeName:function(data,di){
-            this.refreshData();
-            this.data; // is new value
-        }
-    })
-
-
+static method
 
 LICENSE
 =======
