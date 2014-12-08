@@ -20,17 +20,18 @@ describe("EventBus", function () {
     })
 
     it("#init", function (done) {
-        var User = Actor.extend("User", {
-            changeName(name, di) {
-                di.apply("changeName", name);
+        var User = Actor.extend({
+            type:"User",
+            changeName(name) {
+                this.apply("changeName", name);
             },
-            finish(name, di) {
-                di.apply("finish");
+            finish(name) {
+                this.apply("finish");
             },
 
             when(event, set) {
                 if (event.name === "finish") {
-                    set("finish", "ok");
+                    this._data.finish = "ok";
                 }
             }
 
@@ -38,18 +39,18 @@ describe("EventBus", function () {
 
         var uid;
 
-        repos[User.typeName] = new Repository(User, es);
+        repos[User.type] = new Repository(User, es);
 
         co(function *() {
-            actor = yield repos[User.typeName].create({name: "leo"});
+            actor = yield repos[User.type].create({name: "leo"});
             done();
         })()
     })
 
     it("#publsh", function (done) {
 
-        actor.call("changeName", "bright");
-        actor.uncommittedEvents.length.should.eql(2);
+        actor.changeName("bright");
+        actor.uncommittedEvents.length.should.eql(1);
         bus.publish(actor);
 
         setTimeout(function () {

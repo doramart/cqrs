@@ -12,13 +12,14 @@ describe("Domain", function () {
 
     it("#register", function () {
 
-        domain.register("User", {
-            changeName(name, di) {
-                di.apply("changeName", name);
+        domain.register({
+            type: "User",
+            changeName(name) {
+                this.apply("changeName", name);
             },
-            when(event, set) {
+            when(event) {
                 if (event.name === "changeName") {
-                    set("name", event.data);
+                    this._data.name = event.data;
                 }
             }
         });
@@ -32,28 +33,16 @@ describe("Domain", function () {
 
     it("#create", function (done) {
 
-        domain.addListener("User:create", function (event) {
-            event.name.should.eql("create");
-            done()
-        })
-
         domain.create("User", {name: "brighthas"}, function (err, id) {
             uid = id;
             should.exist(id);
+            done();
         });
 
     })
 
-    it("#call", function (done) {
-        domain.call({typeName: "User", actorId: uid, methodName: "changeName", data: "leo"});
-        domain.get("User", uid, function (err, act) {
-            act.id.should.eql(uid);
-            done()
-        })
-    })
-
     it("#getHisitory", function (done) {
-        domain.getHistory(uid, 0,1000, function (err, evets) {
+        domain.getHistory(uid, 0, 1000, function (err, evets) {
             done();
         })
 

@@ -8,126 +8,92 @@ describe("Actor", function () {
     var actor;
 
     it("#new", function () {
-        actor = new Actor({name: "leo", book: "xxx"});
-        var data = actor.json;
-        should.exist(data.id);
-        data.name.should.eql("leo");
-        data.book.should.eql("xxx");
-    })
+        actor = new Actor({name: "leo", age: 26});
+        actor._data.name.should.eql("leo");
+        actor._data.age.should.eql(26);
+        actor._data.should.eql(actor.data);
+        actor.id.should.eql(actor.data.id);
+        actor.type.should.eql(Actor.type);
+    });
 
+    it("#loadEvents", function () {
 
-    it("#json", function () {
-        var data = actor.json;
-        data.name.should.eql("leo");
-        data.book.should.eql("xxx")
-        should.exist(data.id);
-    })
-
-
-    it("#apply", function () {
-
-        //var caller = new Actor();
-
-        var User = Actor.extend("User", {
-            changeName: function (name, service) {
-                service.apply("changeName", name);
+        actor.when = function (event) {
+            if (event.name === "changeName") {
+                this._data.name = event.data;
             }
-        })
+        }
 
-        var caller = new User();
-        var actor = new User();
+        actor.loadEvents([
+            {name: "changeName", data: "brighthas"}
+        ])
 
-        actor.on("apply", function () {
-            this.uncommittedEvents.length.should.eql(1);
-            var event = this.uncommittedEvents[0];
-            should.exist(event.id);
-            should.exist(event.time);
-            event.name.should.eql("changeName");
-            var data = event.data;
-            data.callerId.should.eql(caller.json.id);
-            data.callerType.should.eql("User");
-            data.targetId.should.eql(actor.json.id)
-            data.targetType.should.eql("User");
-            data.data.should.eql("leo");
-        });
-
-        actor.call("changeName", "leo", caller);
-
-    })
-
-    it("#listen", function (done) {
-        var User = Actor.extend("User", {
-            changeName: function (name, service) {
-                service.listen("change","finishChange").exec();
-            },
-            finishChange: function (data, service) {
-                done();
-            }
-        })
-
-        var user = new User();
-
-        user.on("listen", function (event, methodname) {
-            this.call().commandName("finishChange").data(methodname).exec();
-        });
-
-        user.call().commandName("changeName").exec();
-    })
-
-    it("#when", function () {
-        var User = Actor.extend("User", {
-            changeName: function (name, service) {
-                service.apply().name("changeName").data(name).exec();
-            },
-            when: function (event, data) {
-                if (event.name === "changeName") {
-                    data.name = event.data;
-                }
-            }
-        })
-
-        var user = new User();
-
-        user.call().commandName("changeName").data("leo").exec();
-
-        user.json.name.should.eql("leo");
-    })
-
-    it("#create actor usbclass 1", function (done) {
-
-        var User = Actor.extend("User", {
-            changeAge: true,
-            when: function (event, data) {
-                if (event.name === "changeAge") {
-                    done();
-                }
-            }
-        })
-        var user = new User();
-
-        user.call("changeAge").exec();
+        actor.data.name.should.eql("brighthas");
+        actor._data.should.eql(actor.data);
 
     });
 
+    it("#type", function () {
+        class User extends Actor {
+        }
+        User.type.should.eql("User");
+    })
 
-    it("#create actor usbclass 2", function (done) {
-
-        var User = Actor.extend("User", {
-            change: ["name", "age"],
-            when: function (event, data) {
-                if (event.name === "change") {
-                    var mydata = event.data;
-                    mydata.name.should.eql("leo");
-                    mydata.age.should.eql(22);
-                    done()
-                }
-            }
-        })
-        var user = new User();
-
-        user.call("change", {name: "leo", age: 22}).exec();
-
+    it("#toJSON", function () {
+        var json = Actor.toJSON(actor);
+        json.should.eql(actor.data);
     })
 
 
-})
+    it("#parse", function () {
+        var json = Actor.toJSON(actor);
+        var act = Actor.parse(json);
+        act.data.should.eql(act._data);
+        act.data.should.eql(json);
+    })
+
+    it("extend", function () {
+
+
+        var Book = Actor.extend({
+            type: "Book",
+            init: function (data) {
+                this._data.name = data.name;
+                this._data.num = 0;
+            },
+
+            access:true,
+
+            changeName: function (name) {
+                this.apply("changeName", name);
+            },
+            when: function (event) {
+                switch (event.name) {
+                    case "changeName":
+                        this._data.name = event.data;
+                        break;
+                    case "access":
+                        this._data.num += 1;
+                        break;
+                }
+            }
+        })
+
+
+        Book.type.should.eql("Book");
+
+        var book = new Book({name: "node.js", price: 150});
+        book.data.should.eql(book._data);
+        book.data.num.should.eql(0);
+
+
+        book.changeName("express");
+        book.data.name.should.eql("express");
+
+        book.access();
+        book.data.num.should.eql(1);
+
+        book.data.should.eql(book._data);
+
+    })
+});

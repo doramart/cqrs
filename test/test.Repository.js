@@ -9,33 +9,32 @@ var thunkify = require("thunkify");
 
 describe("Repository", function () {
 
-    var User = Actor.extend("People"),es = new ES,repos;
+    var User = Actor.extend(), es = new ES, repos;
 
     var uid;
 
     it("#new", function () {
-       repos  = new Repository(User,es);
+        repos = new Repository(User, es);
     })
 
     it("#create", function (done) {
         co(function *() {
-            var user = yield repos.create({name:"leo"});
+            var user = yield repos.create({name: "leo"});
             uid = user.id;
             user.data.name.should.eql("leo");
             done();
         })()
     })
 
-    //it("#get", function (done) {
-    //    setTimeout(()=>{
-    //        co(function* () {
-    //            repos.clear(uid);
-    //            var user = yield repos.get(uid);
-    //            console.log(user.json);
-    //            user.get("name").should.eql("leo");
-    //            done();
-    //        })()
-    //    },100)
-    //
-    //})
+    it("#get", function (done) {
+        setTimeout(()=> {
+            co(function* () {
+                repos.clear(uid);
+                var user = yield repos.get(uid);
+                user.data.name.should.eql("leo");
+                done();
+            })()
+        })
+
+    })
 })

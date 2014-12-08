@@ -1,24 +1,30 @@
 var ActorListener = require("../lib/ActorListener"),
+    Domain = require("../lib/Domain"),
+    domain = new Domain(),
     Actor = require("../lib/Actor"),
     should = require("should"),
-    User = Actor.extend("User", {
-        handle: function (event, di) {
-            di.apply("handle event");
+    User = Actor.extend({
+        type: "User",
+        handle: function (event) {
+            this.apply("handle event");
         },
-        when: function (event,data) {
-            if(event.name === "handle event"){
-                data.name = "leo";
+        when: function (event) {
+            if (event.name === "handle event") {
+                this._data.name = "leo";
 
             }
         }
     });
 
+domain.register(User).register(ActorListener);
+
 describe("ActorListener", function () {
 
-    var actorListener,user =  new User;
+    var actorListener, user = new User;
 
     it("#new", function () {
-        actorListener = new ActorListener(null,true);
+
+        actorListener = new ActorListener();
 
         var actorRepos = {
             User: {
@@ -30,41 +36,34 @@ describe("ActorListener", function () {
 
         actorListener.actorRepos = actorRepos;
 
-    })
+    });
 
-    it("#listen", function () {
+    it("#listen", function (done) {
 
-        actorListener.on("apply", function (al) {
-            var listeners  = al.json.repos.test;
-        })
+        actorListener.once("apply", function (event) {
+            done();
+        });
 
-        actorListener.call("listen",{
-            eventName:"test",
-            actor:user,
-            handleMethodName:"handle"
-        })
-    })
+        actorListener.listen("test", user, "handle");
+
+    });
 
     it("#pub", function (done) {
 
-        should.not.exist(user.json.name);
+        should.not.exist(user._data.name);
 
         user.on("apply", function (u) {
-            user.json.name.should.eql("leo");
-        })
+            user._data.name.should.eql("leo");
+        });
 
-        actorListener.call("listenOne",{
-            eventName:"test",
-            actor:user,
-            handleMethodName:"handle"
-        })
+        actorListener.listenOne("test", user, "handle");
 
-        actorListener.call("pub",{eventName:"test",event:{name:"leo"}});
+        actorListener.pub({eventName: "test", event: {name: "leo"}});
 
         setTimeout(function () {
-            var listeners  = actorListener.json.repos.test;
+            var listeners = actorListener._data.repos.test;
             done()
-        },200);
+        }, 200);
 
     });
 
