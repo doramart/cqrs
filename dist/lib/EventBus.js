@@ -3,31 +3,33 @@ System.register("../../lib/EventBus", [], function() {
   var __moduleName = "../../lib/EventBus";
   var Emiter = require("events").EventEmitter,
       Event = require("./DomainEvent");
-  var EventBus = function EventBus(eventstore, repos, actorListener) {
+  var EventBus = function EventBus(eventstore) {
     var $__0 = this;
-    this.repos = repos;
-    this.actorListener = actorListener;
     this.es = eventstore;
     this.es.useEventPublisher((function(evt, cb) {
-      $__0.emit(evt.targetType + "." + evt.targetId + ":" + evt.name, evt);
-      $__0.emit(evt.targetType + "." + evt.targetId, evt);
-      $__0.emit(evt.targetType + ":" + evt.name, evt);
-      $__0.emit("." + evt.targetId + ":" + evt.name, evt);
-      $__0.emit(":" + evt.name, evt);
-      $__0.emit(evt.targetType, evt);
-      $__0.emit("*", evt);
-      if (evt.contextId) {
-        $__0.emit(evt.targetType + "." + evt.targetId + ":" + evt.name + "&" + evt.contextId, evt);
-        $__0.emit(evt.targetType + "." + evt.targetId + "&" + evt.contextId, evt);
-        $__0.emit(evt.targetType + ":" + evt.name + "&" + evt.contextId, evt);
-        $__0.emit("." + evt.targetId + ":" + evt.name + "&" + evt.contextId, evt);
-        $__0.emit(":" + evt.name + "&" + evt.contextId, evt);
-        $__0.emit(evt.targetType + "&" + evt.contextId, evt);
-      }
+      $__0._publish(evt);
     }));
     this.es.init();
   };
-  ($traceurRuntime.createClass)(EventBus, {publish: function(actor) {
+  ($traceurRuntime.createClass)(EventBus, {
+    _publish: function(evt) {
+      this.emit(evt.targetType + "." + evt.targetId + ":" + evt.name, evt);
+      this.emit(evt.targetType + "." + evt.targetId, evt);
+      this.emit(evt.targetType + ":" + evt.name, evt);
+      this.emit("." + evt.targetId + ":" + evt.name, evt);
+      this.emit(":" + evt.name, evt);
+      this.emit(evt.targetType, evt);
+      this.emit("*", evt);
+      if (evt.contextId) {
+        this.emit(evt.targetType + "." + evt.targetId + ":" + evt.name + "&" + evt.contextId, evt);
+        this.emit(evt.targetType + "." + evt.targetId + "&" + evt.contextId, evt);
+        this.emit(evt.targetType + ":" + evt.name + "&" + evt.contextId, evt);
+        this.emit("." + evt.targetId + ":" + evt.name + "&" + evt.contextId, evt);
+        this.emit(":" + evt.name + "&" + evt.contextId, evt);
+        this.emit(evt.targetType + "&" + evt.contextId, evt);
+      }
+    },
+    publish: function(actor) {
       var self = this;
       this.es.getFromSnapshot(actor.id, function(err, snap, stream) {
         var history = stream.events;
@@ -44,7 +46,8 @@ System.register("../../lib/EventBus", [], function() {
           actor.uncommittedEvents = [];
         }
       });
-    }}, {}, Emiter);
+    }
+  }, {}, Emiter);
   module.exports = EventBus;
   return {};
 });

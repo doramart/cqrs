@@ -12,7 +12,7 @@ System.register("../../lib/Domain", [], function() {
     this[eventstore] = EventStore(options);
     this.ActorClasses = {};
     this.repos = {};
-    this.eventBus = new EventBus(this[eventstore], this.repos);
+    this.eventBus = new EventBus(this[eventstore]);
     var self = this;
     co($traceurRuntime.initGeneratorFunction(function $__4() {
       var repo,
@@ -48,7 +48,7 @@ System.register("../../lib/Domain", [], function() {
               self.eventBus.on("*", function(evt) {
                 if (evt.targetType === "ActorListener")
                   return;
-                actorListener.call("pub", {
+                actorListener.pub({
                   eventName: evt.targetType + "." + evt.targetId + ":" + evt.name,
                   event: evt
                 });
@@ -127,13 +127,12 @@ System.register("../../lib/Domain", [], function() {
       function actorApplyEventHandle(actor) {
         self.eventBus.publish(actor);
       }
-      function actorListenEventHandle(actor, eventName, handleMethodName, contextId, onlyContext) {
-        self.actorListener.call("listen", {
-          actor: actor,
+      function actorListenEventHandle(eventName, handle, contextId) {
+        self.actorListener.listen({
           eventName: eventName,
-          handleMethodName: handleMethodName,
-          contextId: contextId,
-          onlyContext: onlyContext
+          actor: this,
+          handle: handle,
+          contextId: contextId
         });
       }
       var listenActorEventHandle = (function(actor) {
@@ -144,10 +143,10 @@ System.register("../../lib/Domain", [], function() {
         }
       });
       repo.on("create", listenActorEventHandle);
-      repo.on("reborn", listenActorEventHandle);
     },
     create: function(actorType, data, callback) {
       callback = callback || function() {};
+      var eventBus = this.eventBus;
       var repo = this.repos[actorType];
       co($traceurRuntime.initGeneratorFunction(function $__4() {
         var actor,
@@ -167,6 +166,11 @@ System.register("../../lib/Domain", [], function() {
                 $ctx.state = 4;
                 break;
               case 4:
+                eventBus._publish({
+                  targetType: actor.type,
+                  targetId: actor.id,
+                  name: "create"
+                });
                 callback(null, actor.id);
                 $ctx.state = 6;
                 break;
