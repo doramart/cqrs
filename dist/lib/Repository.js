@@ -71,6 +71,7 @@ System.register("../../lib/Repository", [], function() {
           stream,
           snap,
           history,
+          evt,
           historyv;
       return $traceurRuntime.createGeneratorInstance(function($ctx) {
         while (true)
@@ -99,9 +100,9 @@ System.register("../../lib/Repository", [], function() {
             case 9:
               snapshot = result[0];
               stream = result[1];
-              $ctx.state = 17;
+              $ctx.state = 23;
               break;
-            case 17:
+            case 23:
               $ctx.state = (!snapshot) ? 11 : 12;
               break;
             case 11:
@@ -111,15 +112,32 @@ System.register("../../lib/Repository", [], function() {
               snap = snapshot.data;
               actor = new this.Actor(snap);
               history = stream.events;
+              $ctx.state = 25;
+              break;
+            case 25:
+              $ctx.state = (history.length) ? 17 : 15;
+              break;
+            case 17:
+              evt = history[history.length - 1];
+              $ctx.state = 18;
+              break;
+            case 18:
+              $ctx.state = (evt.payload.name === "remove") ? 14 : 15;
+              break;
+            case 14:
+              $ctx.returnValue = null;
+              $ctx.state = -2;
+              break;
+            case 15:
               historyv = [];
               history.forEach(function(e) {
                 historyv.push(e.payload);
               });
               actor.loadEvents(historyv);
               this[cache][actor.id] = actor;
-              $ctx.state = 19;
+              $ctx.state = 27;
               break;
-            case 19:
+            case 27:
               $ctx.returnValue = actor;
               $ctx.state = -2;
               break;

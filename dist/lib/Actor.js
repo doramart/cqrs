@@ -14,6 +14,9 @@ System.register("../../lib/Actor", [], function() {
   };
   var $Actor = Actor;
   ($traceurRuntime.createClass)(Actor, {
+    remove: function() {
+      this.apply("remove");
+    },
     refreshData: function() {
       this.data = this.constructor.toJSON(this);
       Object.freeze(this.data);
@@ -40,23 +43,23 @@ System.register("../../lib/Actor", [], function() {
     extend: function() {
       var methods = arguments[0] !== (void 0) ? arguments[0] : {};
       var whenFun = methods.when;
-      delete methods.when;
       var typeName = methods.type;
-      delete methods.type;
       var initFun = methods.init;
-      delete methods.init;
       var toJSONFun = methods.toJSON;
-      delete methods.toJSON;
       var Type = function Type(data) {
         $traceurRuntime.superCall(this, $Type.prototype, "constructor", [data]);
         if (initFun) {
-          this.data = this._data = {id: this._data.id};
+          var id = this._data.id;
           initFun.call(this, data);
+          if (!this._data.id) {
+            this._data.id = id;
+          }
         }
       };
       var $Type = Type;
       ($traceurRuntime.createClass)(Type, {when: function(event) {
-          whenFun.call(this, event);
+          if (whenFun)
+            whenFun.call(this, event);
         }}, {
         get type() {
           return typeName;
@@ -71,12 +74,14 @@ System.register("../../lib/Actor", [], function() {
       }, $Actor);
       var keys = Object.keys(methods);
       keys.forEach((function(k) {
-        if (methods[k] === true) {
-          Object.defineProperty(Type.prototype, k, {value: function(data) {
-              this.apply(k, data);
-            }});
-        } else {
-          Object.defineProperty(Type.prototype, k, {value: methods[k]});
+        if (["when", "type", "init", "toJSON"].indexOf(k) === -1) {
+          if (methods[k] === true) {
+            Object.defineProperty(Type.prototype, k, {value: function(data) {
+                this.apply(k, data);
+              }});
+          } else {
+            Object.defineProperty(Type.prototype, k, {value: methods[k]});
+          }
         }
       }));
       return Type;

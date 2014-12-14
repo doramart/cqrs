@@ -35,6 +35,6 @@ describe("Repository", function () {
                 done();
             })()
         })
+    });
 
-    })
-})
+});
