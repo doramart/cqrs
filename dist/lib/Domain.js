@@ -243,6 +243,12 @@ System.register("../../lib/Domain", [], function() {
     addListener: function(eventName, listener) {
       this.eventBus.on(eventName, listener);
     },
+    once: function(eventName, listener) {
+      this.eventBus.once(eventName, listener);
+    },
+    on: function(eventName, listener) {
+      this.eventBus.on(eventName, listener);
+    },
     getHistory: function() {
       var $__3;
       for (var opts = [],

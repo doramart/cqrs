@@ -47,13 +47,13 @@ System.register("../../lib/Actor", [], function() {
       var initFun = methods.init;
       var toJSONFun = methods.toJSON;
       var Type = function Type(data) {
-        $traceurRuntime.superCall(this, $Type.prototype, "constructor", [data]);
+        this._data = {};
         if (initFun) {
-          var id = this._data.id;
           initFun.call(this, data);
-          if (!this._data.id) {
-            this._data.id = id;
-          }
+        }
+        $traceurRuntime.superCall(this, $Type.prototype, "constructor", [this._data]);
+        if (!this._data.id) {
+          this._data.id = id;
         }
       };
       var $Type = Type;
