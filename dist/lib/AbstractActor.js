@@ -26,7 +26,7 @@ System.register("../../lib/AbstractActor", [], function() {
       this.when(event);
       this.uncommittedEvents = this.uncommittedEvents || [];
       this.uncommittedEvents.push(event);
-      this.emit("apply");
+      this.emit("apply", this);
     },
     listen: function(eventName, handle, contextId) {
       this.emit('listen', {

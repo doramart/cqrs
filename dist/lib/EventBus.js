@@ -30,22 +30,24 @@ System.register("../../lib/EventBus", [], function() {
       }
     },
     publish: function(actor) {
-      var self = this;
-      this.es.getFromSnapshot(actor.id, function(err, snap, stream) {
-        var history = stream.events;
-        if (history.length > 20) {
-          self.es.createSnapshot({
-            streamId: actor.id,
-            data: actor.json,
-            revision: stream.lastRevision
-          }, function(err) {});
-        }
-        if (actor.uncommittedEvents.length) {
-          stream.addEvents(actor.uncommittedEvents);
-          stream.commit();
-          actor.uncommittedEvents = [];
-        }
-      });
+      if (actor) {
+        var self = this;
+        this.es.getFromSnapshot(actor.id, function(err, snap, stream) {
+          var history = stream.events;
+          if (history.length > 20) {
+            self.es.createSnapshot({
+              streamId: actor.id,
+              data: actor.json,
+              revision: stream.lastRevision
+            }, function(err) {});
+          }
+          if (actor.uncommittedEvents.length) {
+            stream.addEvents(actor.uncommittedEvents);
+            stream.commit();
+            actor.uncommittedEvents = [];
+          }
+        });
+      }
     }
   }, {}, Emiter);
   module.exports = EventBus;

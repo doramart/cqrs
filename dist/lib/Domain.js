@@ -170,6 +170,9 @@ System.register("../../lib/Domain", [], function() {
               case 4:
                 eventBus._publish(new DomainEvent("create", actor));
                 callback(null, actor.id);
+                process.nextTick(function() {
+                  repo.emit("create", actor);
+                });
                 $ctx.state = 6;
                 break;
               case 6:
@@ -217,8 +220,8 @@ System.register("../../lib/Domain", [], function() {
                 $ctx.state = 4;
                 break;
               case 4:
+                defer.resolve(actor);
                 if (cb) {
-                  defer.resolve(actor);
                   cb(null, actor);
                 }
                 $ctx.state = 8;
