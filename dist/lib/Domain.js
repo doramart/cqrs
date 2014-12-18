@@ -4,7 +4,9 @@ System.register("../../lib/Domain", [], function() {
   var EventStore = require("eventstore"),
       Repository = require("./Repository"),
       co = require("co"),
+      Q = require("q"),
       Actor = require("./Actor"),
+      DomainEvent = require("./DomainEvent"),
       eventstore = Symbol("eventstore"),
       ActorListener = require("./ActorListener"),
       EventBus = require("./EventBus");
@@ -166,11 +168,7 @@ System.register("../../lib/Domain", [], function() {
                 $ctx.state = 4;
                 break;
               case 4:
-                eventBus._publish({
-                  targetType: actor.type,
-                  targetId: actor.id,
-                  name: "create"
-                });
+                eventBus._publish(new DomainEvent("create", actor));
                 callback(null, actor.id);
                 $ctx.state = 6;
                 break;
@@ -194,6 +192,7 @@ System.register("../../lib/Domain", [], function() {
       }))();
     },
     get: function(actorType, actorId, cb) {
+      var defer = Q.defer();
       var self = this;
       co($traceurRuntime.initGeneratorFunction(function $__4() {
         var repo,
@@ -218,7 +217,10 @@ System.register("../../lib/Domain", [], function() {
                 $ctx.state = 4;
                 break;
               case 4:
-                cb(null, actor);
+                if (cb) {
+                  defer.resolve(actor);
+                  cb(null, actor);
+                }
                 $ctx.state = 8;
                 break;
               case 8:
@@ -231,6 +233,7 @@ System.register("../../lib/Domain", [], function() {
                 $ctx.state = 15;
                 break;
               case 15:
+                defer.reject(e);
                 cb(e);
                 $ctx.state = -2;
                 break;
@@ -239,6 +242,7 @@ System.register("../../lib/Domain", [], function() {
             }
         }, $__4, this);
       }))();
+      return defer.promise;
     },
     addListener: function(eventName, listener) {
       this.eventBus.on(eventName, listener);

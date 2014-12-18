@@ -46,8 +46,9 @@ System.register("../../lib/Actor", [], function() {
       var typeName = methods.type;
       var initFun = methods.init;
       var toJSONFun = methods.toJSON;
-      var Type = function Type(data) {
-        this._data = {};
+      var Type = function Type() {
+        var data = arguments[0] !== (void 0) ? arguments[0] : {};
+        this._data = data;
         if (initFun) {
           initFun.call(this, data);
         }

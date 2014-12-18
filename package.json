@@ -26,6 +26,7 @@
     "command": "git://github.com/leogiese/command",
     "debug": "^2.1.0",
     "eventstore": "^1.1.2",
+    "q": "^1.1.2",
     "shortid": "^2.0.1",
     "thunkify": "^2.1.2",
     "traceur": "0.0.74",

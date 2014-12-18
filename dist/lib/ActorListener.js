@@ -43,7 +43,7 @@ System.register("../../lib/ActorListener", [], function() {
         repo = (repo = repos[eventName]) ? repos[eventName] : (repos[eventName] = []);
         repo.push(event.data);
       } else if (event.name === "emit") {
-        var list = repos[event.data.data] || [];
+        var list = repos[event.data] || [];
         for (var i = 0,
             len = list.length; i < len; i++) {
           var listener = list[i];
