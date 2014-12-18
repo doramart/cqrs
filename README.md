@@ -27,7 +27,8 @@ register Actor class , Actor like DDD's AggregateRoot.
 
 e.g.
 
-    domain.register("User",{
+    domain.register({
+        type:"User",
         changeName:function(name){},
         when:function(event){}
     })
@@ -36,7 +37,8 @@ or
 
 
     var Actor = require("cqrs").Actor;
-    var User = Actor.extend("User",{
+    var User = Actor.extend({
+         type:"User",
          changeName:function(name){},
          when:function(event){}
     })
@@ -65,12 +67,13 @@ Actor API
 
 #### Defined Actor class
 
-    var User = Actor.extend("User",options);
+    var User = Actor.extend(options);
 
 
 #### Defined methods
 
-    Actor.extend("User",{
+    Actor.extend({
+        type:"User",
         changeName:function(name){
             // you can validat and throw error ...
             di.apply("changeName",name);
@@ -82,7 +85,8 @@ Actor API
 
 or
 
-    Actor.extend("User",{
+    Actor.extend({
+        type:"User",
         changeName:true,
         when:function(event){
             //see next step
@@ -98,7 +102,7 @@ or
 `change:["name","age"]` Equivalent to
 
     change:function(data){
-        this.apply("change" , {name:data["name"],age:data["age"]})
+        this.apply("change" , {name:data.name,age:data.age})
     }
 
 the method cann't change self data. and must use `when` method to changed.
@@ -126,9 +130,13 @@ e.g.
 
 static method
 
+return actor object.
+
 #### Actor#parse(json)
 
 static method
+
+return actor's json data.
 
 LICENSE
 =======
