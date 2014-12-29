@@ -127,6 +127,9 @@ System.register("../../lib/Domain", [], function() {
       var $__0 = this;
       var self = this;
       function actorApplyEventHandle(actor) {
+        if (actor.uncommittedEvents[0].name === "remove") {
+          self.repos[actor.type].clear(actor.id);
+        }
         self.eventBus.publish(actor);
       }
       function actorListenEventHandle(eventName, handle, contextId) {
@@ -237,7 +240,9 @@ System.register("../../lib/Domain", [], function() {
                 break;
               case 15:
                 defer.reject(e);
-                cb(e);
+                if (cb) {
+                  cb(e);
+                }
                 $ctx.state = -2;
                 break;
               default:

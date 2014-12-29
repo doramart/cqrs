@@ -66,21 +66,31 @@ System.register("../../lib/Repository", [], function() {
     },
     get: $traceurRuntime.initGeneratorFunction(function $__2(id) {
       var actor,
+          returnFun,
           result,
           snapshot,
           stream,
           snap,
           history,
-          evt,
           historyv;
       return $traceurRuntime.createGeneratorInstance(function($ctx) {
         while (true)
           switch ($ctx.state) {
             case 0:
+              returnFun = function() {
+                if (actor && actor.data.alive === false) {
+                  return null;
+                } else {
+                  return actor;
+                }
+              };
+              $ctx.state = 17;
+              break;
+            case 17:
               $ctx.state = (actor = this.getFromCache(id)) ? 1 : 2;
               break;
             case 1:
-              $ctx.returnValue = actor;
+              $ctx.returnValue = returnFun();
               $ctx.state = -2;
               break;
             case 2:
@@ -94,15 +104,15 @@ System.register("../../lib/Repository", [], function() {
               $ctx.state = (actor = this.getFromCache(id)) ? 8 : 9;
               break;
             case 8:
-              $ctx.returnValue = actor;
+              $ctx.returnValue = returnFun();
               $ctx.state = -2;
               break;
             case 9:
               snapshot = result[0];
               stream = result[1];
-              $ctx.state = 23;
+              $ctx.state = 19;
               break;
-            case 23:
+            case 19:
               $ctx.state = (!snapshot) ? 11 : 12;
               break;
             case 11:
@@ -112,33 +122,16 @@ System.register("../../lib/Repository", [], function() {
               snap = snapshot.data;
               actor = new this.Actor(snap);
               history = stream.events;
-              $ctx.state = 25;
-              break;
-            case 25:
-              $ctx.state = (history.length) ? 17 : 15;
-              break;
-            case 17:
-              evt = history[history.length - 1];
-              $ctx.state = 18;
-              break;
-            case 18:
-              $ctx.state = (evt.payload.name === "remove") ? 14 : 15;
-              break;
-            case 14:
-              $ctx.returnValue = null;
-              $ctx.state = -2;
-              break;
-            case 15:
               historyv = [];
               history.forEach(function(e) {
                 historyv.push(e.payload);
               });
               actor.loadEvents(historyv);
               this[cache][actor.id] = actor;
-              $ctx.state = 27;
+              $ctx.state = 21;
               break;
-            case 27:
-              $ctx.returnValue = actor;
+            case 21:
+              $ctx.returnValue = returnFun();
               $ctx.state = -2;
               break;
             default:

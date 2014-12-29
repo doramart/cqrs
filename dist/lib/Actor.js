@@ -46,8 +46,10 @@ System.register("../../lib/Actor", [], function() {
       var typeName = methods.type;
       var initFun = methods.init;
       var toJSONFun = methods.toJSON;
+      var parseFun = methods.parse;
       var Type = function Type() {
         var data = arguments[0] !== (void 0) ? arguments[0] : {};
+        data.alive = true;
         this._data = data;
         if (initFun) {
           initFun.call(this, data);
@@ -59,6 +61,9 @@ System.register("../../lib/Actor", [], function() {
       };
       var $Type = Type;
       ($traceurRuntime.createClass)(Type, {when: function(event) {
+          if (event.name === "remove") {
+            this._data.alive = false;
+          }
           if (whenFun)
             whenFun.call(this, event);
         }}, {
@@ -66,11 +71,25 @@ System.register("../../lib/Actor", [], function() {
           return typeName;
         },
         toJSON: function(actor) {
+          var json;
           if (toJSONFun) {
-            return toJSONFun.call(this, actor);
+            json = toJSONFun.call(this, actor);
           } else {
-            return $traceurRuntime.superCall(this, $Type, "toJSON", [actor]);
+            json = $traceurRuntime.superCall(this, $Type, "toJSON", [actor]);
           }
+          json.alive = actor._data.alive;
+          return json;
+        },
+        parse: function(json) {
+          var actor;
+          if (parseFun) {
+            actor = parseFun.call(this, json);
+          } else {
+            actor = $traceurRuntime.superCall(this, $Type, "parse", [json]);
+          }
+          actor._data.alive = json.alive;
+          actor.refreshData();
+          return actor;
         }
       }, $Actor);
       var keys = Object.keys(methods);
