@@ -171,7 +171,7 @@ System.register("../../lib/Domain", [], function() {
                 $ctx.state = 4;
                 break;
               case 4:
-                eventBus._publish(new DomainEvent("create", actor));
+                eventBus._publish(new DomainEvent("create", actor, actor.constructor.toJSON(actor)));
                 callback(null, actor.id);
                 process.nextTick(function() {
                   repo.emit("create", actor);
