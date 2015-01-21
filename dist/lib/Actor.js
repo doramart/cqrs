@@ -3,6 +3,7 @@ System.register("../../lib/Actor", [], function() {
   var __moduleName = "../../lib/Actor";
   var AbstractActor = require("./AbstractActor");
   var uid = require("shortid");
+  var inherits = require("util").inherits;
   var debug = require("debug")("Actor");
   var Actor = function Actor() {
     var data = arguments[0] !== (void 0) ? arguments[0] : {};
@@ -42,56 +43,60 @@ System.register("../../lib/Actor", [], function() {
     },
     extend: function() {
       var methods = arguments[0] !== (void 0) ? arguments[0] : {};
+      var $__0 = this;
       var whenFun = methods.when;
       var typeName = methods.type;
       var initFun = methods.init;
       var toJSONFun = methods.toJSON;
       var parseFun = methods.parse;
-      var Type = function Type() {
-        var data = arguments[0] !== (void 0) ? arguments[0] : {};
+      function Type(data) {
+        data = data || {};
+        var wrap;
         data.alive = true;
         this._data = data;
         if (initFun) {
-          initFun.call(this, data);
+          wrap = initFun.call(this, data);
         }
-        $traceurRuntime.superCall(this, $Type.prototype, "constructor", [this._data]);
+        $Actor.call(this, this._data);
         if (!this._data.id) {
           this._data.id = id;
         }
-      };
-      var $Type = Type;
-      ($traceurRuntime.createClass)(Type, {when: function(event) {
-          if (event.name === "remove") {
-            this._data.alive = false;
-          }
-          if (whenFun)
-            whenFun.call(this, event);
-        }}, {
-        get type() {
-          return typeName;
-        },
-        toJSON: function(actor) {
-          var json;
-          if (toJSONFun) {
-            json = toJSONFun.call(this, actor);
-          } else {
-            json = $traceurRuntime.superCall(this, $Type, "toJSON", [actor]);
-          }
-          json.alive = actor._data.alive;
-          return json;
-        },
-        parse: function(json) {
-          var actor;
-          if (parseFun) {
-            actor = parseFun.call(this, json);
-          } else {
-            actor = $traceurRuntime.superCall(this, $Type, "parse", [json]);
-          }
-          actor._data.alive = json.alive;
-          actor.refreshData();
-          return actor;
+        if (wrap) {
+          wrap.on = this.on.bind(this);
+          wrap.once = this.once.bind(this);
+          return wrap;
         }
-      }, $Actor);
+      }
+      inherits(Type, $Actor);
+      Type.prototype.when = function(event) {
+        if (event.name === "remove") {
+          this._data.alive = false;
+        }
+        if (whenFun)
+          whenFun.call(this, event);
+      };
+      Type.type = typeName;
+      Type.toJSON = function(actor) {
+        var json;
+        if (toJSONFun) {
+          json = toJSONFun.call(this, actor);
+        } else {
+          json = $Actor.toJSON(actor);
+        }
+        json.alive = actor._data.alive;
+        return json;
+      };
+      Type.parse = function(json) {
+        var actor;
+        if (parseFun) {
+          actor = parseFun.call(this, json);
+        } else {
+          actor = $traceurRuntime.superCall($__0, $Actor, "parse", [json]);
+        }
+        actor._data.alive = json.alive;
+        actor.refreshData();
+        return actor;
+      };
       var keys = Object.keys(methods);
       keys.forEach((function(k) {
         if (["when", "type", "init", "toJSON"].indexOf(k) === -1) {
