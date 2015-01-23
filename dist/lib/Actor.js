@@ -61,11 +61,6 @@ System.register("../../lib/Actor", [], function() {
         if (!this._data.id) {
           this._data.id = id;
         }
-        if (wrap) {
-          wrap.on = this.on.bind(this);
-          wrap.once = this.once.bind(this);
-          return wrap;
-        }
       }
       inherits(Type, $Actor);
       Type.prototype.when = function(event) {

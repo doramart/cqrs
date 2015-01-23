@@ -107,39 +107,6 @@ or
 
 the method cann't change self data. and must use `when` method to changed.
 
-#### Actor's init function
-
-    var User = Actor.extend({
-        type:"User",
-        when:function(event){
-            if(event.name === "changeName"){
-                this._data.name = event.data;
-            }
-        };
-        init:function(data){
-            this._data.name = data.name;
-            var me = this;
-            return {
-                get name(){
-                    return me._data.name;
-                },
-                changeName:this.changeName.bind(this)
-            }
-        },
-        changeName:function(name){
-            this.apply("changeName",name);
-        },
-        privateMethod :function(){
-
-        }
-    })
-
-    // call it
-    var user = new User({name:"leo"});
-    user.name // leo
-    user.changeName // is exist.
-    user.changeAge // isn't exist.
-
 
 #### Actor#when(event)
 
