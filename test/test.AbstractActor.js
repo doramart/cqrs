@@ -60,8 +60,6 @@ describe("AbstractActor", function () {
         });
 
         actor.listen("test","change");
-
-        console.log("hahah");
     });
 
 });

@@ -43,7 +43,6 @@ System.register("../../test/test.AbstractActor", [], function() {
         done();
       });
       actor.listen("test", "change");
-      console.log("hahah");
     });
   });
   return {};

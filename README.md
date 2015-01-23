@@ -127,6 +127,23 @@ e.g.
         }
     })
 
+#### Actor#listen(eventName,handleName,[contextId])
+
+e.g.
+
+    Actor.extend("User",{
+        test:function(){
+            // listen `Book.changeName` domain' event , and use `handle` method to handle.
+            this.listen("Book.changeName","handle");
+            this.apply("test");
+        },
+
+        handle:function(event){
+
+        }
+
+    })
+
 #### Actor#toJSON(actor)
 
 static method
