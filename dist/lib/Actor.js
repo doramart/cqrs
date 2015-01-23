@@ -9,7 +9,8 @@ System.register("../../lib/Actor", [], function() {
     var data = arguments[0] !== (void 0) ? arguments[0] : {};
     $traceurRuntime.superCall(this, $Actor.prototype, "constructor", []);
     this._data = data;
-    this._data.id = uid();
+    if (!this._data.id)
+      this._data.id = uid();
     this.on("apply", this.refreshData);
     this.refreshData();
   };
@@ -51,15 +52,14 @@ System.register("../../lib/Actor", [], function() {
       var parseFun = methods.parse;
       function Type(data) {
         data = data || {};
-        var wrap;
         data.alive = true;
         this._data = data;
         if (initFun) {
-          wrap = initFun.call(this, data);
+          initFun.call(this, data);
         }
         $Actor.call(this, this._data);
         if (!this._data.id) {
-          this._data.id = id;
+          this._data.id = uid();
         }
       }
       inherits(Type, $Actor);
