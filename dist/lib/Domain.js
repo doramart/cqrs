@@ -254,12 +254,15 @@ System.register("../../lib/Domain", [], function() {
     },
     addListener: function(eventName, listener) {
       this.eventBus.on(eventName, listener);
+      return this;
     },
     once: function(eventName, listener) {
       this.eventBus.once(eventName, listener);
+      return this;
     },
     on: function(eventName, listener) {
       this.eventBus.on(eventName, listener);
+      return this;
     },
     getHistory: function() {
       var $__3;
