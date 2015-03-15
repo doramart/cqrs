@@ -11,8 +11,20 @@ export default class DomainEvent {
 
     constructor(name, actor, data, contextId) {
 
+        /**
+         * @member actorId
+         * @memberof DomainEvent.prototype
+         * @type {string}
+         * @readonly
+         */
         this.actorId = actor.id;
 
+        /**
+         * @member actorType
+         * @memberof DomainEvent.prototype
+         * @type {string}
+         * @readonly
+         */
         this.actorType = actor.type;
 
         /**

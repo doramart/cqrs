@@ -1,18 +1,13 @@
 var thunkify = require("thunkify");
 var Emitter = require("events").EventEmitter;
-var cache = Symbol("cache");
-
 
 /**
  * @class Repository
+ * @param Actor
+ * @param eventstore
  */
 export default class Repository extends Emitter {
 
-    /**
-     * @constructor
-     * @param Actor
-     * @param eventstore
-     */
     constructor(Actor, eventstore) {
         this.__Actor = Actor;
         this.__getFromSnapShot = thunkify(eventstore.getFromSnapshot).bind(eventstore);
@@ -24,7 +19,7 @@ export default class Repository extends Emitter {
      * Create a Actor object.
      * @method *create
      * @memberof Repository.prototype
-     * @param data
+     * @param data {Object}
      * @returns {Actor}
      */
     *create(data) {
@@ -46,14 +41,33 @@ export default class Repository extends Emitter {
     }
 
 
+    /**
+     * clear a actor from cache.
+     * @method clear
+     * @memberof Repository.prototype
+     * @param id
+     */
     clear(id) {
         delete this.__cache[id];
     }
 
+    /**
+     * get actor from cache.
+     * @memberof Repository.prototype
+     * @method getFromCache
+     * @param id {String}
+     * @returns {Actor}
+     */
     getFromCache(id) {
         return this.__cache[id];
     }
 
+    /**
+     * get a actor
+     * @method *get
+     * @memberof Repository.prototype
+     * @param id {String}
+     */
     *get(id) {
 
         let actor, returnFun = function () {

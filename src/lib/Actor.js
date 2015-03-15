@@ -1,7 +1,5 @@
 var AbstractActor = require("./AbstractActor");
 var uid = require("shortid");
-var inherits = require("util").inherits;
-var debug = require("debug")("Actor");
 
 /**
  * @class Actor

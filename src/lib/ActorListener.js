@@ -22,7 +22,7 @@ class ActorListener extends Actor {
     /**
      * Listen a actor's domain event.
      * @memberof ActorListener.prototype
-     * @member listen
+     * @method listen
      * @param eventName
      * @param actor
      * @param handle
@@ -38,8 +38,8 @@ class ActorListener extends Actor {
     /**
      * Listen once a actor's domain event.
      * @memberof ActorListener.prototype
-     * @member listenOne
-     * @see Abstractor#listen
+     * @method listenOne
+     * @see ActorListener#listen
      */
     listenOne() {
         var args = _.toArray(arguments);
@@ -48,10 +48,11 @@ class ActorListener extends Actor {
     }
 
     /**
-     *
-     * @memberof ActorListener#prototype
-     * @member pub
-     * @param event domain event
+     * publish domain'event. when have event's listener , then call the listener's handle method.
+     * the listener is a actor object.
+     * @memberof ActorListener.prototype
+     * @method pub
+     * @param event {DomainEvent} domain event
      */
     pub(event) {
 
