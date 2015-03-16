@@ -1,5 +1,7 @@
 "use strict";
 
+require("babel/polyfill");
+
 var should = require("should");
 var AbstractActor = require("../lib/AbstractActor");
 

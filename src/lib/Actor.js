@@ -67,7 +67,7 @@ class Actor extends AbstractActor {
     /**
      * @method parse
      * @memberof Actor
-     * @see AbstractActor#parse
+     * @see AbstractActor.parse
      * @param json {Object}
      * @static
      * @return {Actor}

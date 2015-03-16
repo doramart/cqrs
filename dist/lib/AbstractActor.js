@@ -1,6 +1,6 @@
 "use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
@@ -16,7 +16,7 @@ var DomainEvent = require("./DomainEvent");
  * @class AbstractActor
  */
 
-var AbstractActor = (function (EventEmitter) {
+var AbstractActor = (function (_EventEmitter) {
   function AbstractActor() {
     _classCallCheck(this, AbstractActor);
 
@@ -32,51 +32,9 @@ var AbstractActor = (function (EventEmitter) {
     this.$$uncommittedEvents = [];
   }
 
-  _inherits(AbstractActor, EventEmitter);
+  _inherits(AbstractActor, _EventEmitter);
 
-  _prototypeProperties(AbstractActor, {
-    type: {
-
-      /**
-       * @member type
-       * @memberof AbstractActor
-       * @type {String}
-       * @static
-       * @abstract
-       */
-
-      get: function () {
-        throw new Error("please implements it");
-      },
-      configurable: true
-    },
-    parse: {
-
-      /**
-       * parse json data to actor object.
-       * @function parse
-       * @memberof AbstractActor
-       * @static
-       */
-
-      value: function parse(json) {},
-      writable: true,
-      configurable: true
-    },
-    toJSON: {
-
-      /**
-       * parse actor object to json data.
-       * @function toJSON
-       * @memberof AbstractActor
-       * @static
-       */
-
-      value: function toJSON(actor) {},
-      writable: true,
-      configurable: true
-    }
-  }, {
+  _createClass(AbstractActor, {
     type: {
 
       /**
@@ -86,8 +44,7 @@ var AbstractActor = (function (EventEmitter) {
 
       get: function () {
         return this.constructor.type;
-      },
-      configurable: true
+      }
     },
     id: {
 
@@ -98,8 +55,7 @@ var AbstractActor = (function (EventEmitter) {
 
       get: function () {
         throw new Error("no implements");
-      },
-      configurable: true
+      }
     },
     $$loadEvents: {
 
@@ -120,9 +76,7 @@ var AbstractActor = (function (EventEmitter) {
           _this._when(event);
         });
         this.loadEvents = null;
-      },
-      writable: true,
-      configurable: true
+      }
     },
     _when: {
 
@@ -138,9 +92,7 @@ var AbstractActor = (function (EventEmitter) {
        * @protected
        */
 
-      value: function _when(event) {},
-      writable: true,
-      configurable: true
+      value: function _when(event) {}
     },
     _apply: {
 
@@ -169,9 +121,7 @@ var AbstractActor = (function (EventEmitter) {
          * @event AbstractActor#apply
          */
         this.emit("apply", this);
-      },
-      writable: true,
-      configurable: true
+      }
     },
     _listen: {
 
@@ -193,9 +143,7 @@ var AbstractActor = (function (EventEmitter) {
          * @event AbstractActor#listen
          */
         this.emit("listen", { eventName: eventName, handle: handle, contextId: contextId });
-      },
-      writable: true,
-      configurable: true
+      }
     },
     remove: {
 
@@ -212,9 +160,44 @@ var AbstractActor = (function (EventEmitter) {
          * @event AbstractActor#remove
          */
         this.apply("remove");
-      },
-      writable: true,
-      configurable: true
+      }
+    }
+  }, {
+    type: {
+
+      /**
+       * @member type
+       * @memberof AbstractActor
+       * @type {String}
+       * @static
+       * @abstract
+       */
+
+      get: function () {
+        throw new Error("please implements it");
+      }
+    },
+    parse: {
+
+      /**
+       * parse json data to actor object.
+       * @function parse
+       * @memberof AbstractActor
+       * @static
+       */
+
+      value: function parse(json) {}
+    },
+    toJSON: {
+
+      /**
+       * parse actor object to json data.
+       * @function toJSON
+       * @memberof AbstractActor
+       * @static
+       */
+
+      value: function toJSON(actor) {}
     }
   });
 

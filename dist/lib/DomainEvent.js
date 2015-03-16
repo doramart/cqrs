@@ -15,8 +15,20 @@ var uid = require("shortid");
 var DomainEvent = function DomainEvent(name, actor, data, contextId) {
   _classCallCheck(this, DomainEvent);
 
+  /**
+   * @member actorId
+   * @memberof DomainEvent.prototype
+   * @type {string}
+   * @readonly
+   */
   this.actorId = actor.id;
 
+  /**
+   * @member actorType
+   * @memberof DomainEvent.prototype
+   * @type {string}
+   * @readonly
+   */
   this.actorType = actor.type;
 
   /**

@@ -1,6 +1,6 @@
 "use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
@@ -13,17 +13,47 @@ var EventStore = require("eventstore"),
     ActorListener = require("./ActorListener"),
     EventBus = require("./EventBus");
 
+/**
+ * @class Domain
+ * @param options {json}
+ */
+
 var Domain = (function () {
     function Domain(options) {
+        var _this = this;
+
         _classCallCheck(this, Domain);
 
+        /**
+         *
+         * @memberof Domain.prototype
+         * @member __eventstore
+         * @type {*|Eventstore|exports}
+         * @private
+         */
         this.__eventstore = EventStore(options);
-        this.repos = {};
-        this.eventBus = new EventBus(this.__eventstore);
 
-        var self = this;
+        /**
+         * @memberof Domain.prototype
+         * @member __repos
+         * @type {{Repository}}
+         * @private
+         */
+        this.__repos = {};
 
+        /**
+         * @memberof Domain.prototype
+         * @member __eventBus
+         * @type {EventBus}
+         * @private
+         */
+        this.__eventBus = new EventBus(this.__eventstore);
+
+        // init eventstore
         this.__eventstore.init(function () {
+
+            var self = _this;
+
             co(regeneratorRuntime.mark(function callee$3$0() {
                 var repo, actorListener;
                 return regeneratorRuntime.wrap(function callee$3$0$(context$4$0) {
@@ -31,7 +61,8 @@ var Domain = (function () {
                         case 0:
 
                             self.register(ActorListener);
-                            repo = self.repos.ActorListener;
+
+                            repo = self.__repos.ActorListener;
                             context$4$0.next = 4;
                             return repo.get("ActorListenerId");
 
@@ -50,108 +81,119 @@ var Domain = (function () {
                             actorListener = context$4$0.sent;
 
                         case 9:
-                            self.actorListener = actorListener;
-                            actorListener.actorRepos = self.repos;
 
-                            self.eventBus.on("*", function (evt) {
+                            /**
+                             * @memberof Domain.prototype
+                             * @member __actorListener
+                             * @type {ActorListener}
+                             * @private
+                             */
+                            self.__actorListener = actorListener;
 
-                                if (evt.targetType === "ActorListener") return;
+                            self.__eventBus.on("*", function (evt) {
 
-                                actorListener.pub({ eventName: evt.targetType + "." + evt.targetId + ":" + evt.name, event: evt });
-                                actorListener.pub({ eventName: evt.targetType + "." + evt.targetId, event: evt });
-                                actorListener.pub({ eventName: evt.targetType + ":" + evt.name, event: evt });
-                                actorListener.pub({ eventName: "." + evt.targetId + ":" + evt.name, event: evt });
+                                if (evt.actorType === "ActorListener") return;
+
+                                actorListener.pub({ eventName: evt.actorType + "." + evt.actorId + ":" + evt.name, event: evt });
+                                actorListener.pub({ eventName: evt.actorType + "." + evt.actorId, event: evt });
+                                actorListener.pub({ eventName: evt.actorType + ":" + evt.name, event: evt });
+                                actorListener.pub({ eventName: "." + evt.actorId + ":" + evt.name, event: evt });
                                 actorListener.pub({ eventName: ":" + evt.name, event: evt });
-                                actorListener.pub({ eventName: evt.targetType, event: evt });
+                                actorListener.pub({ eventName: evt.actorType, event: evt });
 
                                 if (evt.contextId) {
                                     actorListener.pub({
-                                        eventName: evt.targetType + "." + evt.targetId + "&" + evt.contextId,
+                                        eventName: evt.actorType + "." + evt.actorId + "&" + evt.contextId,
                                         event: evt
                                     });
-                                    actorListener.pub({ eventName: evt.targetType + ":" + evt.name + "&" + evt.contextId, event: evt });
                                     actorListener.pub({
-                                        eventName: "." + evt.targetId + ":" + evt.name + "&" + evt.contextId,
+                                        eventName: evt.actorType + ":" + evt.name + "&" + evt.contextId,
+                                        event: evt
+                                    });
+                                    actorListener.pub({
+                                        eventName: "." + evt.actorId + ":" + evt.name + "&" + evt.contextId,
                                         event: evt
                                     });
                                     actorListener.pub({ eventName: ":" + evt.name + "&" + evt.contextId, event: evt });
-                                    actorListener.pub({ eventName: evt.targetType + "&" + evt.contextId, event: evt });
+                                    actorListener.pub({ eventName: evt.actorType + "&" + evt.contextId, event: evt });
                                 }
                             });
 
-                        case 12:
+                        case 11:
                         case "end":
                             return context$4$0.stop();
                     }
                 }, callee$3$0, this);
-            }))();
+            }));
         });
     }
 
-    _prototypeProperties(Domain, null, {
+    _createClass(Domain, {
         register: {
+
+            /**
+             * @memberof Domain.prototype
+             * @method register
+             * @param ActorClass {Actor}
+             * @returns {Domain}
+             */
+
             value: function register(ActorClass) {
 
-                var self = this;
-
-                if (typeof ActorClass !== "function") {
-                    ActorClass = Actor.extend(arguments[0], arguments[1]);
-                }
-
-                if (!ActorClass.prototype.myDomain) {
-                    Object.defineProperty(ActorClass.prototype, "myDomain", {
-                        get: function get() {
-                            return self;
-                        }
-                    });
-                }
+                ActorClass.prototype.myDomain = this;
 
                 var repo = new Repository(ActorClass, this.__eventstore);
-                this.repos[ActorClass.type] = repo;
 
-                this._actorEventHandle(repo);
+                this.__repos[ActorClass.type] = repo;
+
+                this.__actorEventHandle(repo);
 
                 return this;
-            },
-            writable: true,
-            configurable: true
+            }
         },
-        _actorEventHandle: {
-            value: function _actorEventHandle(repo) {
+        __actorEventHandle: {
+            value: function __actorEventHandle(repo) {
                 var _this = this;
 
                 var self = this;
 
                 function actorApplyEventHandle(actor) {
-                    if (actor.$uncommittedEvents[0].name === "remove") {
-                        self.repos[actor.type].clear(actor.id);
+                    if (actor.$$uncommittedEvents[0].name === "remove") {
+                        self.__repos[actor.type].clear(actor.id);
                     }
-                    self.eventBus.publish(actor);
+                    self.__eventBus.publish(actor);
                 }
 
                 function actorListenEventHandle(eventName, handle, contextId) {
-                    self.actorListener.listen({ eventName: eventName, actor: this, handle: handle, contextId: contextId });
+                    self.__actorListener.listen({ eventName: eventName, actor: this, handle: handle, contextId: contextId });
                 }
 
                 // listen actor
                 var listenActorEventHandle = function (actor) {
                     actor.on("apply", actorApplyEventHandle);
                     actor.on("listen", actorListenEventHandle);
-                    if (actor.$uncommittedEvents.length) {
-                        _this.eventBus.publish(actor);
+                    if (actor.$$uncommittedEvents.length) {
+                        _this.__eventBus.publish(actor);
                     }
                 };
 
                 repo.on("create", listenActorEventHandle);
-            },
-            writable: true,
-            configurable: true
+            }
         },
         create: {
+
+            /**
+             * create a actor object.
+             * @method create
+             * @param actorType {String}  actor's type.
+             * @param data {json}
+             * @param callback {Function}
+             */
+
             value: function create(actorType, data, callback) {
                 callback = callback || function () {};
-                var eventBus = this.eventBus;
-                var repo = this.repos[actorType];
+                var eventBus = this.__eventBus;
+                var repo = this.__repos[actorType];
                 co(regeneratorRuntime.mark(function callee$2$0() {
                     var actor;
                     return regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
@@ -164,8 +206,7 @@ var Domain = (function () {
                             case 3:
                                 actor = context$3$0.sent;
 
-                                // doto
-                                eventBus._publish(new DomainEvent("create", actor, actor.constructor.toJSON(actor)));
+                                eventBus.__publish(new DomainEvent("create", actor, actor.constructor.toJSON(actor)));
                                 callback(null, actor.id);
                                 process.nextTick(function () {
                                     repo.emit("create", actor);
@@ -185,12 +226,20 @@ var Domain = (function () {
                                 return context$3$0.stop();
                         }
                     }, callee$2$0, this, [[0, 9]]);
-                }))();
-            },
-            writable: true,
-            configurable: true
+                }));
+            }
         },
         get: {
+
+            /**
+             * get a actor
+             * @method get
+             * @param actorType {String}
+             * @param actorId {String}
+             * @param cb {Function}
+             * @returns {Promise}
+             */
+
             value: function get(actorType, actorId, cb) {
                 var defer = Q.defer();
                 var self = this;
@@ -200,7 +249,7 @@ var Domain = (function () {
                         while (1) switch (context$3$0.prev = context$3$0.next) {
                             case 0:
                                 context$3$0.prev = 0;
-                                repo = self.repos[actorType];
+                                repo = self.__repos[actorType];
                                 context$3$0.next = 4;
                                 return repo.get(actorId);
 
@@ -230,38 +279,47 @@ var Domain = (function () {
                                 return context$3$0.stop();
                         }
                     }, callee$2$0, this, [[0, 8]]);
-                }))();
+                }));
                 return defer.promise;
-            },
-            writable: true,
-            configurable: true
-        },
-        addListener: {
-            value: function addListener(eventName, listener) {
-                this.eventBus.on(eventName, listener);
-                return this;
-            },
-            writable: true,
-            configurable: true
+            }
         },
         once: {
+
+            /**
+             * once listen domain'event.
+             * @method once
+             * @memberof Domain.prototype
+             * @param eventName
+             * @param listener
+             */
+
             value: function once(eventName, listener) {
-                this.eventBus.once(eventName, listener);
-                return this;
-            },
-            writable: true,
-            configurable: true
+                this.__eventBus.once(eventName, listener);
+            }
         },
         on: {
+
+            /**
+             * listen domain'event.
+             * @method on
+             * @memberof Domain.prototype
+             * @param eventName
+             * @param listener
+             */
+
             value: function on(eventName, listener) {
-                this.eventBus.on(eventName, listener);
-                return this;
-            },
-            writable: true,
-            configurable: true
+                this.__eventBus.on(eventName, listener);
+            }
         },
-        getHistory: {
-            value: function getHistory() {
+        getEvents: {
+
+            /**
+             * @method getEvents
+             * @memberof Domain.prototype
+             * @param opts
+             */
+
+            value: function getEvents() {
                 var _eventstore;
 
                 for (var _len = arguments.length, opts = Array(_len), _key = 0; _key < _len; _key++) {
@@ -269,9 +327,7 @@ var Domain = (function () {
                 }
 
                 (_eventstore = this.__eventstore).getEvents.apply(_eventstore, opts);
-            },
-            writable: true,
-            configurable: true
+            }
         }
     });
 

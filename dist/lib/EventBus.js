@@ -1,6 +1,6 @@
 "use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
@@ -14,7 +14,7 @@ var EventEmiter = require("events").EventEmitter,
  * @param eventstore
  */
 
-var EventBus = (function (EventEmiter) {
+var EventBus = (function (_EventEmiter) {
     function EventBus(eventstore) {
         var _this = this;
 
@@ -27,9 +27,9 @@ var EventBus = (function (EventEmiter) {
         this.es.init();
     }
 
-    _inherits(EventBus, EventEmiter);
+    _inherits(EventBus, _EventEmiter);
 
-    _prototypeProperties(EventBus, null, {
+    _createClass(EventBus, {
         __publish: {
 
             /**
@@ -54,9 +54,7 @@ var EventBus = (function (EventEmiter) {
                     this.emit(":" + evt.name + "&" + evt.contextId, evt);
                     this.emit(evt.actorType + "&" + evt.contextId, evt);
                 }
-            },
-            writable: true,
-            configurable: true
+            }
         },
         publish: {
 
@@ -90,9 +88,7 @@ var EventBus = (function (EventEmiter) {
                         }
                     });
                 }
-            },
-            writable: true,
-            configurable: true
+            }
         }
     });
 

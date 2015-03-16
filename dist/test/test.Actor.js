@@ -4,7 +4,7 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-require("traceur");
+require("babel/polyfill");
 
 var should = require("should");
 var Actor = require("../lib/Actor");
@@ -37,16 +37,16 @@ describe("Actor", function () {
     });
 
     it("#type", function () {
-        var User = (function (Actor) {
+        var User = (function (_Actor) {
             function User() {
                 _classCallCheck(this, User);
 
-                if (Actor != null) {
-                    Actor.apply(this, arguments);
+                if (_Actor != null) {
+                    _Actor.apply(this, arguments);
                 }
             }
 
-            _inherits(User, Actor);
+            _inherits(User, _Actor);
 
             return User;
         })(Actor);

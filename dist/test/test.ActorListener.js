@@ -1,48 +1,45 @@
 "use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+require("babel/polyfill");
 
 var ActorListener = require("../lib/ActorListener"),
     Actor = require("../lib/Actor"),
     DomainEvent = require("../lib/DomainEvent"),
     should = require("should");
 
-var User = (function (Actor) {
+var User = (function (_Actor) {
     function User() {
         _classCallCheck(this, User);
 
-        if (Actor != null) {
-            Actor.apply(this, arguments);
+        if (_Actor != null) {
+            _Actor.apply(this, arguments);
         }
     }
 
-    _inherits(User, Actor);
+    _inherits(User, _Actor);
 
-    _prototypeProperties(User, {
-        type: {
-            get: function () {
-                return "User";
-            },
-            configurable: true
-        }
-    }, {
+    _createClass(User, {
         handleTest: {
             value: function handleTest(event) {
                 console.log("handleTest");
-            },
-            writable: true,
-            configurable: true
+            }
         },
         handleTest2: {
             value: function handleTest2(event) {
                 console.log("handleTest2");
-            },
-            writable: true,
-            configurable: true
+            }
+        }
+    }, {
+        type: {
+            get: function () {
+                return "User";
+            }
         }
     });
 

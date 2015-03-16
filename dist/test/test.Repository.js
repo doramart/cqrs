@@ -12,16 +12,16 @@ var co = require("co");
 var should = require("should");
 
 describe("Repository", function () {
-    var User = (function (Actor) {
+    var User = (function (_Actor) {
         function User() {
             _classCallCheck(this, User);
 
-            if (Actor != null) {
-                Actor.apply(this, arguments);
+            if (_Actor != null) {
+                _Actor.apply(this, arguments);
             }
         }
 
-        _inherits(User, Actor);
+        _inherits(User, _Actor);
 
         return User;
     })(Actor);

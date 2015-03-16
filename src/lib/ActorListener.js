@@ -3,6 +3,7 @@ var Actor = require("./Actor"), _ = require("underscore");
 /**
  * Only cqrs container use it.
  * @class ActorListener
+ * @extends Actor
  */
 class ActorListener extends Actor {
 

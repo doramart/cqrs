@@ -1,4 +1,4 @@
-require("traceur");
+require('babel/polyfill');
 
 var should = require("should");
 var Actor = require("../lib/Actor");

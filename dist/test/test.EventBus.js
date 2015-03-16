@@ -1,6 +1,6 @@
 "use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
@@ -17,47 +17,40 @@ var ActorListener = require("../lib/ActorListener");
 var co = require("co");
 var should = require("should");
 
-var User = (function (Actor) {
+var User = (function (_Actor) {
     function User() {
         _classCallCheck(this, User);
 
-        if (Actor != null) {
-            Actor.apply(this, arguments);
+        if (_Actor != null) {
+            _Actor.apply(this, arguments);
         }
     }
 
-    _inherits(User, Actor);
+    _inherits(User, _Actor);
 
-    _prototypeProperties(User, {
-        type: {
-            get: function () {
-                return "User";
-            },
-            configurable: true
-        }
-    }, {
+    _createClass(User, {
         changeName: {
             value: function changeName(name) {
                 this._apply("changeName", name);
-            },
-            writable: true,
-            configurable: true
+            }
         },
         finish: {
             value: function finish(name) {
                 this._apply("finish");
-            },
-            writable: true,
-            configurable: true
+            }
         },
         _when: {
             value: function _when(event, set) {
                 if (event.name === "finish") {
                     this._data.finish = "ok";
                 }
-            },
-            writable: true,
-            configurable: true
+            }
+        }
+    }, {
+        type: {
+            get: function () {
+                return "User";
+            }
         }
     });
 

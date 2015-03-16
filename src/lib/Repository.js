@@ -67,6 +67,7 @@ export default class Repository extends Emitter {
      * @method *get
      * @memberof Repository.prototype
      * @param id {String}
+     * @return {Actor}
      */
     *get(id) {
 

@@ -1,6 +1,22 @@
+require('babel/polyfill');
+
 var Domain = require("../lib/Domain");
+var Actor = require("../lib/Actor");
 var should = require("should");
 
+class User extends Actor{
+    static get type(){
+        return "User";
+    }
+    changeName(name) {
+        this._apply("changeName", name);
+    }
+    when(event) {
+        if (event.name === "changeName") {
+            this._data.name = event.data;
+        }
+    }
+}
 
 describe("Domain", function () {
 
@@ -11,22 +27,8 @@ describe("Domain", function () {
     });
 
     it("#register", function () {
-
-        domain.register({
-            type: "User",
-            changeName(name) {
-                this.apply("changeName", name);
-            },
-            when(event) {
-                if (event.name === "changeName") {
-                    this._data.name = event.data;
-                }
-            }
-        });
-
-        should.exist(domain.repos["User"]);
-        should.exist(domain.ActorClasses["User"]);
-
+        domain.register(User);
+        should.exist(domain.__repos["User"]);
     });
 
     var uid;
@@ -39,10 +41,10 @@ describe("Domain", function () {
             done();
         });
 
-    })
+    });
 
-    it("#getHisitory", function (done) {
-        domain.getHistory(uid, 0, 1000, function (err, evets) {
+    it("#getEvents", function (done) {
+        domain.getEvents(uid, 0, 1000, function (err, evets) {
             done();
         })
 

@@ -1,3 +1,5 @@
+require('babel/polyfill');
+
 var ActorListener = require("../lib/ActorListener"),
     Actor = require("../lib/Actor"),
     DomainEvent = require("../lib/DomainEvent"),

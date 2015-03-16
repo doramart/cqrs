@@ -1,6 +1,6 @@
 "use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
@@ -10,8 +10,6 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 
 var AbstractActor = require("./AbstractActor");
 var uid = require("shortid");
-var inherits = require("util").inherits;
-var debug = require("debug")("Actor");
 
 /**
  * @class Actor
@@ -19,7 +17,7 @@ var debug = require("debug")("Actor");
  * @param data {{}}
  */
 
-var Actor = (function (AbstractActor) {
+var Actor = (function (_AbstractActor) {
     function Actor() {
         var data = arguments[0] === undefined ? {} : arguments[0];
 
@@ -39,59 +37,9 @@ var Actor = (function (AbstractActor) {
         this.refreshData();
     }
 
-    _inherits(Actor, AbstractActor);
+    _inherits(Actor, _AbstractActor);
 
-    _prototypeProperties(Actor, {
-        type: {
-
-            /**
-             * @member type {String}
-             * @memberof Actor
-             * @static
-             */
-
-            get: function () {
-                return this.name;
-            },
-            configurable: true
-        },
-        parse: {
-
-            /**
-             * @method parse
-             * @memberof Actor
-             * @see AbstractActor#parse
-             * @param json {Object}
-             * @static
-             * @return {Actor}
-             */
-
-            value: function parse(json) {
-                var actor = new this(json);
-                actor._data.id = json.id;
-                return actor;
-            },
-            writable: true,
-            configurable: true
-        },
-        toJSON: {
-
-            /**
-             * @method toJSON
-             * @memberof Actor
-             * @param actor {Actor}
-             * @return {object}
-             * @static
-             * @see AbstractActor.toJSON
-             */
-
-            value: function toJSON(actor) {
-                return JSON.parse(JSON.stringify(actor._data));
-            },
-            writable: true,
-            configurable: true
-        }
-    }, {
+    _createClass(Actor, {
         refreshData: {
 
             /**
@@ -108,9 +56,7 @@ var Actor = (function (AbstractActor) {
                  * @type {Object}
                  */
                 this.data = this.constructor.toJSON(this);
-            },
-            writable: true,
-            configurable: true
+            }
         },
         id: {
 
@@ -122,16 +68,58 @@ var Actor = (function (AbstractActor) {
 
             get: function () {
                 return this._data.id;
-            },
-            configurable: true
+            }
         },
         $$loadEvents: {
             value: function $$loadEvents(events) {
                 _get(Object.getPrototypeOf(Actor.prototype), "$$loadEvents", this).call(this, events);
                 this.refreshData();
-            },
-            writable: true,
-            configurable: true
+            }
+        }
+    }, {
+        type: {
+
+            /**
+             * @member type {String}
+             * @memberof Actor
+             * @static
+             */
+
+            get: function () {
+                return this.name;
+            }
+        },
+        parse: {
+
+            /**
+             * @method parse
+             * @memberof Actor
+             * @see AbstractActor.parse
+             * @param json {Object}
+             * @static
+             * @return {Actor}
+             */
+
+            value: function parse(json) {
+                var actor = new this(json);
+                actor._data.id = json.id;
+                return actor;
+            }
+        },
+        toJSON: {
+
+            /**
+             * @method toJSON
+             * @memberof Actor
+             * @param actor {Actor}
+             * @return {object}
+             * @static
+             * @see AbstractActor.toJSON
+             */
+
+            value: function toJSON(actor) {
+                return JSON.parse(JSON.stringify(actor._data));
+            }
         }
     });
 

@@ -1,6 +1,6 @@
 "use strict";
 
-var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
@@ -8,20 +8,14 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 
 var thunkify = require("thunkify");
 var Emitter = require("events").EventEmitter;
-var cache = Symbol("cache");
 
 /**
  * @class Repository
+ * @param Actor
+ * @param eventstore
  */
 
-var Repository = (function (Emitter) {
-
-    /**
-     * @constructor
-     * @param Actor
-     * @param eventstore
-     */
-
+var Repository = (function (_Emitter) {
     function Repository(Actor, eventstore) {
         _classCallCheck(this, Repository);
 
@@ -31,16 +25,16 @@ var Repository = (function (Emitter) {
         this.__cache = {};
     }
 
-    _inherits(Repository, Emitter);
+    _inherits(Repository, _Emitter);
 
-    _prototypeProperties(Repository, null, {
+    _createClass(Repository, {
         create: {
 
             /**
              * Create a Actor object.
              * @method *create
              * @memberof Repository.prototype
-             * @param data
+             * @param data {Object}
              * @returns {Actor}
              */
 
@@ -76,25 +70,45 @@ var Repository = (function (Emitter) {
                             return context$2$0.stop();
                     }
                 }, create, this);
-            }),
-            writable: true,
-            configurable: true
+            })
         },
         clear: {
+
+            /**
+             * clear a actor from cache.
+             * @method clear
+             * @memberof Repository.prototype
+             * @param id
+             */
+
             value: function clear(id) {
                 delete this.__cache[id];
-            },
-            writable: true,
-            configurable: true
+            }
         },
         getFromCache: {
+
+            /**
+             * get actor from cache.
+             * @memberof Repository.prototype
+             * @method getFromCache
+             * @param id {String}
+             * @returns {Actor}
+             */
+
             value: function getFromCache(id) {
                 return this.__cache[id];
-            },
-            writable: true,
-            configurable: true
+            }
         },
         get: {
+
+            /**
+             * get a actor
+             * @method *get
+             * @memberof Repository.prototype
+             * @param id {String}
+             * @return {Actor}
+             */
+
             value: regeneratorRuntime.mark(function get(id) {
                 var _this = this;
 
@@ -165,9 +179,7 @@ var Repository = (function (Emitter) {
                             return context$2$0.stop();
                     }
                 }, get, this);
-            }),
-            writable: true,
-            configurable: true
+            })
         }
     });
 
