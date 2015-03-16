@@ -13,11 +13,8 @@ Use
 
 #### create a domain
 
-    var domain = require("cqrs")();
-
-    or
-
-    var domain = require("cqrs")(options);
+    var Domain = require("cqrs").Domain;
+    var domain = new Domain(options)
 
 + options for eventstore , see [eventstore - Provide implementation for storage](https://github.com/adrai/node-eventstore#provide-implementation-for-storage)
 
