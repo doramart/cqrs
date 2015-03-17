@@ -1,0 +1,48 @@
+{
+  "name": "cqrs",
+  "version": "0.6.3",
+  "description": "cqrs for javascript",
+  "main": "dist/lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/leogiese/cqrs"
+  },
+  "keywords": [
+    "ddd",
+    "cqrs",
+    "domain"
+  ],
+  "author": "leogiese",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leogiese/cqrs/issues"
+  },
+  "homepage": "https://github.com/leogiese/cqrs",
+  "dependencies": {
+    "co": "^4.4.0",
+    "debug": "^2.1.0",
+    "eventstore": "^1.1.2",
+    "q": "^1.1.2",
+    "shortid": "^2.0.1",
+    "thunkify": "^2.1.2",
+    "traceur": "0.0.74",
+    "underscore": "^1.7.0"
+  },
+  "devDependencies": {
+    "babel": "^4.7.12",
+    "gulp": "^3.8.11",
+    "gulp-babel": "^4.0.0",
+    "gulp-concat": "^2.5.2",
+    "gulp-rename": "^1.2.0",
+    "gulp-util": "^3.0.4",
+    "mocha": "^2.0.1",
+    "should": "^4.3.0"
+  },
+  "directories": {
+    "example": "example",
+    "test": "test"
+  }
+}

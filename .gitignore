@@ -1,2 +1,8 @@
+<<<<<<< HEAD
 .idea
 dist
+=======
+node_modules
+.idea
+npm-debug.log
+>>>>>>> master
