@@ -42,6 +42,83 @@
 
 
 
+    <section>
+        <article><h4>DDD-CQRS-Actor framework for javascript.</h4><p><img src="https://raw.githubusercontent.com/leogiese/cqrs/master/img.png" alt=""></p>
+<h1>Install</h1><pre class="prettyprint source"><code>npm install cqrs --save</code></pre><h1>Use</h1><h4>create a domain</h4><pre class="prettyprint source"><code>var Domain = require(&quot;cqrs&quot;).Domain;
+var domain = new Domain(options)</code></pre><ul>
+<li>options for eventstore , see <a href="https://github.com/adrai/node-eventstore#provide-implementation-for-storage">eventstore - Provide implementation for storage</a></li>
+</ul>
+<h4>domain#register</h4><p>register Actor class , Actor like DDD's AggregateRoot.</p>
+<p>e.g.</p>
+<pre class="prettyprint source"><code>domain.register({
+    type:&quot;User&quot;,
+    changeName:function(name){},
+    when:function(event){}
+})</code></pre><p>or</p>
+<pre class="prettyprint source"><code>var Actor = require(&quot;cqrs&quot;).Actor;
+var User = Actor.extend({
+     type:&quot;User&quot;,
+     changeName:function(name){},
+     when:function(event){}
+})
+domain.register(User);</code></pre><h4>domain#create(typeName,data,callback)</h4><p>create actor object.</p>
+<pre class="prettyprint source"><code>domain.create(&quot;User&quot;,data,function(err,actorId){})</code></pre><h4>domain#addListener(eventName,handleFunction)</h4><p>listen a domain event.</p>
+<pre class="prettyprint source"><code>domain.addListener(&quot;User:changeName&quot;,function(domainEvent){});</code></pre><h4>domain#get(typeName,actorId,callback)</h4><pre class="prettyprint source"><code>domain.get(&quot;User&quot;,&quot;id0001&quot; , function(err , actor){ })</code></pre><h1>Actor API</h1><h4>Defined Actor class</h4><pre class="prettyprint source"><code>var User = Actor.extend(options);</code></pre><h4>Defined methods</h4><pre class="prettyprint source"><code>Actor.extend({
+    type:&quot;User&quot;,
+    changeName:function(name){
+        // you can validat and throw error ...
+        di.apply(&quot;changeName&quot;,name);
+    },
+    when:function(event){
+        //see next step
+    }
+})</code></pre><p>or</p>
+<pre class="prettyprint source"><code>Actor.extend({
+    type:&quot;User&quot;,
+    changeName:true,
+    when:function(event){
+        //see next step
+    }
+})</code></pre><p><code>changeName:true</code> Equivalent to</p>
+<pre class="prettyprint source"><code>changeName:function(data){
+    this.apply(&quot;changeName&quot;,data.name);
+}</code></pre><p><code>change:[&quot;name&quot;,&quot;age&quot;]</code> Equivalent to</p>
+<pre class="prettyprint source"><code>change:function(data){
+    this.apply(&quot;change&quot; , {name:data.name,age:data.age})
+}</code></pre><p>the method cann't change self data. and must use <code>when</code> method to changed.</p>
+<h4>Actor#when(event)</h4><p>The method only set self data according <code>event</code> , no only logic code.</p>
+<ul>
+<li>event , domain event.</li>
+</ul>
+<p>e.g.</p>
+<pre class="prettyprint source"><code>Actor.extend(&quot;User&quot;,{
+    changeName:function(name){
+        this.apply(&quot;changeName&quot;,name);
+    },
+    when:function(event){
+        if(event.name === &quot;changName&quot;){
+            this._data.name = event.data;
+        }
+    }
+})</code></pre><h4>Actor#listen(eventName,handleName,[contextId])</h4><p>e.g.</p>
+<pre class="prettyprint source"><code>Actor.extend(&quot;User&quot;,{
+    test:function(){
+        // listen `Book.changeName` domain' event , and use `handle` method to handle.
+        this.listen(&quot;Book.changeName&quot;,&quot;handle&quot;);
+        this.apply(&quot;test&quot;);
+    },
+
+    handle:function(event){
+
+    }
+
+})</code></pre><h4>Actor#toJSON(actor)</h4><p>static method</p>
+<p>return actor object.</p>
+<h4>Actor#parse(json)</h4><p>static method</p>
+<p>return actor's json data.</p>
+<h1>LICENSE</h1><p>MIT</p></article>
+    </section>
+
 
 
 
@@ -50,13 +127,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AbstractActor.html">AbstractActor</a></li><li><a href="Actor.html">Actor</a></li><li><a href="ActorListener.html">ActorListener</a></li><li><a href="Domain.html">Domain</a></li><li><a href="DomainEvent.html">DomainEvent</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="Repository.html">Repository</a></li></ul><h3>Events</h3><ul><li><a href="AbstractActor.html#event:apply">apply</a></li><li><a href="AbstractActor.html#event:listen">listen</a></li><li><a href="AbstractActor.html#event:remove">remove</a></li><li><a href="Actor.html#event:apply">apply</a></li><li><a href="Actor.html#event:listen">listen</a></li><li><a href="Actor.html#event:remove">remove</a></li><li><a href="ActorListener.html#event:apply">apply</a></li><li><a href="ActorListener.html#event:listen">listen</a></li><li><a href="ActorListener.html#event:remove">remove</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_listen">_listen</a></li><li><a href="global.html#create">create</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#type">type</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AbstractActor.html">AbstractActor</a></li><li><a href="Actor.html">Actor</a></li><li><a href="ActorListener.html">ActorListener</a></li><li><a href="Domain.html">Domain</a></li><li><a href="DomainEvent.html">DomainEvent</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="Repository.html">Repository</a></li></ul><h3>Events</h3><ul><li><a href="AbstractActor.html#event:apply">apply</a></li><li><a href="AbstractActor.html#event:listen">listen</a></li><li><a href="AbstractActor.html#event:remove">remove</a></li><li><a href="Actor.html#event:apply">apply</a></li><li><a href="Actor.html#event:listen">listen</a></li><li><a href="Actor.html#event:remove">remove</a></li><li><a href="ActorListener.html#event:apply">apply</a></li><li><a href="ActorListener.html#event:listen">listen</a></li><li><a href="ActorListener.html#event:remove">remove</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Mon Mar 16 2015 10:33:16 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Thu Mar 19 2015 09:20:13 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

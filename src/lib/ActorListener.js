@@ -13,7 +13,7 @@ class ActorListener extends Actor {
 
     /**
      * type is ActorListener
-     * @member type
+     * @member ActorListener#type
      * @see AbstractActor#type
      */
     static get type() {

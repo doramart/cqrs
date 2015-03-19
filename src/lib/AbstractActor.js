@@ -5,7 +5,7 @@ var DomainEvent = require("./DomainEvent");
  * A abstract actor class.
  * @class AbstractActor
  */
-class AbstractActor extends EventEmitter {
+export default class AbstractActor extends EventEmitter {
 
     constructor() {
         super();
@@ -97,7 +97,7 @@ class AbstractActor extends EventEmitter {
      * listen a domain'event.
      *
      * @method _listen
-     * @memeberof AbstractActor.prototype
+     * @memberof AbstractActor.prototype
      * @param eventName {String}
      * @param handle {String} it's handle method name.
      * @param contextId {String}
@@ -159,4 +159,3 @@ class AbstractActor extends EventEmitter {
     }
 }
 
-module.exports = AbstractActor;

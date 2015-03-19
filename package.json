@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/leogiese/cqrs",
   "dependencies": {
+    "babel": "^4.7.12",
     "co": "^4.4.0",
     "debug": "^2.1.0",
     "eventstore": "^1.1.2",
@@ -32,7 +33,6 @@
     "underscore": "^1.7.0"
   },
   "devDependencies": {
-    "babel": "^4.7.12",
     "gulp": "^3.8.11",
     "gulp-babel": "^4.0.0",
     "gulp-concat": "^2.5.2",

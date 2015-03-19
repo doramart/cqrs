@@ -457,22 +457,16 @@ uncommitted domain'events.
 
         
             
-<h4 class="name" id="type"><span class="type-signature"></span>type<span class="type-signature"> :String</span></h4>
+<h4 class="name" id="type"><span class="type-signature"></span>type<span class="type-signature"></span></h4>
 
 
 
 
+<div class="description">
+    type is ActorListener
+</div>
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">String</span>
-
-
-        </li>
-    </ul>
 
 
 
@@ -485,12 +479,12 @@ uncommitted domain'events.
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="AbstractActor.html#type">AbstractActor#type</a>
-    </li></ul></dd>
-    
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Actor.html#type">Actor#type</a>
+    </li></ul></dd>
     
 
     
@@ -512,12 +506,19 @@ uncommitted domain'events.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AbstractActor.js.html">AbstractActor.js</a>, <a href="AbstractActor.js.html#line23">line 23</a>
+        <a href="ActorListener.js.html">ActorListener.js</a>, <a href="ActorListener.js.html#line14">line 14</a>
     </li></ul></dd>
     
 
     
 
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="AbstractActor.html#type">AbstractActor#type</a></li>
+        </ul>
+    </dd>
     
 
     
@@ -842,6 +843,193 @@ load domain'events.
 <h5>Fires:</h5>
 <ul>
     <li><a href="AbstractActor.html#event:apply">AbstractActor#event:apply</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="_listen"><span class="type-signature">(protected) </span>_listen<span class="signature">(eventName, handle, contextId)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    listen a domain'event.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>handle</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">it's handle method name.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>contextId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="AbstractActor.html#_listen">AbstractActor#_listen</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AbstractActor.js.html">AbstractActor.js</a>, <a href="AbstractActor.js.html#line96">line 96</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<h5>Fires:</h5>
+<ul>
+    <li><a href="AbstractActor.html#event:listen">AbstractActor#event:listen</a></li>
 </ul>
 
 
@@ -1766,13 +1954,13 @@ the listener is a actor object.
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AbstractActor.html">AbstractActor</a></li><li><a href="Actor.html">Actor</a></li><li><a href="ActorListener.html">ActorListener</a></li><li><a href="Domain.html">Domain</a></li><li><a href="DomainEvent.html">DomainEvent</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="Repository.html">Repository</a></li></ul><h3>Events</h3><ul><li><a href="AbstractActor.html#event:apply">apply</a></li><li><a href="AbstractActor.html#event:listen">listen</a></li><li><a href="AbstractActor.html#event:remove">remove</a></li><li><a href="Actor.html#event:apply">apply</a></li><li><a href="Actor.html#event:listen">listen</a></li><li><a href="Actor.html#event:remove">remove</a></li><li><a href="ActorListener.html#event:apply">apply</a></li><li><a href="ActorListener.html#event:listen">listen</a></li><li><a href="ActorListener.html#event:remove">remove</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_listen">_listen</a></li><li><a href="global.html#create">create</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#type">type</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AbstractActor.html">AbstractActor</a></li><li><a href="Actor.html">Actor</a></li><li><a href="ActorListener.html">ActorListener</a></li><li><a href="Domain.html">Domain</a></li><li><a href="DomainEvent.html">DomainEvent</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="Repository.html">Repository</a></li></ul><h3>Events</h3><ul><li><a href="AbstractActor.html#event:apply">apply</a></li><li><a href="AbstractActor.html#event:listen">listen</a></li><li><a href="AbstractActor.html#event:remove">remove</a></li><li><a href="Actor.html#event:apply">apply</a></li><li><a href="Actor.html#event:listen">listen</a></li><li><a href="Actor.html#event:remove">remove</a></li><li><a href="ActorListener.html#event:apply">apply</a></li><li><a href="ActorListener.html#event:listen">listen</a></li><li><a href="ActorListener.html#event:remove">remove</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Mon Mar 16 2015 10:33:16 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Thu Mar 19 2015 09:20:14 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>

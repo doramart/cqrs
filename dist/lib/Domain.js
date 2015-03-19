@@ -185,6 +185,7 @@ var Domain = (function () {
             /**
              * create a actor object.
              * @method create
+             * @memberof Domain.prototype
              * @param actorType {String}  actor's type.
              * @param data {json}
              * @param callback {Function}
@@ -206,6 +207,7 @@ var Domain = (function () {
                             case 3:
                                 actor = context$3$0.sent;
 
+                                // doto
                                 eventBus.__publish(new DomainEvent("create", actor, actor.constructor.toJSON(actor)));
                                 callback(null, actor.id);
                                 process.nextTick(function () {
@@ -234,6 +236,7 @@ var Domain = (function () {
             /**
              * get a actor
              * @method get
+             * @memberof Domain.prototype
              * @param actorType {String}
              * @param actorId {String}
              * @param cb {Function}

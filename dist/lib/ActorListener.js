@@ -114,7 +114,7 @@ var ActorListener = (function (_Actor) {
 
             /**
              * type is ActorListener
-             * @member type
+             * @member ActorListener#type
              * @see AbstractActor#type
              */
 

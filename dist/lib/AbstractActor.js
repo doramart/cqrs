@@ -129,7 +129,7 @@ var AbstractActor = (function (_EventEmitter) {
        * listen a domain'event.
        *
        * @method _listen
-       * @memeberof AbstractActor.prototype
+       * @memberof AbstractActor.prototype
        * @param eventName {String}
        * @param handle {String} it's handle method name.
        * @param contextId {String}

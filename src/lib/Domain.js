@@ -108,13 +108,9 @@ class Domain {
     register(ActorClass) {
 
         ActorClass.prototype.myDomain = this;
-
         var repo = new Repository(ActorClass, this.__eventstore);
-
         this.__repos[ActorClass.type] = repo;
-
         this.__actorEventHandle(repo);
-
         return this;
     }
 
@@ -149,12 +145,14 @@ class Domain {
     /**
      * create a actor object.
      * @method create
+     * @memberof Domain.prototype
      * @param actorType {String}  actor's type.
      * @param data {json}
      * @param callback {Function}
      */
     create(actorType, data, callback) {
-        callback = callback || function () {};
+        callback = callback || function () {
+        };
         var eventBus = this.__eventBus;
         var repo = this.__repos[actorType];
         co(function *() {
@@ -176,6 +174,7 @@ class Domain {
     /**
      * get a actor
      * @method get
+     * @memberof Domain.prototype
      * @param actorType {String}
      * @param actorId {String}
      * @param cb {Function}

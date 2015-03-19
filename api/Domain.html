@@ -178,291 +178,381 @@
     
 
     
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="__actorListener"><span class="type-signature">(private) </span>__actorListener<span class="type-signature"> :<a href="ActorListener.html">ActorListener</a></span></h4>
-
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="ActorListener.html">ActorListener</a></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Domain.js.html">Domain.js</a>, <a href="Domain.js.html#line62">line 62</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="__eventBus"><span class="type-signature">(private) </span>__eventBus<span class="type-signature"> :<a href="EventBus.html">EventBus</a></span></h4>
-
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="EventBus.html">EventBus</a></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Domain.js.html">Domain.js</a>, <a href="Domain.js.html#line36">line 36</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="__eventstore"><span class="type-signature">(private) </span>__eventstore<span class="type-signature"> :*|Eventstore|exports</span></h4>
-
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">*</span>
-|
-
-<span class="param-type">Eventstore</span>
-|
-
-<span class="param-type">exports</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Domain.js.html">Domain.js</a>, <a href="Domain.js.html#line19">line 19</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="__repos"><span class="type-signature">(private) </span>__repos<span class="type-signature"> :Object</span></h4>
-
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Domain.js.html">Domain.js</a>, <a href="Domain.js.html#line28">line 28</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-    
 
     
         <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="create"><span class="type-signature"></span>create<span class="signature">(actorType, data, callback)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    create a actor object.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>actorType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">actor's type.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">json</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Domain.js.html">Domain.js</a>, <a href="Domain.js.html#line145">line 145</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(actorType, actorId, cb)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+
+    
+
+
+
+<div class="description">
+    get a actor
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>actorType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>actorId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Domain.js.html">Domain.js</a>, <a href="Domain.js.html#line174">line 174</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
 
         
             
@@ -560,7 +650,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Domain.js.html">Domain.js</a>, <a href="Domain.js.html#line229">line 229</a>
+        <a href="Domain.js.html">Domain.js</a>, <a href="Domain.js.html#line226">line 226</a>
     </li></ul></dd>
     
 
@@ -704,7 +794,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Domain.js.html">Domain.js</a>, <a href="Domain.js.html#line218">line 218</a>
+        <a href="Domain.js.html">Domain.js</a>, <a href="Domain.js.html#line215">line 215</a>
     </li></ul></dd>
     
 
@@ -848,7 +938,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Domain.js.html">Domain.js</a>, <a href="Domain.js.html#line207">line 207</a>
+        <a href="Domain.js.html">Domain.js</a>, <a href="Domain.js.html#line204">line 204</a>
     </li></ul></dd>
     
 
@@ -1035,13 +1125,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AbstractActor.html">AbstractActor</a></li><li><a href="Actor.html">Actor</a></li><li><a href="ActorListener.html">ActorListener</a></li><li><a href="Domain.html">Domain</a></li><li><a href="DomainEvent.html">DomainEvent</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="Repository.html">Repository</a></li></ul><h3>Events</h3><ul><li><a href="AbstractActor.html#event:apply">apply</a></li><li><a href="AbstractActor.html#event:listen">listen</a></li><li><a href="AbstractActor.html#event:remove">remove</a></li><li><a href="Actor.html#event:apply">apply</a></li><li><a href="Actor.html#event:listen">listen</a></li><li><a href="Actor.html#event:remove">remove</a></li><li><a href="ActorListener.html#event:apply">apply</a></li><li><a href="ActorListener.html#event:listen">listen</a></li><li><a href="ActorListener.html#event:remove">remove</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_listen">_listen</a></li><li><a href="global.html#create">create</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#type">type</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AbstractActor.html">AbstractActor</a></li><li><a href="Actor.html">Actor</a></li><li><a href="ActorListener.html">ActorListener</a></li><li><a href="Domain.html">Domain</a></li><li><a href="DomainEvent.html">DomainEvent</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="Repository.html">Repository</a></li></ul><h3>Events</h3><ul><li><a href="AbstractActor.html#event:apply">apply</a></li><li><a href="AbstractActor.html#event:listen">listen</a></li><li><a href="AbstractActor.html#event:remove">remove</a></li><li><a href="Actor.html#event:apply">apply</a></li><li><a href="Actor.html#event:listen">listen</a></li><li><a href="Actor.html#event:remove">remove</a></li><li><a href="ActorListener.html#event:apply">apply</a></li><li><a href="ActorListener.html#event:listen">listen</a></li><li><a href="ActorListener.html#event:remove">remove</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Mon Mar 16 2015 10:33:16 GMT+0800 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Thu Mar 19 2015 09:20:14 GMT+0800 (CST)
 </footer>
 
 <script> prettyPrint(); </script>
