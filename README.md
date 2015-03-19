@@ -1,3 +1,6 @@
+[API DOC](http://leogiese.github.io/cqrs/api/index.html)
+---------------------------------------------------------
+
 #### DDD-CQRS-Actor framework for javascript.
 
 
