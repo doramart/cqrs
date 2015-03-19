@@ -1,5 +1,6 @@
 .idea
 dist
-src
 node_modules
 npm-debug.log
+gulpfile.js
+LICENSE
