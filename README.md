@@ -1,7 +1,6 @@
 [API DOC](http://leogiese.github.io/cqrs/api/index.html)
 ---------------------------------------------------------
 
-
 #### DDD-CQRS-Actor framework for javascript.
 
 ![](https://raw.githubusercontent.com/leogiese/cqrs/master/img.png)
@@ -10,6 +9,11 @@ Install
 =======
 
     npm install cqrs --save
+
+Test
+====
+
+    npm test
 
 Use
 ===
