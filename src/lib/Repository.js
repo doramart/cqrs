@@ -3,8 +3,8 @@ var EventEmitter = require("events").EventEmitter;
 
 /**
  * @class Repository
- * @param Actor
- * @param eventstore
+ * @param Actor {class}
+ * @param eventstore {EventStore}
  */
 export default
 class Repository extends EventEmitter {

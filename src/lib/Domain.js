@@ -1,30 +1,32 @@
 var EventStore = require("eventstore"),
-    Repository = require("./Repository"),
+    _Repository = require("./Repository"),
     co = require("co"),
     Q = require("q"),
     Actor = require("./Actor"),
     DomainEvent = require("./DomainEvent"),
-    ActorListener = require("./ActorListener"),
-    EventBus = require("./EventBus");
+    _ActorListener = require("./ActorListener"),
+    _EventBus = require("./EventBus");
 
 /**
  * @class Domain
  * @see EventBus
  * @see ActorListener
- * @param eventStoreOptions {json}
- * @param [EventBus] {class} replace default EventBus
- * @param [ActorListener] {class} replace default ActorListener
+ * @param eventStoreOptions {object}
+ * @param replaceClasses {object} replace default EventBus | ActorListener | Repository
  */
 export default
 class Domain {
 
-    constructor(eventStoreOptions,_EventBus,_ActorListener) {
+    constructor(eventStoreOptions,replaceClasses = {}) {
 
         // replace default EventBus class
-        EventBus = _EventBus || EventBus;
+        let EventBus = replaceClasses.EventBus || _EventBus;
 
         // replace default ActorListener class
-        ActorListener = _ActorListener || ActorListener;
+        let ActorListener = replaceClasses.ActorListener || _ActorListener;
+
+        // replace default Repository class
+        this.__Repository = replaceClasses.Repository || _Repository;
 
         /**
          *
@@ -119,7 +121,7 @@ class Domain {
 
         ActorClass.prototype.myDomain = this;
 
-        var repo = new Repository(ActorClass, this.__eventstore);
+        var repo = new this.__Repository(ActorClass, this.__eventstore);
 
         this.__repos[ActorClass.type] = repo;
 
