@@ -55,7 +55,7 @@ export default class EventBus extends EventEmiter {
                 if (history.length > 20) {
                     self.es.createSnapshot({
                         streamId: actor.id,
-                        data: actor.json,
+                        data: actor.toJSON(),
                         revision: stream.lastRevision
                     }, function (err) {
                         // snapshot saved
