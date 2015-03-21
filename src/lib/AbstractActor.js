@@ -128,6 +128,15 @@ class AbstractActor extends EventEmitter {
     }
 
     /**
+     * @method toJSON
+     * @memberof AbstractActor.prototype
+     * @returns {json}
+     */
+    toJSON(){
+        return this.constructor.toJSON(this);
+    }
+
+    /**
      * @member type
      * @memberof AbstractActor
      * @type {String}

@@ -10,6 +10,8 @@ var EventStore = require("eventstore"),
 /**
  * @class Domain
  * @param options {json}
+ * @param EventBus {EventBus}
+ * @param ActorListener {ActorListener}
  */
 export default
 class Domain {
