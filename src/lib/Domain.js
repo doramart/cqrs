@@ -9,14 +9,19 @@ var EventStore = require("eventstore"),
 
 /**
  * @class Domain
- * @param options {json}
- * @param EventBus {EventBus}
- * @param ActorListener {ActorListener}
+ * @see EventBus
+ * @see ActorListener
+ * @param eventStoreOptions {json}
+ * @param [EventBus] {class} replace default EventBus
+ * @param [ActorListener] {class} replace default ActorListener
  */
 export default
 class Domain {
 
-    constructor(options) {
+    constructor(eventStoreOptions,_EventBus,_ActorListener) {
+
+        EventBus = _EventBus || EventBus;
+        ActorListener = _ActorListener || ActorListener;
 
         /**
          *
@@ -25,7 +30,7 @@ class Domain {
          * @type {*|Eventstore|exports}
          * @private
          */
-        this.__eventstore = EventStore(options);
+        this.__eventstore = EventStore(eventStoreOptions);
 
         /**
          * @memberof Domain.prototype
