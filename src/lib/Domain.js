@@ -20,7 +20,10 @@ class Domain {
 
     constructor(eventStoreOptions,_EventBus,_ActorListener) {
 
+        // replace default EventBus class
         EventBus = _EventBus || EventBus;
+
+        // replace default ActorListener class
         ActorListener = _ActorListener || ActorListener;
 
         /**
