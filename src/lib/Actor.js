@@ -74,7 +74,6 @@ class Actor extends AbstractActor {
      */
     static parse(json) {
         var actor = new this(json);
-        actor._data.id = json.id;
         return actor;
     }
 
