@@ -32,8 +32,8 @@ class ActorListener extends Actor {
     listen(eventName, actor, handle, isOne) {
         let actorType = actor.type;
         let actorId = actor.id;
-        let param = {eventName, actorType, actorId, handle, isOne};
-        this._apply("listen", param);
+        let data = {eventName, actorType, actorId, handle, isOne};
+        this._apply("listen", data);
     }
 
     /**
@@ -57,9 +57,9 @@ class ActorListener extends Actor {
      */
     pub(event) {
 
-        var list = this._data.repos[event.name] || [];
+        var listeners = this._data.repos[event.name] || [];
 
-        list.forEach(listener=> {
+        listeners.forEach(listener=> {
             this.myDomain.get(listener.actorType, listener.actorId, function (err, actor) {
                 if (actor && actor[listener.handle])
                     actor[listener.handle](event);
@@ -76,8 +76,7 @@ class ActorListener extends Actor {
 
 
             let eventName = event.data.eventName;
-            let repo;
-            repo = (repo = repos[eventName]) ? repos[eventName] : (repos[eventName] = []);
+            let repo = repos[eventName] ? repos[eventName] : (repos[eventName] = []);
             repo.push(event.data);
 
         } else if (event.name === "emit") {

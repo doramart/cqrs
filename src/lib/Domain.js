@@ -184,8 +184,8 @@ class Domain {
      * @returns {Promise}
      */
     get(actorType, actorId, cb) {
-        var defer = Q.defer();
         var self = this;
+        var defer = Q.defer();
         co(function* () {
             try {
                 var repo = self.__repos[actorType];

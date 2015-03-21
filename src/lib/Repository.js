@@ -1,12 +1,13 @@
 var thunkify = require("thunkify");
-var Emitter = require("events").EventEmitter;
+var EventEmitter = require("events").EventEmitter;
 
 /**
  * @class Repository
  * @param Actor
  * @param eventstore
  */
-export default class Repository extends Emitter {
+export default
+class Repository extends EventEmitter {
 
     constructor(Actor, eventstore) {
         this.__Actor = Actor;
@@ -71,13 +72,14 @@ export default class Repository extends Emitter {
      */
     *get(id) {
 
-        let actor, returnFun = function () {
-            if(actor  && actor.data.alive === false){
-                return null;
-            }else{
-                return actor;
-            }
-        };
+        let actor,
+            returnFun = function () {
+                if (actor && actor.data.alive === false) {
+                    return null;
+                } else {
+                    return actor;
+                }
+            };
 
         if (actor = this.getFromCache(id)) {
             return returnFun();
