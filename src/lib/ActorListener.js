@@ -6,6 +6,7 @@ var Actor = require("./Actor"), _ = require("underscore");
  * @class ActorListener
  * @extends Actor
  */
+export default
 class ActorListener extends Actor {
 
     constructor() {
@@ -47,7 +48,7 @@ class ActorListener extends Actor {
     listenOne() {
         var args = _.toArray(arguments);
         args[3] = true;
-        this.listen.apply(this,args);
+        this.listen.apply(this, args);
     }
 
     /**
@@ -97,4 +98,3 @@ class ActorListener extends Actor {
 
 }
 
-module.exports = ActorListener;

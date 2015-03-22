@@ -6,6 +6,7 @@ var uid = require("shortid");
  * @augments AbstractActor
  * @param data {{}}
  */
+export default
 class Actor extends AbstractActor {
 
     constructor(data = {}) {
@@ -92,4 +93,3 @@ class Actor extends AbstractActor {
 }
 
 
-module.exports = Actor;
