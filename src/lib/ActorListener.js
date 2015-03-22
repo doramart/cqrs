@@ -1,7 +1,8 @@
 var Actor = require("./Actor"), _ = require("underscore");
 
 /**
- * Only cqrs container use it.
+ * cqrs's core component.
+ * only cqrs container use it.
  * @class ActorListener
  * @extends Actor
  */
@@ -30,6 +31,7 @@ class ActorListener extends Actor {
      * @param isOne
      */
     listen(eventName, actor, handle, isOne) {
+
         let actorType = actor.type;
         let actorId = actor.id;
         let data = {eventName, actorType, actorId, handle, isOne};
@@ -56,11 +58,9 @@ class ActorListener extends Actor {
      * @param event {DomainEvent} domain event
      */
     pub(event) {
-
-        var listeners = this._data.repos[event.name] || [];
-
+        var listeners = this._data.repos[event.eventName] || [];
         listeners.forEach(listener=> {
-            this.myDomain.get(listener.actorType, listener.actorId, function (err, actor) {
+            this.myDomain.get(listener.actorType, listener.actorId, (err, actor) => {
                 if (actor && actor[listener.handle])
                     actor[listener.handle](event);
             });
@@ -78,6 +78,7 @@ class ActorListener extends Actor {
             let eventName = event.data.eventName;
             let repo = repos[eventName] ? repos[eventName] : (repos[eventName] = []);
             repo.push(event.data);
+
 
         } else if (event.name === "emit") {
 

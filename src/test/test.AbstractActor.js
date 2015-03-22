@@ -55,10 +55,9 @@ describe("AbstractActor", function () {
 
     it("#listen", function (done) {
 
-        actor.once("listen", function (event) {
-            should.exist(event.eventName);
-            should.exist(event.handle);
-            should.not.exist(event.contextId);
+        actor.once("listen", function (eventName,handle) {
+            should.exist(eventName);
+            should.exist(handle);
             done();
         });
 

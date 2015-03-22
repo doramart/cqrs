@@ -12,12 +12,12 @@ var EventStore = require("eventstore"),
  * @see EventBus
  * @see ActorListener
  * @param eventStoreOptions {object}
- * @param replaceClasses {object} replace default EventBus | ActorListener | Repository
+ * @param replaceClasses {object} replace default {EventBus | ActorListener | Repository}
  */
 export default
 class Domain {
 
-    constructor(eventStoreOptions,replaceClasses = {}) {
+    constructor(eventStoreOptions, replaceClasses = {}) {
 
         // replace default EventBus class
         let EventBus = replaceClasses.EventBus || _EventBus;
@@ -92,6 +92,11 @@ class Domain {
 
                     if (evt.contextId) {
                         actorListener.pub({
+                            eventName: evt.actorType + "." + evt.actorId + ":" + evt.name + "&" + evt.contextId,
+                            event: evt
+                        });
+
+                        actorListener.pub({
                             eventName: evt.actorType + "." + evt.actorId + "&" + evt.contextId,
                             event: evt
                         });
@@ -122,7 +127,6 @@ class Domain {
         ActorClass.prototype.myDomain = this;
 
         var repo = new this.__Repository(ActorClass, this.__eventstore);
-
         this.__repos[ActorClass.type] = repo;
 
         this.__actorEventHandle(repo);
@@ -141,14 +145,19 @@ class Domain {
             self.__eventBus.publish(actor);
         }
 
-        function actorListenEventHandle(eventName, handle, contextId) {
-            self.__actorListener.listen({eventName, actor: this, handle, contextId});
+        function actorListenEventHandle(eventName, handle) {
+            self.__actorListener.listen(eventName, this, handle);
+        }
+
+        function actorListenOneEventHandle(eventName, handle) {
+            self.__actorListener.listen(eventName, this, handle, true);
         }
 
         // listen actor
         let listenActorEventHandle = actor=> {
             actor.on("apply", actorApplyEventHandle);
             actor.on("listen", actorListenEventHandle);
+            actor.on("listenOne", actorListenOneEventHandle);
             if (actor.$$uncommittedEvents.length) {
                 this.__eventBus.publish(actor);
             }
@@ -166,7 +175,8 @@ class Domain {
      * @param callback {Function}
      */
     create(actorType, data, callback) {
-        callback = callback || function () {};
+        callback = callback || function () {
+        };
         var eventBus = this.__eventBus;
         var repo = this.__repos[actorType];
         co(function *() {

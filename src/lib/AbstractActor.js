@@ -104,12 +104,11 @@ class AbstractActor extends EventEmitter {
      * @fires AbstractActor#listen
      * @protected
      */
-    _listen(eventName, handle, contextId) {
-
+    _listen(eventName, handle) {
         /**
          * @event AbstractActor#listen
          */
-        this.emit("listen", {eventName, handle, contextId});
+        this.emit("listen", eventName, handle);
     }
 
 

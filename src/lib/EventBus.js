@@ -2,6 +2,7 @@ var EventEmiter = require("events").EventEmitter,
     Event = require("./DomainEvent");
 
 /**
+ * cqrs's core component.
  * @class EventBus
  * @param eventstore
  */

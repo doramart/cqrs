@@ -2,6 +2,7 @@ var thunkify = require("thunkify");
 var EventEmitter = require("events").EventEmitter;
 
 /**
+ * cqrs's core component.
  * @class Repository
  * @param Actor {class}
  * @param eventstore {EventStore}
