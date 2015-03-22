@@ -1,5 +1,5 @@
-var thunkify = require("thunkify");
-var EventEmitter = require("events").EventEmitter;
+import thunkify from 'thunkify';
+import {EventEmitter} from 'events';
 
 /**
  * cqrs's core component.

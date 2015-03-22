@@ -1,9 +1,9 @@
-require('babel/polyfill');
+import {} from 'babel/polyfill';
+import Domain from './Domain';
+import Actor from './Actor';
+import AbstractActor from './AbstractActor';
+import DomainEvent from './DomainEvent';
+import EventBus from './EventBus';
+import Repository from './Repository';
 
-exports.Domain = require('./Domain');
-exports.Actor = require('./Actor');
-exports.AbstractActor = require('./AbstractActor');
-exports.DomainEvent = require('./DomainEvent');
-exports.EventBus = require('./EventBus');
-exports.Repository = require('./Repository');
-
+export {Domain,Actor,AbstractActor,DomainEvent,EventBus,Repository}

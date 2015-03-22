@@ -1,4 +1,4 @@
-var uid = require("shortid");
+import uid from 'shortid';
 
 /**
  * @class DomainEvent
@@ -58,7 +58,7 @@ export default class DomainEvent {
          * @type {string | boolean}
          * @readonly
          */
-        this.contextId = contextId === true ? uid() : (typeof contextId === "string" ? contextId : null);
+        this.contextId = contextId === true ? uid() : (typeof contextId === 'string' ? contextId : null);
 
         /**
          * create time

@@ -1,12 +1,12 @@
-var EventEmiter = require("events").EventEmitter,
-    Event = require("./DomainEvent");
+import {EventEmitter} from 'events';
+import Event from './DomainEvent';
 
 /**
  * cqrs's core component.
  * @class EventBus
  * @param eventstore
  */
-export default class EventBus extends EventEmiter {
+export default class EventBus extends EventEmitter {
 
     constructor(eventstore) {
         this.es = eventstore;

@@ -1,4 +1,5 @@
-var Actor = require("./Actor"), _ = require("underscore");
+import Actor from './Actor';
+import _ from 'underscore';
 
 /**
  * cqrs's core component.
@@ -19,7 +20,7 @@ class ActorListener extends Actor {
      * @see AbstractActor#type
      */
     static get type() {
-        return "ActorListener"
+        return 'ActorListener'
     }
 
     /**
@@ -36,7 +37,7 @@ class ActorListener extends Actor {
         let actorType = actor.type;
         let actorId = actor.id;
         let data = {eventName, actorType, actorId, handle, isOne};
-        this._apply("listen", data);
+        this._apply('listen', data);
     }
 
     /**
@@ -67,13 +68,13 @@ class ActorListener extends Actor {
             });
         });
 
-        this._apply("emit", event.name);
+        this._apply('emit', event.name);
     }
 
     _when(event) {
 
         var repos = this._data.repos;
-        if (event.name === "listen") {
+        if (event.name === 'listen') {
 
 
             let eventName = event.data.eventName;
@@ -81,7 +82,7 @@ class ActorListener extends Actor {
             repo.push(event.data);
 
 
-        } else if (event.name === "emit") {
+        } else if (event.name === 'emit') {
 
             var list = repos[event.data] || [];
 

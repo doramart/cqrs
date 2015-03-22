@@ -1,5 +1,5 @@
-var AbstractActor = require("./AbstractActor");
-var uid = require("shortid");
+import AbstractActor from './AbstractActor';
+import uid from 'shortid';
 
 /**
  * @class Actor
@@ -22,7 +22,7 @@ class Actor extends AbstractActor {
         this._data = data;
         if (!this._data.id)
             this._data.id = uid();
-        this.on("apply", this.refreshData);
+        this.on('apply', this.refreshData);
         this.refreshData();
 
     }

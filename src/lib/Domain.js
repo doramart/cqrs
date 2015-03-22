@@ -1,11 +1,11 @@
-var EventStore = require("eventstore"),
-    _Repository = require("./Repository"),
-    co = require("co"),
-    Q = require("q"),
-    Actor = require("./Actor"),
-    DomainEvent = require("./DomainEvent"),
-    _ActorListener = require("./ActorListener"),
-    _EventBus = require("./EventBus");
+import EventStore from 'eventstore';
+import _Repository from './Repository';
+import co from 'co';
+import Q from 'q';
+import Actor from './Actor';
+import DomainEvent from './DomainEvent';
+import _ActorListener from './ActorListener';
+import _EventBus from './EventBus';
 
 /**
  * @class Domain
@@ -63,9 +63,9 @@ class Domain {
 
                 self.register(ActorListener);
 
-                var repo = self.__repos["ActorListener"];
+                var repo = self.__repos['ActorListener'];
 
-                var actorListener = yield repo.get("ActorListenerId");
+                var actorListener = yield repo.get('ActorListenerId');
 
                 if (!actorListener) {
                     actorListener = yield repo.create();
@@ -79,37 +79,37 @@ class Domain {
                  */
                 self.__actorListener = actorListener;
 
-                self.__eventBus.on("*", function (evt) {
+                self.__eventBus.on('*', function (evt) {
 
-                    if (evt.actorType === "ActorListener") return;
+                    if (evt.actorType === 'ActorListener') return;
 
-                    actorListener.pub({eventName: evt.actorType + "." + evt.actorId + ":" + evt.name, event: evt});
-                    actorListener.pub({eventName: evt.actorType + "." + evt.actorId, event: evt});
-                    actorListener.pub({eventName: evt.actorType + ":" + evt.name, event: evt});
-                    actorListener.pub({eventName: "." + evt.actorId + ":" + evt.name, event: evt});
-                    actorListener.pub({eventName: ":" + evt.name, event: evt});
+                    actorListener.pub({eventName: evt.actorType + '.' + evt.actorId + ':' + evt.name, event: evt});
+                    actorListener.pub({eventName: evt.actorType + '.' + evt.actorId, event: evt});
+                    actorListener.pub({eventName: evt.actorType + ':' + evt.name, event: evt});
+                    actorListener.pub({eventName: '.' + evt.actorId + ':' + evt.name, event: evt});
+                    actorListener.pub({eventName: ':' + evt.name, event: evt});
                     actorListener.pub({eventName: evt.actorType, event: evt});
 
                     if (evt.contextId) {
                         actorListener.pub({
-                            eventName: evt.actorType + "." + evt.actorId + ":" + evt.name + "&" + evt.contextId,
+                            eventName: evt.actorType + '.' + evt.actorId + ':' + evt.name + '&' + evt.contextId,
                             event: evt
                         });
 
                         actorListener.pub({
-                            eventName: evt.actorType + "." + evt.actorId + "&" + evt.contextId,
+                            eventName: evt.actorType + '.' + evt.actorId + '&' + evt.contextId,
                             event: evt
                         });
                         actorListener.pub({
-                            eventName: evt.actorType + ":" + evt.name + "&" + evt.contextId,
+                            eventName: evt.actorType + ':' + evt.name + '&' + evt.contextId,
                             event: evt
                         });
                         actorListener.pub({
-                            eventName: "." + evt.actorId + ":" + evt.name + "&" + evt.contextId,
+                            eventName: '.' + evt.actorId + ':' + evt.name + '&' + evt.contextId,
                             event: evt
                         });
-                        actorListener.pub({eventName: ":" + evt.name + "&" + evt.contextId, event: evt});
-                        actorListener.pub({eventName: evt.actorType + "&" + evt.contextId, event: evt});
+                        actorListener.pub({eventName: ':' + evt.name + '&' + evt.contextId, event: evt});
+                        actorListener.pub({eventName: evt.actorType + '&' + evt.contextId, event: evt});
                     }
                 })
             });
@@ -139,7 +139,7 @@ class Domain {
         var self = this;
 
         function actorApplyEventHandle(actor) {
-            if (actor.$$uncommittedEvents[0].name === "remove") {
+            if (actor.$$uncommittedEvents[0].name === 'remove') {
                 self.__repos[actor.type].clear(actor.id);
             }
             self.__eventBus.publish(actor);
@@ -155,15 +155,15 @@ class Domain {
 
         // listen actor
         let listenActorEventHandle = actor=> {
-            actor.on("apply", actorApplyEventHandle);
-            actor.on("listen", actorListenEventHandle);
-            actor.on("listenOne", actorListenOneEventHandle);
+            actor.on('apply', actorApplyEventHandle);
+            actor.on('listen', actorListenEventHandle);
+            actor.on('listenOne', actorListenOneEventHandle);
             if (actor.$$uncommittedEvents.length) {
                 this.__eventBus.publish(actor);
             }
         };
 
-        repo.on("create", listenActorEventHandle);
+        repo.on('create', listenActorEventHandle);
 
     }
 
@@ -183,10 +183,10 @@ class Domain {
             try {
                 var actor = yield repo.create(data);
                 // doto
-                eventBus.__publish(new DomainEvent("create", actor, actor.constructor.toJSON(actor)));
+                eventBus.__publish(new DomainEvent('create', actor, actor.constructor.toJSON(actor)));
                 callback(null, actor.id);
                 process.nextTick(function () {
-                    repo.emit("create", actor);
+                    repo.emit('create', actor);
                 });
 
             } catch (e) {

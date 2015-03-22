@@ -1,5 +1,5 @@
-var EventEmitter = require("events").EventEmitter;
-var DomainEvent = require("./DomainEvent");
+import {EventEmitter} from 'events';
+import DomainEvent from './DomainEvent.js';
 
 /**
  * A abstract actor class.
@@ -34,7 +34,7 @@ class AbstractActor extends EventEmitter {
      * @type {String}
      */
     get id() {
-        throw new Error("no implements");
+        throw new Error('no implements');
     }
 
     /**
@@ -91,7 +91,7 @@ class AbstractActor extends EventEmitter {
          *
          * @event AbstractActor#apply
          */
-        this.emit("apply", this);
+        this.emit('apply', this);
     }
 
     /**
@@ -109,7 +109,7 @@ class AbstractActor extends EventEmitter {
         /**
          * @event AbstractActor#listen
          */
-        this.emit("listen", eventName, handle);
+        this.emit('listen', eventName, handle);
     }
 
 
@@ -124,7 +124,7 @@ class AbstractActor extends EventEmitter {
          * remove event
          * @event AbstractActor#remove
          */
-        this.apply("remove");
+        this.apply('remove');
     }
 
     /**
@@ -144,7 +144,7 @@ class AbstractActor extends EventEmitter {
      * @abstract
      */
     static get type() {
-        throw new Error("please implements it");
+        throw new Error('please implements it');
     }
 
     /**
