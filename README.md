@@ -3,7 +3,11 @@
 
 #### DDD-CQRS-Actor framework for javascript.
 
+###### Schematic diagram
 ![](https://raw.githubusercontent.com/leogiese/cqrs/master/img.png)
+
+###### Understand ActorListener
+![](https://raw.githubusercontent.com/leogiese/cqrs/master/img2.png)
 
 Install
 =======
