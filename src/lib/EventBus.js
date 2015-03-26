@@ -6,7 +6,8 @@ import Event from './DomainEvent';
  * @class EventBus
  * @param eventstore
  */
-export default class EventBus extends EventEmitter {
+export default
+class EventBus extends EventEmitter {
 
     constructor(eventstore) {
         this.es = eventstore;
@@ -46,7 +47,7 @@ export default class EventBus extends EventEmitter {
      */
     publish(actor) {
 
-        if(actor){
+        if (actor) {
             var self = this;
 
             this.es.getFromSnapshot(actor.id, function (err, snap, stream) {

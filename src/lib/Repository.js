@@ -42,7 +42,6 @@ class Repository extends EventEmitter {
 
     }
 
-
     /**
      * clear a actor from cache.
      * @method clear
@@ -50,7 +49,7 @@ class Repository extends EventEmitter {
      * @param id
      */
     clear(id) {
-        delete this.__cache[id];
+        this.__cache[id] = false;
     }
 
     /**
@@ -72,6 +71,10 @@ class Repository extends EventEmitter {
      * @return {Actor}
      */
     *get(id) {
+
+        if (this.__cache[id] === false) {
+            return null;
+        }
 
         let actor,
             returnFun = function () {
@@ -114,5 +117,7 @@ class Repository extends EventEmitter {
         this.__cache[actor.id] = actor;
 
         return returnFun();
+
+
     }
 }
