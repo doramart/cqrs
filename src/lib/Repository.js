@@ -78,10 +78,10 @@ class Repository extends EventEmitter {
 
         let actor,
             returnFun = function () {
-                if (actor && actor.data.alive === false) {
-                    return null;
-                } else {
+                if (actor && actor.isAlive) {
                     return actor;
+                } else {
+                    return null;
                 }
             };
 

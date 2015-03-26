@@ -19,6 +19,7 @@ class AbstractActor extends EventEmitter {
          * @type {Array}
          */
         this.$$uncommittedEvents = [];
+        this.__isAlive = true;
     }
 
     /**
@@ -68,6 +69,10 @@ class AbstractActor extends EventEmitter {
 
     }
 
+    get isAlive(){
+        return this.__isAlive;
+    }
+
     /**
      *
      * @method _apply
@@ -82,6 +87,7 @@ class AbstractActor extends EventEmitter {
      */
     _apply(name, data, contextId) {
 
+        if(!this.isAlive) return;
         var event = new DomainEvent(name, this, data, contextId);
         this._when(event);
         this.$$uncommittedEvents = this.$$uncommittedEvents || [];
@@ -125,6 +131,8 @@ class AbstractActor extends EventEmitter {
          * @event AbstractActor#remove
          */
         this._apply('remove');
+        this.__isAlive = false;
+
     }
 
     /**
