@@ -124,7 +124,7 @@ class AbstractActor extends EventEmitter {
          * remove event
          * @event AbstractActor#remove
          */
-        this.apply('remove');
+        this._apply('remove');
     }
 
     /**
