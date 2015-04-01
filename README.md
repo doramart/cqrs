@@ -76,11 +76,34 @@ Use
 Advanced Usage
 ==============
 
-please waiting ...
+#### Actor listen domain'event, and handle.
 
-+ Actor listen domain'event, and handle.
-+ Saga usage.
-+ Multiple domain.
+    export default
+    class Transfer extends Actor {
+
+        static get type() {
+            return "Transfer";
+        }
+
+        transfer(fromId, toId, money) {
+            ......
+
+            this._listen("User." + fromId + ":deduct&" + this.id, "__userDeduct");
+            this._listen("User." + toId + ":recharge&" + this.id, "__userRecharge");
+
+            ......
+        }
+
+        // event handle method
+        __userDeduct(event) {
+            ......
+        }
+
+        __userRecharge(event) {
+            ......
+        }
+
+    }
 
 
 LICENSE

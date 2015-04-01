@@ -233,6 +233,7 @@ class Domain {
      */
     once(eventName, listener) {
         this.__eventBus.once(eventName, listener);
+        return this;
     }
 
     /**
@@ -244,6 +245,7 @@ class Domain {
      */
     on(eventName, listener) {
         this.__eventBus.on(eventName, listener);
+        return this;
     }
 
     /**
