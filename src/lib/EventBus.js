@@ -72,10 +72,7 @@ class EventBus extends EventEmitter {
 
             })
         }
-
     }
-
-
 }
 
 

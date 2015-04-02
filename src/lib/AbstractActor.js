@@ -69,7 +69,7 @@ class AbstractActor extends EventEmitter {
 
     }
 
-    get isAlive(){
+    get isAlive() {
         return this.__isAlive;
     }
 
@@ -87,7 +87,7 @@ class AbstractActor extends EventEmitter {
      */
     _apply(name, data, contextId) {
 
-        if(!this.isAlive) return;
+        if (!this.isAlive) return;
         var event = new DomainEvent(name, this, data, contextId);
         this._when(event);
         this.$$uncommittedEvents = this.$$uncommittedEvents || [];
@@ -130,7 +130,7 @@ class AbstractActor extends EventEmitter {
          * remove event
          * @event AbstractActor#remove
          */
-        this._apply('remove',this.data);
+        this._apply('remove', this.data);
         this.__isAlive = false;
 
     }
