@@ -1,11 +1,11 @@
 {
   "name": "cqrs",
-  "version": "0.7.1",
+  "version": "0.7.3",
   "description": "cqrs for javascript",
   "main": "dist/lib/index.js",
   "scripts": {
     "test": "mocha dist/test",
-    "postinstall": "gulp es5"
+    "postinstall": "./node_modules/.bin/gulp es5"
   },
   "repository": {
     "type": "git",
