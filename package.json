@@ -1,11 +1,11 @@
 {
   "name": "cqrs",
-  "version": "0.7.3",
+  "version": "0.7.6",
   "description": "cqrs for javascript",
   "main": "dist/lib/index.js",
   "scripts": {
     "test": "mocha dist/test",
-    "postinstall": "./node_modules/.bin/gulp es5"
+    "postinstall": "node ./node_modules/.bin/gulp es5"
   },
   "repository": {
     "type": "git",
@@ -31,15 +31,15 @@
     "shortid": "^2.0.1",
     "thunkify": "^2.1.2",
     "traceur": "0.0.74",
-    "underscore": "^1.7.0"
-  },
-  "devDependencies": {
+    "underscore": "^1.7.0",
     "babel": "^4.7.12",
     "gulp": "^3.8.11",
     "gulp-babel": "^4.0.0",
     "gulp-concat": "^2.5.2",
     "gulp-rename": "^1.2.0",
-    "gulp-util": "^3.0.4",
+    "gulp-util": "^3.0.4"
+  },
+  "devDependencies": {
     "mocha": "^2.0.1",
     "should": "^4.3.0"
   },
