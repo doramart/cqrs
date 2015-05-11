@@ -117,7 +117,8 @@ class Repository extends EventEmitter {
         this.__cache[actor.id] = actor;
 
         return returnFun();
-
-
     }
+
+    
+
 }

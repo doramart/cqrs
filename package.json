@@ -1,6 +1,6 @@
 {
   "name": "cqrs",
-  "version": "0.7.6",
+  "version": "0.8.5",
   "description": "cqrs for javascript",
   "main": "dist/lib/index.js",
   "scripts": {
@@ -22,7 +22,13 @@
     "url": "https://github.com/leogiese/cqrs/issues"
   },
   "homepage": "https://github.com/leogiese/cqrs",
+
   "dependencies": {
+    "gulp": "^3.8.11",
+    "gulp-babel": "^4.0.0",
+    "gulp-concat": "^2.5.2",
+    "gulp-rename": "^1.2.0",
+    "gulp-util": "^3.0.4",
     "babel": "^4.7.12",
     "co": "^4.4.0",
     "debug": "^2.1.0",
@@ -32,12 +38,8 @@
     "thunkify": "^2.1.2",
     "traceur": "0.0.74",
     "underscore": "^1.7.0",
-    "babel": "^4.7.12",
-    "gulp": "^3.8.11",
-    "gulp-babel": "^4.0.0",
-    "gulp-concat": "^2.5.2",
-    "gulp-rename": "^1.2.0",
-    "gulp-util": "^3.0.4"
+    "babel": "^4.7.12"
+
   },
   "devDependencies": {
     "mocha": "^2.0.1",

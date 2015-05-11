@@ -124,8 +124,6 @@ class Domain {
      */
     register(ActorClass) {
 
-        ActorClass.prototype.myDomain = this;
-
         var repo = new this.__Repository(ActorClass, this.__eventstore);
         this.__repos[ActorClass.type] = repo;
 
@@ -210,6 +208,7 @@ class Domain {
             try {
                 var repo = self.__repos[actorType];
                 var actor = yield repo.get(actorId);
+                actor.myDomain = self;
                 defer.resolve(actor);
             } catch (e) {
                 defer.reject(e);
@@ -218,6 +217,7 @@ class Domain {
                 }
             }
             if (cb) {
+                actor.myDomain = self;
                 cb(null, actor);
             }
         });
@@ -256,6 +256,7 @@ class Domain {
     getEvents(...opts) {
         this.__eventstore.getEvents(...opts);
     }
+
 
 }
 
