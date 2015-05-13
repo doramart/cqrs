@@ -7,6 +7,7 @@ import DomainEvent from './DomainEvent';
 import _ActorListener from './ActorListener';
 import _EventBus from './EventBus';
 
+
 /**
  * @class Domain
  * @see EventBus
@@ -18,7 +19,6 @@ export default
 class Domain {
 
     constructor(eventStoreOptions, replaceClasses = {}) {
-
         // replace default EventBus class
         let EventBus = replaceClasses.EventBus || _EventBus;
 
@@ -53,7 +53,6 @@ class Domain {
          */
         this.__eventBus = new EventBus(this.__eventstore);
 
-
         // init eventstore
         this.__eventstore.init(() => {
 
@@ -62,14 +61,14 @@ class Domain {
             co(function* () {
 
                 self.register(ActorListener);
-
                 var repo = self.__repos['ActorListener'];
-
                 var actorListener = yield repo.get('ActorListenerId');
 
                 if (!actorListener) {
                     actorListener = yield repo.create();
                 }
+
+                actorListener.myDomain = self;
 
                 /**
                  * @memberof Domain.prototype
@@ -77,8 +76,8 @@ class Domain {
                  * @type {ActorListener}
                  * @private
                  */
-                self.__actorListener = actorListener;
 
+                self.__actorListener = actorListener;
                 self.__eventBus.on('*', function (evt) {
 
                     if (evt.actorType === 'ActorListener') return;

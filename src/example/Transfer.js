@@ -10,7 +10,6 @@ class Transfer extends Actor {
     }
 
     transfer(fromId, toId, money) {
-
         if (this.data.isBegin) return;
 
         this._listen("User." + fromId + ":deduct&" + this.id, "__userDeduct");
@@ -24,7 +23,6 @@ class Transfer extends Actor {
     }
 
     __userDeduct(event) {
-
 
         this.myDomain.get("User", this.data.toId).then(toUser => {
             toUser.recharge(this.data.money, this.id);

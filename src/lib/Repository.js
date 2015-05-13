@@ -49,7 +49,7 @@ class Repository extends EventEmitter {
      * @param id
      */
     clear(id) {
-        this.__cache[id] = false;
+        this.__cache[id] = null;
     }
 
     /**
@@ -71,10 +71,6 @@ class Repository extends EventEmitter {
      * @return {Actor}
      */
     *get(id) {
-
-        if (this.__cache[id] === false) {
-            return null;
-        }
 
         let actor,
             returnFun = function () {

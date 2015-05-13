@@ -30,11 +30,14 @@ describe("Repository", function () {
     it("#get", function (done) {
         setTimeout(()=> {
             co(function* () {
+
                 repos.clear(uid);
                 var user = yield repos.get(uid);
                 user.data.name.should.eql("leo");
                 done();
-            });
+            }).catch(function (err) {
+                console.log(err.stack);
+            })
         })
     });
 
