@@ -19,7 +19,6 @@ class AbstractActor extends EventEmitter {
          * @type {Array}
          */
         this.$$uncommittedEvents = [];
-        this.__isAlive = true;
     }
 
     /**
@@ -49,6 +48,7 @@ class AbstractActor extends EventEmitter {
      */
     $$loadEvents(events) {
         events.forEach(event => {
+            this.__when(event);
             this._when(event);
         });
         this.loadEvents = null;
@@ -69,8 +69,12 @@ class AbstractActor extends EventEmitter {
 
     }
 
-    get isAlive() {
-        return this.__isAlive;
+    __when(event){
+
+    }
+
+    get isAlive(){
+        return true;
     }
 
     /**
@@ -87,8 +91,9 @@ class AbstractActor extends EventEmitter {
      */
     _apply(name, data, contextId) {
 
-        if (!this.isAlive) return;
+        if(!this.isAlive) return;
         var event = new DomainEvent(name, this, data, contextId);
+        this.__when(event);
         this._when(event);
         this.$$uncommittedEvents = this.$$uncommittedEvents || [];
         this.$$uncommittedEvents.push(event);
@@ -131,7 +136,6 @@ class AbstractActor extends EventEmitter {
          * @event AbstractActor#remove
          */
         this._apply('remove', this.data);
-        this.__isAlive = false;
 
     }
 

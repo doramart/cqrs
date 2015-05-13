@@ -22,6 +22,8 @@ class Actor extends AbstractActor {
         this._data = data;
         if (!this._data.id)
             this._data.id = uid();
+
+        this._data.__isAlive = true;
         this.on('apply', this.refreshData);
         this.refreshData();
 
@@ -40,6 +42,16 @@ class Actor extends AbstractActor {
          * @type {Object}
          */
         this.data = this.constructor.toJSON(this);
+    }
+
+    __when(event){
+        if(event.name === 'remove'){
+            this._data.__isAlive = false;
+        }
+    }
+
+    get isAlive(){
+        return this._data.__isAlive;
     }
 
     /**
