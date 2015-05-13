@@ -48,10 +48,8 @@ class AbstractActor extends EventEmitter {
      */
     $$loadEvents(events) {
         events.forEach(event => {
-            this.__when(event);
             this._when(event);
         });
-        this.loadEvents = null;
     }
 
     /**
@@ -69,14 +67,6 @@ class AbstractActor extends EventEmitter {
 
     }
 
-    __when(event){
-
-    }
-
-    get isAlive(){
-        return true;
-    }
-
     /**
      *
      * @method _apply
@@ -91,9 +81,7 @@ class AbstractActor extends EventEmitter {
      */
     _apply(name, data, contextId) {
 
-        if(!this.isAlive) return;
         var event = new DomainEvent(name, this, data, contextId);
-        this.__when(event);
         this._when(event);
         this.$$uncommittedEvents = this.$$uncommittedEvents || [];
         this.$$uncommittedEvents.push(event);

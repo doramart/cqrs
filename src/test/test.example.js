@@ -61,6 +61,7 @@ describe("Transfers Example", function () {
             user.data.money.should.eql(80);
             done();
         });
+
     });
 
 

@@ -1,5 +1,6 @@
 import AbstractActor from './AbstractActor';
 import uid from 'shortid';
+import DomainEvent from './DomainEvent.js';
 
 /**
  * @class Actor
@@ -50,6 +51,21 @@ class Actor extends AbstractActor {
         }
     }
 
+    _apply(name, data, contextId) {
+
+        var event = new DomainEvent(name, this, data, contextId);
+        this.__when(event);
+        this._when(event);
+        this.$$uncommittedEvents = this.$$uncommittedEvents || [];
+        this.$$uncommittedEvents.push(event);
+        /**
+         * apply event.
+         *
+         * @event AbstractActor#apply
+         */
+        this.emit('apply', this);
+    }
+
     get isAlive(){
         return this._data.__isAlive;
     }
@@ -64,7 +80,10 @@ class Actor extends AbstractActor {
     }
 
     $$loadEvents(events) {
-        super.$$loadEvents(events);
+        events.forEach(event => {
+            this.__when(event);
+            this._when(event);
+        });
         this.refreshData();
     }
 
