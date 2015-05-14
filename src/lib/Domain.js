@@ -6,6 +6,7 @@ import Actor from './Actor';
 import DomainEvent from './DomainEvent';
 import _ActorListener from './ActorListener';
 import _EventBus from './EventBus';
+import {EventEmitter} from 'events';
 
 
 /**
@@ -19,6 +20,10 @@ export default
 class Domain {
 
     constructor(eventStoreOptions, replaceClasses = {}) {
+
+        this._emitter = new EventEmitter;
+        this.inited = false;
+
         // replace default EventBus class
         let EventBus = replaceClasses.EventBus || _EventBus;
 
@@ -111,6 +116,8 @@ class Domain {
                         actorListener.pub({eventName: evt.actorType + '&' + evt.contextId, event: evt});
                     }
                 })
+                self.inited = true;
+                self._emitter.emit('init');
             });
         });
     }
@@ -238,7 +245,12 @@ class Domain {
      * @param listener
      */
     on(eventName, listener) {
-        this.__eventBus.on(eventName, listener);
+        if(eventName === 'init'){
+            this._emitter.on(eventName,listener);
+        }else{
+            this.__eventBus.on(eventName, listener);
+        }
+
         return this;
     }
 
