@@ -14,7 +14,6 @@ class EventBus extends EventEmitter {
         this.es.useEventPublisher((evt, cb) => {
             this.__publish(evt);
         });
-        this.es.init();
     }
 
     /**
