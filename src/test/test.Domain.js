@@ -4,14 +4,16 @@ var Domain = require("../lib/Domain");
 var Actor = require("../lib/Actor");
 var should = require("should");
 
-class User extends Actor{
-    static get type(){
+class User extends Actor {
+    static get type() {
         return "User";
     }
+
     changeName(name) {
         this._apply("changeName", name);
     }
-    when(event) {
+
+    _when(event) {
         if (event.name === "changeName") {
             this._data.name = event.data;
         }
@@ -48,6 +50,17 @@ describe("Domain", function () {
             done();
         })
 
-    })
+    });
+
+    it("#remove", function (done) {
+        domain.on('User:remove', function (event) {
+            domain.get('User', uid, function (err, user) {
+                done();
+            });
+        });
+        domain.get('User', uid, function (err, user) {
+            user.remove();
+        });
+    });
 
 });

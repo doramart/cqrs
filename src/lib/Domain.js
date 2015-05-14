@@ -204,19 +204,14 @@ class Domain {
         var self = this;
         var defer = Q.defer();
         co(function* () {
-            try {
-                var repo = self.__repos[actorType];
-                var actor = yield repo.get(actorId);
+            var repo = self.__repos[actorType];
+            var actor = yield repo.get(actorId);
+            if (actor) {
                 actor.myDomain = self;
-                defer.resolve(actor);
-            } catch (e) {
-                defer.reject(e);
-                if (cb) {
-                    cb(e);
-                }
             }
+            defer.resolve(actor);
+
             if (cb) {
-                actor.myDomain = self;
                 cb(null, actor);
             }
         });
