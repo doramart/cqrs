@@ -33,8 +33,33 @@ Use
 
 #### Step 2 . create a actor class
 
+    // use es5 extend tool
+    var extend = require("cqrs").extend;    
+    var User = extend({
+    
+       type:'User',
+       
+       _when:function(event){
+           switch(event.name){
+               case "changeName":
+                   this._data.name = event.name;
+               break;
+           }
+       },
+
+       changeName(name){
+           this._apply("changeName",name);
+       }
+    });
+    
+    
+    --- or use es6 class ---
 
     class User extends Actor{
+
+        static get type(){
+           return 'User';
+        }
 
         _when(event){
             switch(event.name){
