@@ -47,7 +47,7 @@ Use
            }
        },
 
-       changeName(name){
+       changeName:function(name){
            this._apply("changeName",name);
        }
     });
@@ -87,6 +87,13 @@ Use
 
 #### Step 5 . actor operating
 
+    // create a user
+    domain.create("User",{name:"leo"},function(err,userId){
+        ......
+    });
+
+
+    // get a user object
     domain.get("User",userId,function(err,actor){
 
     });

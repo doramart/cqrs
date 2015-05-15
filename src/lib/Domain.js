@@ -245,9 +245,14 @@ class Domain {
      * @param listener
      */
     on(eventName, listener) {
-        if(eventName === 'init'){
-            this._emitter.on(eventName,listener);
-        }else{
+
+        if (eventName === 'init') {
+            if (this.inited) {
+                listener();
+            } else {
+                this._emitter.on(eventName, listener);
+            }
+        } else {
             this.__eventBus.on(eventName, listener);
         }
 
