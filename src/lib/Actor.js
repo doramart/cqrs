@@ -1,6 +1,7 @@
 import AbstractActor from './AbstractActor';
 import uid from 'shortid';
 import DomainEvent from './DomainEvent.js';
+import _ from 'underscore';
 
 /**
  * @class Actor
@@ -24,8 +25,11 @@ class Actor extends AbstractActor {
         if (!this._data.id)
             this._data.id = uid();
 
-        this._data.__isAlive = true;
-        this.on('apply', this.refreshData);
+        if (!_.isBoolean(this._data.__isAlive)) {
+            this._data.__isAlive = true;
+        }
+
+        this.on('apply', ()=> this.refreshData());
         this.refreshData();
 
     }
@@ -45,8 +49,8 @@ class Actor extends AbstractActor {
         this.data = this.constructor.toJSON(this);
     }
 
-    __when(event){
-        if(event.name === 'remove'){
+    __when(event) {
+        if (event.name === 'remove') {
             this._data.__isAlive = false;
         }
     }
@@ -66,7 +70,7 @@ class Actor extends AbstractActor {
         this.emit('apply', this);
     }
 
-    get isAlive(){
+    get isAlive() {
         return this._data.__isAlive;
     }
 
@@ -105,7 +109,9 @@ class Actor extends AbstractActor {
      * @return {Actor}
      */
     static parse(json) {
-        var actor = new this(json);
+        var actor = new Actor(json);
+        actor.__proto__ = this.prototype;
+        actor.constructor = this;
         return actor;
     }
 

@@ -98,7 +98,7 @@ class Repository extends EventEmitter {
 
         let snap = snapshot.data;
 
-        actor = new this.__Actor(snap);
+        actor = this.__Actor.parse(snap);
 
         let history = stream.events;
 
