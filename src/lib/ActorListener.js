@@ -1,5 +1,5 @@
 import Actor from './Actor';
-import _ from 'underscore';
+import _ from 'lodash';
 
 /**
  * cqrs's core component.

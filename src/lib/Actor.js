@@ -1,7 +1,7 @@
 import AbstractActor from './AbstractActor';
 import uid from 'shortid';
 import DomainEvent from './DomainEvent.js';
-import _ from 'underscore';
+import _ from 'lodash';
 
 /**
  * @class Actor
