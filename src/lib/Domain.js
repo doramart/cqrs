@@ -8,6 +8,7 @@ import _ActorListener from './ActorListener';
 import _EventBus from './EventBus';
 import {EventEmitter} from 'events';
 import _ from 'lodash';
+import extend from './extend.js';
 
 
 /**
@@ -131,11 +132,14 @@ class Domain {
      */
     register(ActorClass) {
 
-        var repo = new this.__Repository(ActorClass, this.__eventstore);
-        this.__repos[ActorClass.type] = repo;
+        if(_.isFunction(ActorClass)){
+            var repo = new this.__Repository(ActorClass, this.__eventstore);
+            this.__repos[ActorClass.type] = repo;
+            this.__actorEventHandle(repo);
+            return this;
+        }
 
-        this.__actorEventHandle(repo);
-
+        this.register(extend(ActorClass));
         return this;
     }
 
@@ -270,17 +274,16 @@ class Domain {
     }
 
     /**
-     *
      * domain.call('User.id001.changeName',)
      */
     call(methodName, args, callback) {
 
         if (!_.isArray(methodName)) {
-            if(_.isString(arguments[2])){
-                methodName = [methodName,args,callback];
+            if (_.isString(arguments[2])) {
+                methodName = [methodName, args, callback];
                 args = arguments[3];
                 callback = arguments[4];
-            }else{
+            } else {
                 methodName = methodName.split('.');
             }
         }
@@ -317,6 +320,10 @@ class Domain {
             });
         });
 
+    }
+
+    remove(type, id, callback) {
+        return this.call(type, id, 'remove', callback);
     }
 
 
