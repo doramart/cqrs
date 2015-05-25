@@ -45,6 +45,16 @@ describe("Domain", function () {
 
     });
 
+
+
+    it('#call', function (done) {
+        domain.call(`User.${uid}.changeName`,['leoleo']).catch((err)=>{console.log(err.stack)});
+        domain.get('User',uid).then((u)=>{
+            u.data.name.should.eql('leoleo');
+            done();
+        })
+    });
+
     it("#getEvents", function (done) {
         domain.getEvents(uid, 0, 1000, function (err, evets) {
             done();

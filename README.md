@@ -39,6 +39,11 @@ Use
     
        type:'User',
        
+       init(data){
+           data.name = '';
+           data.accessNum = 0;
+       },
+       
        _when:function(event){
            switch(event.name){
                case "changeName":
@@ -60,6 +65,13 @@ Use
         static get type(){
            return 'User';
         }
+        
+        constructor(data){
+            super({
+                name;'',
+                accessNum:0
+            });
+        }
 
         _when(event){
             switch(event.name){
@@ -71,6 +83,10 @@ Use
 
         changeName(name){
             this._apply("changeName",name);
+        }
+        
+        access(){
+            this._apply("access");
         }
 
     }
@@ -103,7 +119,19 @@ Use
     domain.get("User",userId).then(function(actor){
         actor.changeName("leo giese");
     });
-
+    
+    // or
+    
+    domain.call('User',userId,'changeName',['leo giese']);  // return a promise object
+    domain.call(`User.${userId}.changeName`,['leo giese']); 
+    domain.call(['User',userId,'changeName'],['leo giese']);
+    domain.call(`User.${userId}.changeName`,['leo giese'],function(err,result){ ... });
+    
+    // if no need arguments
+    domain.call('User',userId,'access'); 
+    domain.call('User.${userId}.access'); 
+    domain.call(['User',userId,'access']); 
+    
 
 Advanced Usage
 ==============

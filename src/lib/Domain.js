@@ -7,6 +7,7 @@ import DomainEvent from './DomainEvent';
 import _ActorListener from './ActorListener';
 import _EventBus from './EventBus';
 import {EventEmitter} from 'events';
+import _ from 'lodash';
 
 
 /**
@@ -266,6 +267,56 @@ class Domain {
      */
     getEvents(...opts) {
         this.__eventstore.getEvents(...opts);
+    }
+
+    /**
+     *
+     * domain.call('User.id001.changeName',)
+     */
+    call(methodName, args, callback) {
+
+        if (!_.isArray(methodName)) {
+            if(_.isString(arguments[2])){
+                methodName = [methodName,args,callback];
+                args = arguments[3];
+                callback = arguments[4];
+            }else{
+                methodName = methodName.split('.');
+            }
+        }
+
+        args = args || [];
+
+        if (!_.isArray(args)) {
+            callback = args;
+        }
+
+        callback = callback || function () {
+        };
+
+        let type = methodName[0];
+        let id = methodName[1];
+        let method = methodName[2];
+
+        return new Promise((resolve, reject)=> {
+            this.get(type, id, (err, actor)=> {
+                if (actor) {
+                    try {
+                        let result = actor[method].apply(actor, args);
+                        resolve(result);
+                        callback(null, result);
+                    } catch (err) {
+                        reject(err);
+                        callback(err);
+                    }
+                } else {
+                    let err = new Error('no actor');
+                    reject(err);
+                    callback(err);
+                }
+            });
+        });
+
     }
 
 
