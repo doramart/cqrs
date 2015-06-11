@@ -37,7 +37,7 @@ class ActorListener extends Actor {
         let actorType = actor.type;
         let actorId = actor.id;
         let data = {eventName, actorType, actorId, handle, isOne};
-        this._apply('listen', data);
+        this.apply('listen', data);
     }
 
     /**
@@ -68,10 +68,10 @@ class ActorListener extends Actor {
             });
         });
 
-        this._apply('emit', event.name);
+        this.apply('emit', event.name);
     }
 
-    _when(event) {
+    when(event) {
 
         var repos = this._data.repos;
         if (event.name === 'listen') {

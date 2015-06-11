@@ -117,7 +117,7 @@ class Domain {
                         actorListener.pub({eventName: ':' + evt.name + '&' + evt.contextId, event: evt});
                         actorListener.pub({eventName: evt.actorType + '&' + evt.contextId, event: evt});
                     }
-                })
+                });
                 self.inited = true;
                 self._emitter.emit('init');
             });

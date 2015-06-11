@@ -34,6 +34,10 @@ class Actor extends AbstractActor {
 
     }
 
+    get json() {
+        return this.constructor.toJSON(this);
+    }
+
     /**
      * refresh actor's data
      * @method refreshData
@@ -55,10 +59,11 @@ class Actor extends AbstractActor {
         }
     }
 
-    _apply(name, data, contextId) {
+    apply(name, data, contextId) {
 
         var event = new DomainEvent(name, this, data, contextId);
         this.__when(event);
+        this.when(event);
         this._when(event);
         this.$$uncommittedEvents = this.$$uncommittedEvents || [];
         this.$$uncommittedEvents.push(event);
@@ -86,6 +91,7 @@ class Actor extends AbstractActor {
     $$loadEvents(events) {
         events.forEach(event => {
             this.__when(event);
+            this.when(event);
             this._when(event);
         });
         this.refreshData();

@@ -4,10 +4,10 @@
 #### DDD-CQRS-Actor framework for javascript.
 
 ###### Schematic diagram
-![](https://raw.githubusercontent.com/leogiese/cqrs/master/img.png)
+![](https://raw.githubusercontent.com/liangzeng/cqrs/master/img.png)
 
 ###### Understand ActorListener
-![](https://raw.githubusercontent.com/leogiese/cqrs/master/img2.png)
+![](https://raw.githubusercontent.com/liangzeng/cqrs/master/img2.png)
 
 Install
 =======
@@ -44,7 +44,7 @@ Use
            data.accessNum = 0;
        },
        
-       _when:function(event){
+       when:function(event){
            switch(event.name){
                case "changeName":
                    this._data.name = event.name;
@@ -53,7 +53,7 @@ Use
        },
 
        changeName:function(name){
-           this._apply("changeName",name);
+           this.apply("changeName",name);
        }
     });
     
@@ -73,7 +73,7 @@ Use
             });
         }
 
-        _when(event){
+        when(event){
             switch(event.name){
                 case "changeName":
                     this._data.name = event.name;
@@ -82,11 +82,11 @@ Use
         }
 
         changeName(name){
-            this._apply("changeName",name);
+            this.apply("changeName",name);
         }
         
         access(){
-            this._apply("access");
+            this.apply("access");
         }
 
     }
@@ -148,8 +148,8 @@ Advanced Usage
         transfer(fromId, toId, money) {
             ......
 
-            this._listen("User." + fromId + ":deduct&" + this.id, "__userDeduct");
-            this._listen("User." + toId + ":recharge&" + this.id, "__userRecharge");
+            this.listen("User." + fromId + ":deduct&" + this.id, "__userDeduct");
+            this.listen("User." + toId + ":recharge&" + this.id, "__userRecharge");
 
             ......
         }

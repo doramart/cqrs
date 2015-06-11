@@ -62,9 +62,41 @@ class AbstractActor extends EventEmitter {
      * @param event {DomainEvent}
      * @virtual
      * @protected
+     * @deprecated
      */
     _when(event) {
 
+    }
+
+    /**
+     * Only system calls, and must sync.
+     * actor's data can only be changed by it.
+     * it is a abstract method , need rewrite.
+     * @method _when
+     * @memberof AbstractActor.prototype
+     * @see AbstractActor#$$loadEvents
+     * @param event {DomainEvent}
+     * @virtual
+     * @protected
+     */
+    when(event) {
+
+    }
+
+    /**
+     *
+     * @method _apply
+     * @memberof AbstractActor.prototype
+     * @param name {String} event name
+     * @param data {json} event'data
+     * @param contextId {String} context's id
+     *
+     * @fires AbstractActor#apply
+     * @deprecated
+     * @protected
+     */
+    _apply(...props) {
+        this.apply(...props);
     }
 
     /**
@@ -79,9 +111,10 @@ class AbstractActor extends EventEmitter {
      *
      * @protected
      */
-    _apply(name, data, contextId) {
+    apply(name, data, contextId) {
 
         var event = new DomainEvent(name, this, data, contextId);
+        this.when(event);
         this._when(event);
         this.$$uncommittedEvents = this.$$uncommittedEvents || [];
         this.$$uncommittedEvents.push(event);
@@ -103,8 +136,24 @@ class AbstractActor extends EventEmitter {
      * @param contextId {String}
      * @fires AbstractActor#listen
      * @protected
+     * @deprecated
      */
-    _listen(eventName, handle) {
+    _listen(...props) {
+        this.listen(...props);
+    }
+
+    /**
+     * listen a domain'event.
+     *
+     * @method _listen
+     * @memeberof AbstractActor.prototype
+     * @param eventName {String}
+     * @param handle {String} it's handle method name.
+     * @param contextId {String}
+     * @fires AbstractActor#listen
+     * @protected
+     */
+    listen(eventName, handle) {
         /**
          * @event AbstractActor#listen
          */
