@@ -31,51 +31,34 @@ Create actor class
     class User extends Actor {
 
         constructor(data) {
-            super();
-            this._name = data.name;
-            this._age = data.age;
-            this._isAlive = true;
-            this._id = uuid();
+            super(data);
         }
 
-        static parse(json) {
-            let user = new this(json);
-            user._isAlive = json.isAlive;
-            return user;
-        }
-
-        changeName(name) {
-            this.apply('changeName', {name});
+        // business method
+        changeName(name,service) {
+            if(name.length < 10 && name.length > 2){
+               service.apply('changeName', {name});
+            }else{
+               throw new Error('name char size must < 10 and > 2');
+            }
         }
 
         when(event) {
 
             switch (event.name) {
                 case 'changeName':
-                    this._name = event.data.name;
+                    this.data._name = event.data.name;
                     break;
             }
 
         }
 
-        isAlive() {
-            return this._isAlive;
-        }
-
-        get id() {
-            return this._id;
-        }
-
-        static toJSON(actor) {
-            return {
-                id: actor._id,
-                age:actor._age,
-                name: actor._name,
-                isAlive: actor._isAlive
-            }
-        }
-
     }
+
+Other document
+==============
+
+    TODO ......
 
 
 LICENSE
