@@ -17,17 +17,6 @@ Test
 ====
     npm test
 
-Create Actor class
-==================
-
-class User extends Actor{
-
-    constructor(data){
-        this._data = data;
-    }
-
-}
-
 LICENSE
 =======
 MIT
