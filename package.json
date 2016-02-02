@@ -2,7 +2,7 @@
   "name": "cqrs",
   "version": "1.0pre",
   "description": "cqrs for javascript",
-  "main": "dist/lib/index.js",
+  "main": "lib/Domain.js",
   "scripts": {
     "test": "mocha"
   },
