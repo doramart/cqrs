@@ -1,6 +1,6 @@
 {
   "name": "cqrs",
-  "version": "1.0pre",
+  "version": "1.0.0-pre",
   "description": "cqrs for javascript",
   "main": "lib/Domain.js",
   "scripts": {
@@ -36,9 +36,5 @@
     "jsdoc": "^3.4.0",
     "mocha": "^2.0.1",
     "should": "^4.3.0"
-  },
-  "directories": {
-    "example": "example",
-    "test": "test"
   }
 }

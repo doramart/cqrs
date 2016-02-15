@@ -4,7 +4,7 @@ const Domain = require('../lib/Domain');
 const User = require('./util/User');
 const T = require('./util/T');
 const should = require('should');
-
+const co = require('co');
 
 describe('Domain', function () {
 
@@ -56,7 +56,24 @@ describe('Domain', function () {
             })
         });
 
-    })
+    });
+
+    it('#getHistory', function (done) {
+
+
+        co(function *() {
+            try {
+                yield domain.call(`User.${from}.changeName`, 'bright');
+                let hist = yield domain.getHistory(from);
+                hist.snap.name.should.eql('bright');
+            } catch (err) {
+                console.log(err);
+            }
+
+            done();
+
+        });
+    });
 
 
 });

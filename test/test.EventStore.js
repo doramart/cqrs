@@ -104,7 +104,6 @@ describe("eventstore", function () {
 
     it('#getEventsBySnapshot', function (done) {
         es.getEventsBySnapshot('s002', function (err, result) {
-
             result.length.should.eql(2);
             result[0].index.should.eql(1);
             result[1].index.should.eql(2);

@@ -1,14 +1,15 @@
 Version
 =======
 
-    1.0-pre
+    1.0.0-pre
 
     node.js version > 4.0
 
 DDD-CQRS-Actor framework for javascript.
 ========================================
 
-    doc todo ...
+Actor is a aggregate root object.
+
 
 Install
 =======
@@ -25,8 +26,7 @@ Create actor class
 
     'use strict';
 
-    const Actor = require('Domain').Actor;
-    const uuid = require("uuid").v1;
+    const Actor = require('cqrs').Actor;
 
     class User extends Actor {
 
@@ -55,10 +55,15 @@ Create actor class
 
     }
 
-Other document
-==============
 
-    TODO ......
+Create a domain
+===============
+
+const Domain = require('cqrs');
+const domain = new Domain();
+
+// register actor class
+domain.register(User);
 
 
 LICENSE

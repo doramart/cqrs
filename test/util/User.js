@@ -24,8 +24,8 @@ class User extends Actor {
         return user;
     }
 
-    changeName(name) {
-        this.apply('changeName', {name});
+    changeName(name,service) {
+        service.apply('changeName', {name});
     }
 
     recharge(money, service) {
