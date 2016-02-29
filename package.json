@@ -26,6 +26,7 @@
     "debug": "^2.1.0",
     "is-generator": "^1.0.2",
     "lodash": "^3.9.1",
+    "nedb": "^1.8.0",
     "thunkify": "^2.1.2",
     "tingodb": "^0.4.2",
     "traceur": "0.0.74",
