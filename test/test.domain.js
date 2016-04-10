@@ -2,6 +2,7 @@
 
 const Domain = require('../lib/Domain');
 const User = require('./util/User');
+const Actor = require('../lib/Actor');
 const T = require('./util/T');
 const should = require('should');
 const co = require('co');
@@ -75,5 +76,47 @@ describe('Domain', function () {
         });
     });
 
+
+
+    it('#createBefor', function (done) {
+        class People extends Actor {
+
+            constructor() {
+                super();
+            }
+
+            change(data, serv) {
+
+            }
+
+            static changeBefor() {
+                //throw new Error('erewr');
+            }
+
+            static createBefor(data, service) {
+
+                return function *() {
+                    let result = yield new Promise((resolve, reject)=> {
+
+                        setTimeout(function () {
+                            resolve('haha---- error');
+                        }, 1000)
+                    });
+                    console.log(result);
+                }
+            }
+        }
+
+        let domain = new Domain().register(People);
+
+        domain.create('People', 'leo', function (err, json) {
+
+            domain.call(`People.${json.id}.change`,null, function (err, json) {
+                console.log(err);
+                done()
+            });
+        });
+
+    });
 
 });
