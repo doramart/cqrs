@@ -47,16 +47,18 @@ describe('Domain', function () {
 
 
     it('# transfer', function (done) {
-        domain.call('T.' + tid + '.transfer', null, function (err) {
-        });
+ 
 
         domain.once(Domain.Alias().name('end').actorId(tid).get(), function (event) {
             domain._get('T', tid, function (err, t) {
+                console.log("-----------------------------")
                 t.json.state.should.eql('end');
                 done();
             })
         });
-
+        console.log(tid);
+       domain.call('T.' + tid + '.transfer', null, function (err) {
+        });
     });
 
     it('#getHistory', function (done) {
