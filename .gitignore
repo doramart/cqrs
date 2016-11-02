@@ -3,3 +3,4 @@ node_modules
 api
 npm-debug.log
 .DS_Store
+testdb/*
